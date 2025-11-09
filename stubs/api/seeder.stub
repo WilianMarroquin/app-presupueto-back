@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace {{ seederNamespace }};
 
 use Illuminate\Database\Seeder;
 
-class {{ tableNameM }}TableSeeder extends Seeder
+class {{ seederName }} extends Seeder
 {
     /**
      * Run the database seeds.

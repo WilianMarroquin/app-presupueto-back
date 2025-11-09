@@ -10,7 +10,6 @@ use {{ requestNamespace }}\{{ updateRequest }};
 use {{ modelNamespace }}\{{ model }};
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -19,7 +18,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class {{ controlador }} extends AppbaseController implements HasMiddleware
 {
 
-      /**
+    /**
      * @return array
      */
     public static function middleware(): array
@@ -40,13 +39,12 @@ class {{ controlador }} extends AppbaseController implements HasMiddleware
     public function index(Request $request): JsonResponse
     {
         ${{ variable_plural }} = QueryBuilder::for({{ model }}::class)
-            ->with([])
             ->allowedFilters({{ otro }})
             ->allowedSorts({{ otro }})
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
-            ->paginate($request->get('per_page', 10));
+            ->Paginate(request('page.size') ?? 10);
 
-        return $this->sendResponse(${{ variable_plural }}->toArray(), '{{ variable_plural }} recuperados con éxito.');
+        return $this->sendResponse(${{ variable_plural }}, '{{ variable_plural }} recuperados con éxito.');
     }
 
 
@@ -63,7 +61,6 @@ class {{ controlador }} extends AppbaseController implements HasMiddleware
         return $this->sendResponse(${{ variable_plural }}->toArray(), '{{ model }} creado con éxito.');
     }
 
-
     /**
      * Display the specified {{ model }}.
      * GET|HEAD /{{ variable_plural }}/{id}
@@ -72,8 +69,6 @@ class {{ controlador }} extends AppbaseController implements HasMiddleware
     {
         return $this->sendResponse(${{ variable }}->toArray(), '{{ model }} recuperado con éxito.');
     }
-
-
 
     /**
     * Update the specified {{ model }} in storage.
@@ -95,28 +90,4 @@ class {{ controlador }} extends AppbaseController implements HasMiddleware
         ${{ variable }}->delete();
         return $this->sendResponse(null, '{{ model }} eliminado con éxito.');
     }
-
-    /**
-    * Get columns of the table
-    * GET /{{ variable_plural }}/columns
-    */
-    public function getColumnas(): JsonResponse
-    {
-
-        $columns = Schema::getColumnListing((new {{ model }})->getTable());
-
-        $columnasSinTimesTamps = array_diff($columns, ['id', 'created_at', 'updated_at', 'deleted_at']);
-
-        $nombreDeTabla = (new {{ model }})->getTable();
-
-        $data = [
-            'columns' => array_values($columnasSinTimesTamps),
-            'nombreDelModelo' => '{{ model }}',
-            'nombreDeTabla' => $nombreDeTabla,
-            'ruta' => 'api/'.$nombreDeTabla,
-        ];
-
-        return $this->sendResponse($data, 'Columnas de la tabla {{ tableName }} recuperadas con éxito.');
-    }
-
 }

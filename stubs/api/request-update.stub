@@ -14,9 +14,7 @@ class {{ updateRequest }} extends FormRequest
 
     public function rules()
     {
-
-         return {{ model }}::$rules;
-
+        return {{ model }}::$rules;
     }
 }
 

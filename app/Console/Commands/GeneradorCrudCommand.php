@@ -22,6 +22,7 @@ class GeneradorCrudCommand extends Command
     private $namespace = 'App\\Models';
     private $controllerNamespace = 'App\\Http\\Controllers\\Api';
     private $requestNamespace = 'App\\Http\\Requests\\Api';
+    private $seederNamespace = 'Database\\Seeders';
 
     private $castFormatoOriginal;
 
@@ -44,6 +45,7 @@ class GeneradorCrudCommand extends Command
             $this->namespace .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', $this->subdirectorio);
             $this->controllerNamespace .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', $this->subdirectorio);
             $this->requestNamespace .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', $this->subdirectorio);
+            $this->seederNamespace = 'Database\\Seeders\\' . $this->subdirectorio;
         }
 
         // Verificar si la tabla existe
@@ -71,7 +73,6 @@ class GeneradorCrudCommand extends Command
 
         $this->info("🚀 ¡Generación de archivos completada con éxito!");
 
-
     }
 
 
@@ -81,17 +82,21 @@ class GeneradorCrudCommand extends Command
 
         $pathSub = $this->subdirectorio ? $this->subdirectorio . DIRECTORY_SEPARATOR : '';
 
+        $nombreTabla = str_contains($this->nombreTabla, '.') ? explode('.', $this->nombreTabla)[1] : $this->nombreTabla;
+
         $modelo = "{$this->nombreModelo}";
         $controlador = "{$this->nombreModelo}ApiController";
         $createRequest = "Create{$this->nombreModelo}ApiRequest";
         $updateRequest = "Update{$this->nombreModelo}ApiRequest";
-        $seedername = "{$this->nombreModelo}TableSeeder";
-        $seederPath = "Database/seeders/{$seedername}.php";
+        $seederName =  ucwords($this->nombreModelo) . "TableSeeder";
+        $seederPermisosName =  ucwords($this->nombreModelo) . "PermisosTableSeeder";
 
         $modelPath = app_path("Models/{$pathSub}{$modelo}.php");
         $controllerPath = app_path("Http/Controllers/Api/{$pathSub}{$controlador}.php");
         $createRequestPath = app_path("Http/Requests/Api/{$pathSub}{$createRequest}.php");
         $updateRequestPath = app_path("Http/Requests/Api/{$pathSub}{$updateRequest}.php");
+        $seederPath = database_path("seeders/{$pathSub}{$seederName}.php");
+        $seederPermisosPath = database_path("seeders/{$pathSub}{$seederPermisosName}.php");
 
         // Stubs
         $modelStub = File::get(base_path('stubs/api/model.stub'));
@@ -99,24 +104,26 @@ class GeneradorCrudCommand extends Command
         $createRequestStub = File::get(base_path('stubs/api/request-create.stub'));
         $updateRequestStub = File::get(base_path('stubs/api/request-update.stub'));
         $seederStub = File::get(base_path('stubs/api/seeder.stub'));
+        $seederPermisosStub = File::get(base_path('stubs/api/seeder-permisos.stub'));
 
         $tieneSoftDeletes = Schema::hasColumn($this->nombreTabla, 'deleted_at'); // Verificar si la tabla tiene SoftDeletes
 
         $useSoftDeletesCode = $tieneSoftDeletes ? 'use Illuminate\\Database\\Eloquent\\SoftDeletes;' : '';
         $softDeletesTrait = $tieneSoftDeletes ? 'use SoftDeletes;' : '';
 
-        $nombreTabla = str_contains($this->nombreTabla, '.') ? explode('.', $this->nombreTabla)[1] : $this->nombreTabla;
-
         $replacements = [
             '{{ modelNamespace }}' => $this->namespace,
             '{{ requestNamespace }}' => $this->requestNamespace,
             '{{ controllerNamespace }}' => $this->controllerNamespace,
+            '{{ seederNamespace }}' => $this->seederNamespace,
             '{{ controlador }}' => $controlador,
             '{{ model }}' => $this->nombreModelo,
             '{{ variable }}' => $this->variable,
             '{{ variable_plural }}' => $nombreTabla,
-            '{{ variableTitleCase }}' => $this->convertirATitleCase($this->nombreModelo),
+            '{{ nombre_permiso }}' => $this->camelCaseAFraseMinusculaConPlural($this->nombreModelo),
             '{{ tableNameM }}' => $tableNameM,
+            '{{ seederPermisosName }}' => $seederPermisosName,
+            '{{ seederName }}' => $seederName,
             '{{ createRequest }}' => $createRequest,
             '{{ updateRequest }}' => $updateRequest,
             '{{ fillable }}' => $fillable,
@@ -127,9 +134,10 @@ class GeneradorCrudCommand extends Command
             '{{ softDeletesTrait }}' => $softDeletesTrait,
             '{{ casts }}' => $casts,
             '{{ otro }}' => $fillable,
+            '{{ variableTitleCase }}' => $this->convertirATitleCase($this->nombreModelo),
         ];
 
-        foreach ([$modelPath, $controllerPath, $createRequestPath, $updateRequestPath] as $path) {
+        foreach ([$modelPath, $controllerPath, $createRequestPath, $updateRequestPath, $seederPath, $seederPermisosPath] as $path) {
             if (!File::exists(dirname($path))) {
                 File::makeDirectory(dirname($path), 0755, true);
             }
@@ -141,7 +149,7 @@ class GeneradorCrudCommand extends Command
         File::put($createRequestPath, str_replace(array_keys($replacements), $replacements, $createRequestStub));
         File::put($updateRequestPath, str_replace(array_keys($replacements), $replacements, $updateRequestStub));
         File::put($seederPath, str_replace(array_keys($replacements), $replacements, $seederStub));
-
+        File::put($seederPermisosPath, str_replace(array_keys($replacements), $replacements, $seederPermisosStub));
 
         // Ejecutar el comando ide-helper:models para agregar anotaciones
         $this->callSilent('ide-helper:models', [
@@ -175,17 +183,23 @@ class GeneradorCrudCommand extends Command
         $datosACopiar = json_encode([
             'Modelo' => $modelo,
             'Ruta' => "api/{$nombreTabla}",
-            'columnas' => $this->camposTipados()
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            'Columnas' => $this->camposTipados(),
+            'Directorio' => $this->subdirectorio,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+        $this->line("\n📋 Copia el JSON generado aquí 👇");
+        $this->line(str_repeat('═', 50));
+        $this->line($datosACopiar);
+        $this->line(str_repeat('═', 50) . "\n");
 
         if (PHP_OS_FAMILY === 'Darwin') {
             Process::run("echo " . escapeshellarg($datosACopiar) . " | pbcopy");
-            $this->info("📋 Datos copiados al portapapeles (MacOS)");
+            $this->info("✅ JSON copiado al portapapeles (MacOS)");
         } elseif (PHP_OS_FAMILY === 'Windows') {
             Process::run("echo $datosACopiar | clip");
-            $this->info("📋 Datos copiados al portapapeles (Windows)");
+            $this->info("✅ JSON copiado al portapapeles (Windows)");
         } else {
-            $this->info("⚠️ Copia manual: Usa Ctrl+C para copiar los datos.");
+            $this->warn("⚠️ Copia manual: selecciona el texto y usa Ctrl+C");
         }
     }
 
@@ -496,23 +510,33 @@ class GeneradorCrudCommand extends Command
 
     }
 
-    function pluralizar(string $palabra): string
-    {
-        $vocales = ['a', 'e', 'i', 'o', 'u'];
-        $ultima = strtolower(substr($palabra, -1));
-        $penultima = strtolower(substr($palabra, -2, 1));
+    function camelCaseAFraseMinusculaConPlural($texto) {
+        // Insertar espacios entre palabras camel case
+        $frase = preg_replace('/(?<=[a-z])(?=[A-Z])/', ' ', $texto);
+        $frase = preg_replace('/(?<=[A-Z])(?=[A-Z][a-z])/', ' ', $frase);
 
-        if (in_array($ultima, $vocales)) {
-            return $palabra . 's';
-        } elseif ($ultima === 'z') {
-            return substr($palabra, 0, -1) . 'ces';
-        } elseif ($ultima === 'n' || $ultima === 'r') {
-            return $palabra . 'es';
-        } elseif ($ultima === 'l' && $penultima === 'e') {
-            return $palabra . 'es';
+        // Convertir a minúsculas
+        $palabras = explode(' ', strtolower($frase));
+
+        // Pluralizar la última palabra
+        $ultima = array_pop($palabras);
+        $plural = $ultima;
+
+        if (str_ends_with($ultima, 'z')) {
+            $plural = substr($ultima, 0, -1) . 'ces';
+        } elseif (str_ends_with($ultima, 'ión')) {
+            $plural = preg_replace('/ión$/', 'iones', $ultima);
+        } elseif (str_ends_with($ultima, 's')) {
+            // Ya es plural
+        } elseif (preg_match('/[aeo]$/', $ultima)) {
+            $plural = $ultima . 's';
         } else {
-            return $palabra . 'es';
+            $plural = $ultima . 'es';
         }
+
+        $palabras[] = $plural;
+
+        return implode(' ', $palabras);
     }
 
     function convertirATitleCase(string $texto): string
@@ -538,6 +562,23 @@ class GeneradorCrudCommand extends Command
 
         return implode(' ', $resultado);
     }
+    function pluralizar(string $palabra): string
+    {
+        $vocales = ['a', 'e', 'i', 'o', 'u'];
+        $ultima = strtolower(substr($palabra, -1));
+        $penultima = strtolower(substr($palabra, -2, 1));
 
+        if (in_array($ultima, $vocales)) {
+            return $palabra . 's';
+        } elseif ($ultima === 'z') {
+            return substr($palabra, 0, -1) . 'ces';
+        } elseif ($ultima === 'n' || $ultima === 'r') {
+            return $palabra . 'es';
+        } elseif ($ultima === 'l' && $penultima === 'e') {
+            return $palabra . 'es';
+        } else {
+            return $palabra . 'es';
+        }
+    }
 
 }

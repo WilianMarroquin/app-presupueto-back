@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use {{ modelNamespace }}\{{ model }};
 
 
-
 class {{ createRequest }} extends FormRequest
 {
     public function authorize()
@@ -16,9 +15,7 @@ class {{ createRequest }} extends FormRequest
 
     public function rules()
     {
-
         return {{ model }}::$rules;
-
     }
 }
 
