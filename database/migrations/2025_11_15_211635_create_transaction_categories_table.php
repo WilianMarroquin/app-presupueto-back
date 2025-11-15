@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transaction_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nombre', 100);
-            $table->enum('type', ['Income', 'Exponse']);
+            $table->string('name', 100);
+            $table->enum('type', ['Income', 'Expense']);
             $table->text('description');
             $table->unsignedBigInteger('parent_id')->index('fk_transaction_categories_transaction_categories1_idx')->nullable();
             $table->timestamps();

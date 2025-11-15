@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  *
  * @property int $id
- * @property string $nombre
+ * @property string $name
  * @property string $type
  * @property string $description
  * @property int $parent_id
@@ -47,12 +47,14 @@ class TransactionCategory extends Model
 
     protected $fillable =
         [
-    'nombre',
+    'name',
     'type',
     'description',
     'parent_id'
 ];
 
+    const CATEGORY_TYPE_INCOME = 'Income';
+    const CATEGORY_TYPE_EXPENSE = 'Expense';
 
     /**
      * The attributes that should be casted to native types.
@@ -62,7 +64,7 @@ class TransactionCategory extends Model
     protected $casts =
         [
         'id' => 'integer',
-        'nombre' => 'string',
+        'name' => 'string',
         'type' => 'string',
         'description' => 'string',
         'parent_id' => 'integer',
@@ -80,7 +82,7 @@ class TransactionCategory extends Model
      */
     public static $rules =
     [
-    'nombre' => 'required|string|max:100',
+    'name' => 'required|string|max:100',
     'type' => 'required|string',
     'description' => 'required|string',
     'parent_id' => 'integer',
