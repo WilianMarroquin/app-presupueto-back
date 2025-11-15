@@ -67,7 +67,6 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
         return $this->sendResponse($transactions, 'transactions recuperados con éxito.');
     }
 
-
     /**
      * Store a newly created Transaction in storage.
      * POST /transactions

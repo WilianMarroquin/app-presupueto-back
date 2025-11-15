@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \Illuminate\Support\Carbon $transaction_date
  * @property int $payment_method_id
  * @property int $is_recurring
- * @property string $notes
+
  * @property int|null $created_ad
  * @property int|null $updated_at
  * @property int|null $deleted_at
@@ -63,7 +63,6 @@ class Transaction extends Model
     'transaction_date',
     'payment_method_id',
     'is_recurring',
-    'notes',
 ];
 
 
@@ -81,8 +80,7 @@ class Transaction extends Model
         'description' => 'string',
         'transaction_date' => 'date',
         'payment_method_id' => 'integer',
-        'is_recurring' => 'integer',
-        'notes' => 'string',
+        'is_recurring' => 'boolean',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
@@ -101,8 +99,7 @@ class Transaction extends Model
     'amount' => 'required|numeric',
     'description' => 'required|string',
     'payment_method_id' => 'required|integer',
-    'is_recurring' => 'required|integer',
-    'notes' => 'required|string',
+    'is_recurring' => 'required|boolean',
 ];
 
 

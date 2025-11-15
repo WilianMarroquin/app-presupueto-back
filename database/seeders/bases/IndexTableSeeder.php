@@ -16,7 +16,7 @@ class IndexTableSeeder extends Seeder
             UsersEstadosTableSeeder::class,
             UserSeeder::class,
             RolesPermisosBaseTableSeeder::class,
-            MenuOpcionesTableSeeder::class,
+//            MenuOpcionesTableSeeder::class,
             ConfiguracionesTableSeeder::class,
         ]);
 

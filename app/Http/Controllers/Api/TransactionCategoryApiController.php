@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateTransactionCategoryApiRequest;
 use App\Models\TransactionCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -40,21 +41,23 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     {
         $transaction_categories = QueryBuilder::for(TransactionCategory::class)
             ->allowedFilters([
-    'nombre',
-    'type',
-    'description',
-    'parent_id'
-])
+                'nombre',
+                'type',
+                'description',
+                'parent_id',
+                AllowedFilter::Custom('solo_padres', new \App\Filters\OnlyParentCategoriesFilter())
+            ])
             ->allowedSorts([
-    'nombre',
-    'type',
-    'description',
-    'parent_id'
-])
-            ->defaultSort('-id') // Ordenar por defecto por fecha descendente
-            ->Paginate(request('page.size') ?? 10);
+                'nombre',
+                'type',
+                'description',
+                'parent_id'
+            ])
+            ->allowedIncludes(['subCategories'])
+            ->defaultSort('-id')
+            ->jsonPaginate(request('per_page') ?? 10);
 
-        return $this->sendResponse($transaction_categories, 'transaction_categories recuperados con éxito.');
+        return $this->sendResponse($transaction_categories, 'Categories retrieved successfully');
     }
 
 
@@ -81,9 +84,9 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     }
 
     /**
-    * Update the specified TransactionCategory in storage.
-    * PUT/PATCH /transaction_categories/{id}
-    */
+     * Update the specified TransactionCategory in storage.
+     * PUT/PATCH /transaction_categories/{id}
+     */
     public function update(UpdateTransactionCategoryApiRequest $request, $id): JsonResponse
     {
         $transactioncategory = TransactionCategory::findOrFail($id);
@@ -92,9 +95,9 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     }
 
     /**
-    * Remove the specified TransactionCategory from storage.
-    * DELETE /transaction_categories/{id}
-    */
+     * Remove the specified TransactionCategory from storage.
+     * DELETE /transaction_categories/{id}
+     */
     public function destroy(TransactionCategory $transactioncategory): JsonResponse
     {
         $transactioncategory->delete();
