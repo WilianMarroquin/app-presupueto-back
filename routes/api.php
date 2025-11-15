@@ -36,3 +36,6 @@ Route::apiResource('transaction_categories', App\Http\Controllers\Api\Transactio
 
 Route::apiResource('account_types', App\Http\Controllers\Api\AccountTypeApiController::class)
         ->parameters(['account_types' => 'accounttype']);
+
+Route::apiResource('account_currencys', App\Http\Controllers\Api\AccountCurrencyApiController::class)
+        ->parameters(['account_currencys' => 'accountcurrency']);
