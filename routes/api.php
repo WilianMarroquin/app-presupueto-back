@@ -30,3 +30,6 @@ Route::prefix('libres')->group(function () {
 
 
 
+
+Route::apiResource('transaction_categories', App\Http\Controllers\Api\TransactionCategoryApiController::class)
+        ->parameters(['transaction_categories' => 'transactioncategory']);

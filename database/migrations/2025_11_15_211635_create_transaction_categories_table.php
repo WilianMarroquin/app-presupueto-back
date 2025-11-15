@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->enum('type', ['Income', 'Exponse']);
             $table->text('description');
-            $table->unsignedBigInteger('parent_id')->index('fk_transaction_categories_transaction_categories1_idx');
+            $table->unsignedBigInteger('parent_id')->index('fk_transaction_categories_transaction_categories1_idx')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
