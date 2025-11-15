@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -36,6 +36,8 @@ class AccountCurrency extends Model
 
     protected $table = 'account_currencys';
 
+    const QUETZAL = 1;
+    const USD = 2;
 
     protected $fillable =
         [
@@ -85,6 +87,6 @@ class AccountCurrency extends Model
      *
      * @var array
      */
-    
+
 
 }

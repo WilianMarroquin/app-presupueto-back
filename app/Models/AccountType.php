@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -35,6 +35,11 @@ class AccountType extends Model
     use HasFactory;
 
     protected $table = 'account_types';
+
+    const BANK = 1;
+    const CASH = 2;
+    const CREDIT_CARD = 3;
+    const WALLET = 4;
 
 
     protected $fillable =
@@ -85,6 +90,6 @@ class AccountType extends Model
      *
      * @var array
      */
-    
+
 
 }
