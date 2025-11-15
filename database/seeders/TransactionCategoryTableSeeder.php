@@ -14,6 +14,9 @@ class TransactionCategoryTableSeeder extends Seeder
      */
     public function run()
     {
+        disableForeignKeys();
+        TransactionCategory::truncate();
+
         $categories = [
             // ===== CATEGORÍAS DE GASTOS =====
 
@@ -262,5 +265,7 @@ class TransactionCategoryTableSeeder extends Seeder
 
         // Insertar subcategorías
         TransactionCategory::insert($subcategories);
+
+        enableForeignKeys();
     }
 }
