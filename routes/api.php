@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('transactions', App\Http\Controllers\Api\TransactionApiController::class)
         ->parameters(['transactions' => 'transaction']);
 
+    Route::get('analytics/expense/by/categories', [App\Http\Controllers\Api\AnalyticsApiController::class, 'getTotalExpensesByCategory']);
+
 });
 
 require __DIR__.'/auth.php';

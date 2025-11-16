@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\Transaction;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateTransactionCategoryApiRequest;
@@ -103,4 +104,5 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
         $transactioncategory->delete();
         return $this->sendResponse(null, 'TransactionCategory eliminado con éxito.');
     }
+
 }

@@ -92,21 +92,6 @@ class TransactionCategoryTableSeeder extends Seeder
                 'description' => 'Pagos de deudas, créditos y préstamos',
             ],
 
-            // Mascotas
-            [
-                'name' => 'Mascotas',
-                'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
-                'parent_id' => null,
-                'description' => 'Gastos relacionados con mascotas',
-            ],
-
-            // Hijos
-            [
-                'name' => 'Hijos',
-                'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
-                'parent_id' => null,
-                'description' => 'Gastos relacionados con hijos',
-            ],
 
             // Otros Gastos
             [
@@ -164,8 +149,6 @@ class TransactionCategoryTableSeeder extends Seeder
         $cuidadoPersonal = TransactionCategory::where('name', 'Cuidado Personal')->first();
         $seguros = TransactionCategory::where('name', 'Seguros')->first();
         $deudas = TransactionCategory::where('name', 'Deudas y Préstamos')->first();
-        $mascotas = TransactionCategory::where('name', 'Mascotas')->first();
-        $hijos = TransactionCategory::where('name', 'Hijos')->first();
         $ingresosFijos = TransactionCategory::where('name', 'Ingresos Fijos')->first();
         $ingresosVariables = TransactionCategory::where('name', 'Ingresos Variables')->first();
         $ingresosEsporadicos = TransactionCategory::where('name', 'Ingresos Esporádicos')->first();
@@ -230,15 +213,6 @@ class TransactionCategoryTableSeeder extends Seeder
             ['name' => 'Préstamos Personales', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $deudas->id, 'description' => 'Abonos a préstamos'],
             ['name' => 'Créditos', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $deudas->id, 'description' => 'Otros créditos'],
 
-            // Subcategorías de Mascotas
-            ['name' => 'Veterinario', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $mascotas->id, 'description' => 'Atención veterinaria'],
-            ['name' => 'Alimento para Mascotas', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $mascotas->id, 'description' => 'Comida de mascotas'],
-            ['name' => 'Accesorios', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $mascotas->id, 'description' => 'Juguetes y accesorios'],
-
-            // Subcategorías de Hijos
-            ['name' => 'Productos Infantiles', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $hijos->id, 'description' => 'Pañales, biberones, etc'],
-            ['name' => 'Guardería', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $hijos->id, 'description' => 'Cuidado infantil'],
-            ['name' => 'Actividades Extracurriculares', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $hijos->id, 'description' => 'Clases y deportes'],
 
             // Subcategorías de Ingresos Fijos
             ['name' => 'Salario', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosFijos->id, 'description' => 'Sueldo mensual'],

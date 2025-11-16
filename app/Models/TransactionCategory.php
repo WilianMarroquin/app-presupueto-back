@@ -4,6 +4,9 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -45,13 +48,12 @@ class TransactionCategory extends Model
     protected $table = 'transaction_categories';
 
 
-    protected $fillable =
-        [
-    'name',
-    'type',
-    'description',
-    'parent_id'
-];
+    protected $fillable = [
+        'name',
+        'type',
+        'description',
+        'parent_id'
+    ];
 
     const CATEGORY_TYPE_INCOME = 'Income';
     const CATEGORY_TYPE_EXPENSE = 'Expense';
@@ -61,8 +63,7 @@ class TransactionCategory extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'type' => 'string',
@@ -74,19 +75,17 @@ class TransactionCategory extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:100',
-    'type' => 'required|string',
-    'description' => 'required|string',
-    'parent_id' => 'integer',
-];
+    public static $rules = [
+        'name' => 'required|string|max:100',
+        'type' => 'required|string',
+        'description' => 'required|string',
+        'parent_id' => 'integer',
+    ];
 
 
     /**
@@ -94,7 +93,7 @@ class TransactionCategory extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -104,9 +103,14 @@ class TransactionCategory extends Model
      *
      * @var array
      */
-    public function subCategories()
+    public function subCategories(): HasMany
     {
-    return $this->hasMany(TransactionCategory::class,'parent_id','id');
+        return $this->hasMany(TransactionCategory::class, 'parent_id', 'id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(TransactionCategory::class, 'id', 'parent_id');
     }
 
 }

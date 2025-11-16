@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -118,17 +119,17 @@ class Transaction extends Model
      *
      * @var array
      */
-    public function account()
+    public function account(): BelongsTo
     {
     return $this->belongsTo(Account::class,'account_id','id');
     }
 
-    public function transactionCategory()
+    public function category(): BelongsTo
     {
     return $this->belongsTo(TransactionCategory::class,'category_id','id');
     }
 
-    public function transactionPaymentMethod()
+    public function paymentMethod(): BelongsTo
     {
     return $this->belongsTo(TransactionPaymentMethod::class,'payment_method_id','id');
     }
