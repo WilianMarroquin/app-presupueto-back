@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AccountTableSeeder::class);
         $this->call(TransactionPaymentMethodTableSeeder::class);
         $this->call(MenuOpcionesTableSeeder::class);
+        $this->call(BudgetPeriodTypeTableSeeder::class);
 
     }
 }
