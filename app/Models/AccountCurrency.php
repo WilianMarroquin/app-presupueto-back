@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountCurrency whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountCurrency withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountCurrency withoutTrashed()
+ * @property string $code
+ * @property string $symbol
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountCurrency whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountCurrency whereSymbol($value)
  * @mixin \Eloquent
  */
 class AccountCurrency extends Model

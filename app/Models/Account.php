@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withoutTrashed()
+ * @property-read \App\Models\AccountType $type
  * @mixin \Eloquent
  */
 class Account extends Model

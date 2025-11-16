@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $category_id
@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \Illuminate\Support\Carbon $transaction_date
  * @property int $payment_method_id
  * @property int $is_recurring
-
  * @property int|null $created_ad
  * @property int|null $updated_at
  * @property int|null $deleted_at
@@ -44,6 +43,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withoutTrashed()
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property-read \App\Models\TransactionCategory $category
+ * @property-read \App\Models\TransactionPaymentMethod $paymentMethod
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCreatedAt($value)
  * @mixin \Eloquent
  */
 class Transaction extends Model

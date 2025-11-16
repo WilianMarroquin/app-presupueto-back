@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -37,6 +37,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory withoutTrashed()
+ * @property-read TransactionCategory|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TransactionCategory> $subCategories
+ * @property-read int|null $sub_categories_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereName($value)
  * @mixin \Eloquent
  */
 class TransactionCategory extends Model
@@ -110,7 +114,7 @@ class TransactionCategory extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(TransactionCategory::class, 'id', 'parent_id');
+        return $this->belongsTo(TransactionCategory::class, 'parent_id');
     }
 
 }

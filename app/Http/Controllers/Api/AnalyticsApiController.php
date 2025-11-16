@@ -11,14 +11,12 @@ class AnalyticsApiController extends AppBaseController
 {
     public function getTotalExpensesByCategory(Request $request)
     {
-        $transactions = Transaction::with(['category.parent'])
-            ->whereHas('category.parent') // Solo transacciones con subcategoría (que tiene padre)
+        $transactions = Transaction::whereHas('category.parent') // Solo transacciones con subcategoría (que tiene padre)
             ->whereHas('category', function($query) {
                 $query->where('type', TransactionCategory::CATEGORY_TYPE_EXPENSE);
             })
             ->get();
 
-        dd($transactions);
         // Agrupar por categoría padre y sumar montos
         $totals = $transactions
             ->groupBy(function ($transaction) {
