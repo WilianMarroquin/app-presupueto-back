@@ -32,6 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_period_types', App\Http\Controllers\Api\BudgetPeriodTypeApiController::class)
         ->parameters(['budget_period_types' => 'budgetperiodtype']);
 
+    Route::apiResource('budgets', App\Http\Controllers\Api\BudgetApiController::class)
+        ->parameters(['budgets' => 'budget']);
+
     Route::get('analytics/expense/by/categories', [App\Http\Controllers\Api\AnalyticsApiController::class, 'getTotalExpensesByCategory']);
 
 });
@@ -43,5 +46,4 @@ Route::prefix('libres')->group(function () {
     require __DIR__.'/admin/Configuraciones/api_libres.php';
 
 });
-
 
