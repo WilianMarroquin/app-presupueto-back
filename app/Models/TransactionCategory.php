@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -50,6 +50,21 @@ class TransactionCategory extends Model
     use HasFactory;
 
     protected $table = 'transaction_categories';
+
+    const VIVIENDA = 1;
+    const ALIMENTACION = 2;
+    const TRANSPORTE = 3;
+    const SALUD = 4;
+    const EDUCACION = 5;
+    const ENTRETENIMIENTO = 6;
+    const CUIDADO_PERSONAL = 7;
+    const SEGUROS = 8;
+    const DEUDAS_Y_PRESTAMOS = 9;
+    const OTROS_GASTOS = 10;
+    const INGRESOS_FIJOS = 11;
+    const INGRESOS_VARIABLES = 12;
+    const INGRESOS_ESPORADICOS = 13;
+    const INGRESOS_PASIVOS = 14;
 
 
     protected $fillable = [

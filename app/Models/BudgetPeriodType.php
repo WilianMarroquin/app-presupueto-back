@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -38,12 +38,14 @@ class BudgetPeriodType extends Model
 
     protected $table = 'budget_period_types';
 
+    const MENSUAL = 1;
+    const TRIMESTRAL = 2;
+    const ANUAL = 3;
 
-    protected $fillable =
-        [
-    'name',
-    'description'
-];
+    protected $fillable = [
+        'name',
+        'description'
+    ];
 
 
     /**
@@ -51,8 +53,7 @@ class BudgetPeriodType extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'description' => 'string',
@@ -62,17 +63,15 @@ class BudgetPeriodType extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:100',
-    'description' => 'required|string',
-];
+    public static $rules = [
+        'name' => 'required|string|max:100',
+        'description' => 'required|string',
+    ];
 
 
     /**
@@ -80,7 +79,7 @@ class BudgetPeriodType extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -90,6 +89,6 @@ class BudgetPeriodType extends Model
      *
      * @var array
      */
-    
+
 
 }

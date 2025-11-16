@@ -91,6 +91,13 @@ class TransactionCategoryTableSeeder extends Seeder
                 'parent_id' => null,
                 'description' => 'Pagos de deudas, créditos y préstamos',
             ],
+            // Deudas y Préstamos
+            [
+                'name' => 'Deudas y Préstamos',
+                'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
+                'parent_id' => null,
+                'description' => 'Pagos de deudas, créditos y préstamos',
+            ],
 
 
             // Otros Gastos
@@ -153,6 +160,7 @@ class TransactionCategoryTableSeeder extends Seeder
         $ingresosVariables = TransactionCategory::where('name', 'Ingresos Variables')->first();
         $ingresosEsporadicos = TransactionCategory::where('name', 'Ingresos Esporádicos')->first();
         $ingresosPasivos = TransactionCategory::where('name', 'Ingresos Pasivos')->first();
+        $otrosGastos = TransactionCategory::where('name', 'Otros Gastos')->first();
 
         $subcategories = [
             // Subcategorías de Vivienda
@@ -213,6 +221,11 @@ class TransactionCategoryTableSeeder extends Seeder
             ['name' => 'Préstamos Personales', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $deudas->id, 'description' => 'Abonos a préstamos'],
             ['name' => 'Créditos', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $deudas->id, 'description' => 'Otros créditos'],
 
+            // SubCategorías de Otros Gastos
+            ['name' => 'Donaciones', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Aportaciones benéficas'],
+            ['name' => 'Multas', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Sanciones y multas'],
+            ['name' => 'Gastos Varios', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Gastos imprevistos'],
+            ['name' => 'Servicios Digitales', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Apps y plataformas digitales'],
 
             // Subcategorías de Ingresos Fijos
             ['name' => 'Salario', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosFijos->id, 'description' => 'Sueldo mensual'],
