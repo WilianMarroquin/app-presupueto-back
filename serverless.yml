@@ -1,0 +1,67 @@
+service: laravel-api-budget
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: provided.al2
+  stage: production
+  memorySize: 1024
+  environment:
+    APP_URL: https://api.mrqn-labs.com
+    APP_ENV: production
+    APP_DEBUG: false
+    APP_KEY: ${ssm:/app-budget/APP_KEY}
+    DB_CONNECTION: mysql
+    DB_HOST: ${ssm:/app-budget/DB_HOST}
+
+    # ⚠️ OJO: AWS RDS usa puerto 3306. PlanetScale usa 4000.
+    # Si usas RDS Free Tier, cambia esto a 3306.
+    DB_PORT: 4000
+
+    DB_DATABASE: app_budget
+    DB_USERNAME: ${ssm:/app-budget/DB_USERNAME}
+
+    # CORREGIDO: Agregué el SSM aquí porque lo tenías vacío
+    DB_PASSWORD:
+
+    SESSION_DRIVER: cookie
+    CACHE_DRIVER: array
+    SESSION_DOMAIN: .mrqn-labs.com
+
+    # CORREGIDO: Tenías "https::/" con doble dos puntos
+    FRONTEND_URL: https://mrqn-labs.com
+
+    SANCTUM_STATEFUL_DOMAINS: mrqn-labs.com,api.mrqn-labs.com
+
+plugins:
+  - ./vendor/bref/bref
+  - serverless-domain-manager  # <--- ¡AQUÍ ESTÁ EL MAGO! 🎩
+
+# --- CONFIGURACIÓN DEL DOMINIO ---
+custom:
+  customDomain:
+    domainName: api.mrqn-labs.com      # Tu subdominio
+    basePath: ''                       # Para que sea api.com/rutas y no api.com/dev/rutas
+    stage: ${self:provider.stage}
+    createRoute53Record: true          # Crea el registro DNS solo
+    certificateName: mrqn-labs.com     # Debe coincidir con tu certificado ACM
+# ---------------------------------
+
+functions:
+  api:
+    handler: public/index.php
+    description: 'Laravel API Budget'
+    timeout: 28
+    layers:
+      - ${bref:layer.php-82-fpm}
+    events:
+      - httpApi: '*'
+
+package:
+  exclude:
+    - node_modules/**
+    - public/storage
+    - resources/assets/**
+    - storage/**
+    - tests/**
+    - .env
