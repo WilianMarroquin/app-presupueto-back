@@ -8,8 +8,8 @@ provider:
   memorySize: 1024
   environment:
     APP_URL: https://api.mrqn-labs.com
-    APP_ENV: production
-    APP_DEBUG: false
+    APP_ENV: local
+    APP_DEBUG: true
     APP_KEY: ${ssm:/app-budget/APP_KEY}
     DB_CONNECTION: mysql
     DB_HOST: ${ssm:/app-budget/DB_HOST}
@@ -17,17 +17,18 @@ provider:
     # 4000 es correcto si usas PlanetScale. Si usas RDS normal es 3306.
     DB_PORT: 4000
 
-    DB_DATABASE: app_budget
+    DB_DATABASE: ${ssm:/app-budget/DB_DATABASE}
     DB_USERNAME: ${ssm:/app-budget/DB_USERNAME}
 
     # CORREGIDO: Se agregó la referencia a SSM
-    DB_PASSWORD:
+    DB_PASSWORD: ${ssm:/app-budget/DB_PASSWORD}
 
     SESSION_DRIVER: cookie
     CACHE_DRIVER: array
     SESSION_DOMAIN: .mrqn-labs.com
     FRONTEND_URL: https://mrqn-labs.com
     SANCTUM_STATEFUL_DOMAINS: mrqn-labs.com,api.mrqn-labs.com
+    MYSQL_ATTR_SSL_CA: /etc/pki/tls/certs/ca-bundle.crt
 
 plugins:
   - ./vendor/bref/bref
