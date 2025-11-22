@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property float $amount
@@ -37,6 +37,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Budget whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Budget withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Budget withoutTrashed()
+ * @property-read \App\Models\TransactionCategory $category
+ * @property-read \App\Models\BudgetPeriodType $periodType
  * @mixin \Eloquent
  */
 class Budget extends Model

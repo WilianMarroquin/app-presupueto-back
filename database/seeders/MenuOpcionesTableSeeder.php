@@ -18,29 +18,58 @@ class MenuOpcionesTableSeeder extends Seeder
         MenuOpcion::truncate();
 
         MenuOpcion::create([
-            "titulo" => "Create Transacción",
+            "titulo" => "Home",
             "icono" => "ri-file-add-line",
             "ruta" => "index",
             "orden" => 0,
-            "action" => "Crear Transactiones",
+            "action" => "Home",
+            "subject" => "Home",
+            "parent_id" => null
+        ]);
+        MenuOpcion::create([
+            "titulo" => "Transactions",
+            "icono" => "ri-exchange-line",
+            "ruta" => "transactions",
+            "orden" => 1,
+            "action" => "Listar Transactiones",
             "subject" => "Transaction",
+            "parent_id" => null
+        ]);
+        MenuOpcion::create([
+            "titulo_seccion" => "Analytics",
+            "icono" => null,
+            "ruta" => null,
+            "orden" => 2,
+            "action" => "Listar Analytics",
+            "subject" => "Dashboard",
             "parent_id" => null
         ]);
         MenuOpcion::create([
             "titulo" => "Dashboard",
             "icono" => "ri-dashboard-line",
             "ruta" => "dashboard",
-            "orden" => 1,
+            "orden" => 3,
             "action" => "Listar Dashboard",
             "subject" => "Transaction",
             "parent_id" => null
         ]);
+
         MenuOpcion::create([
-            "titulo" => "Transactions",
-            "icono" => "ri-transaction-line",
-            "ruta" => "transactions",
-            "orden" => 2,
-            "action" => "Listar Transactiones",
+            "titulo_seccion" => "Accounts Management",
+            "icono" => null,
+            "ruta" => null,
+            "orden" => 4,
+            "action" => "Listar Cuentas Bancarias",
+            "subject" => "Accounts",
+            "parent_id" => null
+        ]);
+
+        MenuOpcion::create([
+            "titulo" => "My Bank Accounts",
+            "icono" => "ri-bank-line",
+            "ruta" => "accounts",
+            "orden" => 5,
+            "action" => "Listar Cuentas Bancarias",
             "subject" => "Transaction",
             "parent_id" => null
         ]);

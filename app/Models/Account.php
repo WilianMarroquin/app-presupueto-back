@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -39,6 +40,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withoutTrashed()
  * @property-read \App\Models\AccountType $type
+ * @property-read \App\Models\AccountCurrency $currency
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -113,12 +115,12 @@ class Account extends Model
      *
      * @var array
      */
-    public function accountCurrency()
+    public function currency(): BelongsTo
     {
     return $this->belongsTo(AccountCurrency::class,'currency_id','id');
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
     return $this->belongsTo(AccountType::class,'type_id','id');
     }
