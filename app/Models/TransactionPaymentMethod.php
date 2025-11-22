@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -37,19 +37,20 @@ class TransactionPaymentMethod extends Model
     protected $table = 'transaction_payment_methods';
 
 
-    protected $fillable =
-        [
-    'name'
-];
+    protected $fillable = [
+        'name'
+    ];
 
+    const EFECTIVO = 1;
+    const TARJETA_DE_DEBITO = 2;
+    const TRANSFERENCIA = 3;
 
     /**
      * The attributes that should be casted to native types.
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'created_at' => 'timestamp',
@@ -58,16 +59,14 @@ class TransactionPaymentMethod extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:100',
-];
+    public static $rules = [
+        'name' => 'required|string|max:100',
+    ];
 
 
     /**
@@ -75,7 +74,7 @@ class TransactionPaymentMethod extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -85,6 +84,6 @@ class TransactionPaymentMethod extends Model
      *
      * @var array
      */
-    
+
 
 }
