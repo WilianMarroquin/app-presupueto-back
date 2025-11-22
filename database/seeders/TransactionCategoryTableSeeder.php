@@ -91,14 +91,6 @@ class TransactionCategoryTableSeeder extends Seeder
                 'parent_id' => null,
                 'description' => 'Pagos de deudas, créditos y préstamos',
             ],
-            // Deudas y Préstamos
-            [
-                'name' => 'Deudas y Préstamos',
-                'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
-                'parent_id' => null,
-                'description' => 'Pagos de deudas, créditos y préstamos',
-            ],
-
 
             // Otros Gastos
             [
@@ -106,6 +98,14 @@ class TransactionCategoryTableSeeder extends Seeder
                 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
                 'parent_id' => null,
                 'description' => 'Gastos varios no clasificados',
+            ],
+
+            // Servicios Digitales
+            [
+                'name' => 'Servicios Digitales',
+                'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE,
+                'parent_id' => null,
+                'description' => 'Gastos en tecnología y software.',
             ],
 
             // ===== CATEGORÍAS DE INGRESOS =====
@@ -161,12 +161,12 @@ class TransactionCategoryTableSeeder extends Seeder
         $ingresosEsporadicos = TransactionCategory::where('name', 'Ingresos Esporádicos')->first();
         $ingresosPasivos = TransactionCategory::where('name', 'Ingresos Pasivos')->first();
         $otrosGastos = TransactionCategory::where('name', 'Otros Gastos')->first();
+        $serviciosDigitales = TransactionCategory::where('name', 'Servicios Digitales')->first();
 
         $subcategories = [
             // Subcategorías de Vivienda
             ['name' => 'Renta/Hipoteca', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Pago mensual de vivienda'],
             ['name' => 'Servicios', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Luz, agua, gas'],
-            ['name' => 'Internet y Teléfono', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Servicios de comunicación'],
             ['name' => 'Mantenimiento', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Reparaciones y mantenimiento'],
             ['name' => 'Impuesto Predial', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Impuestos de propiedad'],
             ['name' => 'Muebles', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $vivienda->id, 'description' => 'Muebles y electrodomésticos'],
@@ -201,7 +201,7 @@ class TransactionCategoryTableSeeder extends Seeder
             // Subcategorías de Entretenimiento
             ['name' => 'Cine y Teatro', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Entretenimiento cultural'],
             ['name' => 'Gimnasio', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Membresía deportiva'],
-            ['name' => 'Suscripciones', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Netflix, Spotify, etc'],
+            ['name' => 'Suscripciones (Ocio)', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Netflix, Spotify, etc'],
             ['name' => 'Vacaciones', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Viajes y turismo'],
             ['name' => 'Hobbies', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $entretenimiento->id, 'description' => 'Pasatiempos diversos'],
 
@@ -225,7 +225,6 @@ class TransactionCategoryTableSeeder extends Seeder
             ['name' => 'Donaciones', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Aportaciones benéficas'],
             ['name' => 'Multas', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Sanciones y multas'],
             ['name' => 'Gastos Varios', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Gastos imprevistos'],
-            ['name' => 'Servicios Digitales', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $otrosGastos->id, 'description' => 'Apps y plataformas digitales'],
 
             // Subcategorías de Ingresos Fijos
             ['name' => 'Salario', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosFijos->id, 'description' => 'Sueldo mensual'],
@@ -243,11 +242,17 @@ class TransactionCategoryTableSeeder extends Seeder
             ['name' => 'Regalos', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosEsporadicos->id, 'description' => 'Dinero recibido como regalo'],
             ['name' => 'Devolución de Impuestos', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosEsporadicos->id, 'description' => 'Reembolsos fiscales'],
             ['name' => 'Premios', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosEsporadicos->id, 'description' => 'Premios ganados'],
+            ['name' => 'Freelance / Consultoría', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosEsporadicos->id, 'description' => 'Pagos por servicios profesionales o proyectos.'],
 
             // Subcategorías de Ingresos Pasivos
             ['name' => 'Dividendos', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosPasivos->id, 'description' => 'Dividendos de inversiones'],
             ['name' => 'Intereses Bancarios', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosPasivos->id, 'description' => 'Intereses generados'],
             ['name' => 'Regalías', 'type' => TransactionCategory::CATEGORY_TYPE_INCOME, 'parent_id' => $ingresosPasivos->id, 'description' => 'Ingresos por regalías'],
+
+            //Servicios Digitales
+            ['name' => 'Internet y Telefonía', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $serviciosDigitales->id, 'description' => 'Internet fijo y móvil'],
+            ['name' => 'Cloud y Hosting', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $serviciosDigitales->id, 'description' => 'Servicios de AWS, Azure, Google Cloud, Hosting'],
+            ['name' => 'Software y Licencias', 'type' => TransactionCategory::CATEGORY_TYPE_EXPENSE, 'parent_id' => $serviciosDigitales->id, 'description' => 'Software de productividad y desarrollo (Office, Adobe, IDEs)'], // <-- Añadido
         ];
 
         // Insertar subcategorías
