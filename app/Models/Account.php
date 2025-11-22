@@ -4,11 +4,12 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -39,6 +40,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withoutTrashed()
  * @property-read \App\Models\AccountType $type
+ * @property-read \App\Models\AccountCurrency $currency
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -50,15 +52,14 @@ class Account extends Model
     protected $table = 'accounts';
 
 
-    protected $fillable =
-        [
-    'name',
-    'type_id',
-    'currency_id',
-    'initial_balance',
-    'current_balance',
-    'is_active'
-];
+    protected $fillable = [
+            'name',
+            'type_id',
+            'currency_id',
+            'initial_balance',
+            'current_balance',
+            'is_active'
+        ];
 
 
     /**
@@ -66,20 +67,18 @@ class Account extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
-        'id' => 'integer',
-        'name' => 'string',
-        'type_id' => 'integer',
-        'currency_id' => 'integer',
-        'initial_balance' => 'float',
-        'current_balance' => 'float',
-        'is_active' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
-    ];
-
+    protected $casts = [
+            'id' => 'integer',
+            'name' => 'string',
+            'type_id' => 'integer',
+            'currency_id' => 'integer',
+            'initial_balance' => 'float',
+            'current_balance' => 'float',
+            'is_active' => 'integer',
+            'created_at' => 'timestamp',
+            'updated_at' => 'timestamp',
+            'deleted_at' => 'timestamp',
+        ];
 
 
     /**
@@ -87,15 +86,14 @@ class Account extends Model
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:45',
-    'type_id' => 'required|integer',
-    'currency_id' => 'required|integer',
-    'initial_balance' => 'required|numeric',
-    'current_balance' => 'required|numeric',
-    'is_active' => 'required|integer',
-];
+    public static $rules = [
+            'name' => 'required|string|max:45',
+            'type_id' => 'required|integer',
+            'currency_id' => 'required|integer',
+            'initial_balance' => 'required|numeric',
+            'current_balance' => 'required|numeric',
+            'is_active' => 'required|integer',
+        ];
 
 
     /**
@@ -103,7 +101,7 @@ class Account extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -113,14 +111,30 @@ class Account extends Model
      *
      * @var array
      */
-    public function accountCurrency()
+    public function currency(): BelongsTo
     {
-    return $this->belongsTo(AccountCurrency::class,'currency_id','id');
+        return $this->belongsTo(AccountCurrency::class, 'currency_id', 'id');
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
-    return $this->belongsTo(AccountType::class,'type_id','id');
+        return $this->belongsTo(AccountType::class, 'type_id', 'id');
+    }
+
+    public function accredit(float $monto): void
+    {
+        $this->current_balance += $monto;
+        $this->save();
+    }
+
+    public function debit(float $monto): void
+    {
+        if($this->current_balance < $monto){
+            throw new \DomainException('Fondos insuficientes en la cuenta.');
+        }
+
+        $this->current_balance -= $monto;
+        $this->save();
     }
 
 }

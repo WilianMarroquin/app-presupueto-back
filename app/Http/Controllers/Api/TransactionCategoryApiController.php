@@ -46,7 +46,7 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
                 'type',
                 'description',
                 'parent_id',
-                AllowedFilter::Custom('solo_padres', new \App\Filters\OnlyParentCategoriesFilter())
+                AllowedFilter::Custom('only_parents', new \App\Filters\OnlyParentCategoriesFilter())
             ])
             ->allowedSorts([
                 'nombre',

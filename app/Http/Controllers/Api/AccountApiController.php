@@ -40,21 +40,22 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     {
         $accounts = QueryBuilder::for(Account::class)
             ->allowedFilters([
-    'name',
-    'type_id',
-    'currency_id',
-    'initial_balance',
-    'current_balance',
-    'is_active'
-])
+                'name',
+                'type_id',
+                'currency_id',
+                'initial_balance',
+                'current_balance',
+                'is_active'
+            ])
             ->allowedSorts([
-    'name',
-    'type_id',
-    'currency_id',
-    'initial_balance',
-    'current_balance',
-    'is_active'
-])
+                'name',
+                'type_id',
+                'currency_id',
+                'initial_balance',
+                'current_balance',
+                'is_active'
+            ])
+            ->allowedIncludes('type', 'currency')
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -85,9 +86,9 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Update the specified Account in storage.
-    * PUT/PATCH /accounts/{id}
-    */
+     * Update the specified Account in storage.
+     * PUT/PATCH /accounts/{id}
+     */
     public function update(UpdateAccountApiRequest $request, $id): JsonResponse
     {
         $account = Account::findOrFail($id);
@@ -96,9 +97,9 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Remove the specified Account from storage.
-    * DELETE /accounts/{id}
-    */
+     * Remove the specified Account from storage.
+     * DELETE /accounts/{id}
+     */
     public function destroy(Account $account): JsonResponse
     {
         $account->delete();

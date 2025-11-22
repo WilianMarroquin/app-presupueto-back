@@ -132,4 +132,14 @@ class TransactionCategory extends Model
         return $this->belongsTo(TransactionCategory::class, 'parent_id');
     }
 
+    public function isExpense(): bool
+    {
+        return $this->type === self::CATEGORY_TYPE_EXPENSE;
+    }
+
+    public function isIncome(): bool
+    {
+        return $this->type === self::CATEGORY_TYPE_INCOME;
+    }
+
 }
