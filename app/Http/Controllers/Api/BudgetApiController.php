@@ -40,21 +40,21 @@ class BudgetApiController extends AppbaseController implements HasMiddleware
     {
         $budgets = QueryBuilder::for(Budget::class)
             ->allowedFilters([
-    'amount',
-    'period_types_id',
-    'category_id',
-    'start_date',
-    'end_date'
-])
+                'amount',
+                'period_types_id',
+                'category_id',
+                'start_date',
+                'end_date'
+            ])
             ->allowedSorts([
-    'amount',
-    'period_types_id',
-    'category_id',
-    'start_date',
-    'end_date'
-])
+                'amount',
+                'period_types_id',
+                'category_id',
+                'start_date',
+                'end_date'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
-            ->Paginate(request('page.size') ?? 10);
+            ->jsonPaginate(100);
 
         return $this->sendResponse($budgets, 'budgets recuperados con éxito.');
     }
@@ -83,9 +83,9 @@ class BudgetApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Update the specified Budget in storage.
-    * PUT/PATCH /budgets/{id}
-    */
+     * Update the specified Budget in storage.
+     * PUT/PATCH /budgets/{id}
+     */
     public function update(UpdateBudgetApiRequest $request, $id): JsonResponse
     {
         $budget = Budget::findOrFail($id);
@@ -94,9 +94,9 @@ class BudgetApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Remove the specified Budget from storage.
-    * DELETE /budgets/{id}
-    */
+     * Remove the specified Budget from storage.
+     * DELETE /budgets/{id}
+     */
     public function destroy(Budget $budget): JsonResponse
     {
         $budget->delete();

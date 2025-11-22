@@ -30,8 +30,17 @@ class MenuOpcionesTableSeeder extends Seeder
             "titulo" => "Dashboard",
             "icono" => "ri-dashboard-line",
             "ruta" => "dashboard",
-            "orden" => 0,
-            "action" => "Crear Transactiones",
+            "orden" => 1,
+            "action" => "Listar Dashboard",
+            "subject" => "Transaction",
+            "parent_id" => null
+        ]);
+        MenuOpcion::create([
+            "titulo" => "Transactions",
+            "icono" => "ri-transaction-line",
+            "ruta" => "transactions",
+            "orden" => 2,
+            "action" => "Listar Transactiones",
             "subject" => "Transaction",
             "parent_id" => null
         ]);

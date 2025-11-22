@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateTransactionApiRequest;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -40,6 +41,19 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
     {
         $transactions = QueryBuilder::for(Transaction::class)
             ->allowedFilters([
+                'account_id',
+                'amount',
+                'description',
+                'transaction_date',
+                'payment_method_id',
+                'is_recurring',
+                'notes',
+                'created_ad',
+                AllowedFilter::custom('date_range', new \App\Filters\Transactions\TransactionDateRangeFilter()),
+                AllowedFilter::custom('category_id', new \App\Filters\Transactions\TransactionCategoryFilter()),
+            ])
+            ->allowedSorts([
+                'id',
                 'category_id',
                 'account_id',
                 'amount',
@@ -50,16 +64,10 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 'notes',
                 'created_ad'
             ])
-            ->allowedSorts([
-                'category_id',
-                'account_id',
-                'amount',
-                'description',
-                'transaction_date',
-                'payment_method_id',
-                'is_recurring',
-                'notes',
-                'created_ad'
+            ->allowedIncludes([
+                'category',
+                'account',
+                'paymentMethod',
             ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->jsonPaginate(request('page.size') ?? 10);
