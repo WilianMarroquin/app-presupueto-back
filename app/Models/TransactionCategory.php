@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -130,6 +130,16 @@ class TransactionCategory extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(TransactionCategory::class, 'parent_id');
+    }
+
+    public function isExpense(): bool
+    {
+        return $this->type === self::CATEGORY_TYPE_EXPENSE;
+    }
+
+    public function isIncome(): bool
+    {
+        return $this->type === self::CATEGORY_TYPE_INCOME;
     }
 
 }

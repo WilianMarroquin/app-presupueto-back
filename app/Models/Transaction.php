@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -136,5 +136,6 @@ class Transaction extends Model
     {
     return $this->belongsTo(TransactionPaymentMethod::class,'payment_method_id','id');
     }
+
 
 }

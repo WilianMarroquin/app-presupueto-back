@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateTransactionApiRequest;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -83,11 +84,27 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
     {
         $input = $request->all();
 
-        $input['transaction_date'] = now();
+        try {
+            DB::beginTransaction();
+            $input['transaction_date'] = now();
+            $transaction = Transaction::create($input);
 
-        $transactions = Transaction::create($input);
+            if($transaction->category->isExpense()){
+                $transaction->account->debit($transaction->amount);
+            }
+            if($transaction->category->isIncome()){
+                $transaction->account->accredit($transaction->amount);
+            }
 
-        return $this->sendResponse($transactions->toArray(), 'Transaction creado con éxito.');
+            DB::commit();
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('Error al crear la transacción: ' . $e->getMessage(), 500);
+        }
+
+
+        return $this->sendResponse($transaction->toArray(), 'Transaction creado con éxito.');
     }
 
     /**
