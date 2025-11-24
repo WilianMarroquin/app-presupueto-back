@@ -4,11 +4,12 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -47,15 +48,14 @@ class InstallmentPlan extends Model
     protected $table = 'installment_plans';
 
 
-    protected $fillable =
-        [
-    'name',
-    'total_amount',
-    'total_installments',
-    'interest_rate',
-    'start_date',
-    'status'
-];
+    protected $fillable = [
+        'name',
+        'total_amount',
+        'total_installments',
+        'interest_rate',
+        'start_date',
+        'status'
+    ];
 
 
     /**
@@ -63,8 +63,7 @@ class InstallmentPlan extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'total_amount' => 'float',
@@ -78,21 +77,19 @@ class InstallmentPlan extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:255',
-    'total_amount' => 'required|numeric',
-    'total_installments' => 'required|integer',
-    'interest_rate' => 'required|numeric',
-    'start_date' => 'required|date',
-    'status' => 'required|string',
-];
+    public static $rules = [
+        'name' => 'required|string|max:255',
+        'total_amount' => 'required|numeric',
+        'total_installments' => 'required|integer',
+        'interest_rate' => 'required|numeric',
+        'start_date' => 'required|date',
+        'status' => 'required|string',
+    ];
 
 
     /**
@@ -100,7 +97,7 @@ class InstallmentPlan extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -110,6 +107,13 @@ class InstallmentPlan extends Model
      *
      * @var array
      */
-    
+
+    public function paymentsMade(): HasMany
+    {
+        return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id')
+            ->where('status', CreditCardProvisions::STATUS_SETTLED);
+
+    }
+
 
 }

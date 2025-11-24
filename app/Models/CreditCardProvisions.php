@@ -102,6 +102,9 @@ class CreditCardProvisions extends Model
         ];
 
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_SETTLED = 'settled';
+
     /**
      * Custom messages for validation
      *
