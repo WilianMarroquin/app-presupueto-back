@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Database\Seeders\bases\IndexTableSeeder;
+use Database\Seeders\permisos\IndexPermisosTableSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +14,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        //Configuraciones
         $this->call(IndexTableSeeder::class);
+
+        //Catálogos
         $this->call(TransactionCategoryTableSeeder::class);
         $this->call(AccountTypeTableSeeder::class);
         $this->call(AccountCurrencyTableSeeder::class);
@@ -21,6 +25,11 @@ class DatabaseSeeder extends Seeder
         $this->call(TransactionPaymentMethodTableSeeder::class);
         $this->call(MenuOpcionesTableSeeder::class);
         $this->call(BudgetPeriodTypeTableSeeder::class);
+        $this->call(InstallmentPlanTableSeeder::class);
+
+        //Permisos
+        $this->call(IndexPermisosTableSeeder::class);
+
 
     }
 }

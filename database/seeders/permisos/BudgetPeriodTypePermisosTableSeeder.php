@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\permisos;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
-use App\Models\Permission;
 
-class AccountTypePermisosTableSeeder extends Seeder
+class BudgetPeriodTypePermisosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,16 +17,16 @@ class AccountTypePermisosTableSeeder extends Seeder
     {
 
         $permisos = [
-            'Ver Account Types',
-            'Crear Account Types',
-            'Editar Account Types',
-            'Eliminar Account Types',
+            'Ver Budget Period Types',
+            'Crear Budget Period Types',
+            'Editar Budget Period Types',
+            'Eliminar Budget Period Types',
         ];
 
         foreach ($permisos as $permiso) {
             Permission::create([
                 'name' => $permiso,
-                'subject' => 'AccountType',
+                'subject' => 'BudgetPeriodType',
                 'guard_name' => 'api',
             ]);
         }

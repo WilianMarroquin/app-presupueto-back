@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budgets', App\Http\Controllers\Api\BudgetApiController::class)
         ->parameters(['budgets' => 'budget']);
 
+    Route::apiResource('installment_plans', App\Http\Controllers\Api\InstallmentPlanApiController::class)
+        ->parameters(['installment_plans' => 'installmentplan']);
+
     Route::get('analytics/expense/by/categories', [App\Http\Controllers\Api\AnalyticsApiController::class, 'getTotalExpensesByCategory']);
 
 });

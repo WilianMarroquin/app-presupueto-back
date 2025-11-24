@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\permisos;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
-use App\Models\Permission;
 
-class TransactionPermisosTableSeeder extends Seeder
+class TransactionPaymentMethodPermisosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,16 +17,16 @@ class TransactionPermisosTableSeeder extends Seeder
     {
 
         $permisos = [
-            'Ver Transactiones',
-            'Crear Transactiones',
-            'Editar Transactiones',
-            'Eliminar Transactiones',
+            'Ver Transaction Payment Methodes',
+            'Crear Transaction Payment Methodes',
+            'Editar Transaction Payment Methodes',
+            'Eliminar Transaction Payment Methodes',
         ];
 
         foreach ($permisos as $permiso) {
             Permission::create([
                 'name' => $permiso,
-                'subject' => 'Transaction',
+                'subject' => 'TransactionPaymentMethod',
                 'guard_name' => 'api',
             ]);
         }
