@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Services\Transaction\CreateTransactionService;
+use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateTransactionApiRequest;
@@ -86,32 +88,38 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
 
         try {
             DB::beginTransaction();
-            $input['transaction_date'] = now();
-            $transaction = Transaction::create($input);
+            $datos = [
+                'category_id' => $input['category_id'],
+                'account_id' => $input['account_id'],
+                'amount' => $input['amount'],
+                'description' => $input['description'],
+                'payment_method_id' => $input['payment_method_id'],
+                'is_recurring' => $input['is_recurring'] ?? 0,
+            ];
+            $dpo = TransactionDTO::fromArray($datos);
 
-            if($transaction->category->isExpense()){
-                $transaction->account->debit($transaction->amount);
-            }
-            if($transaction->category->isIncome()){
-                $transaction->account->accredit($transaction->amount);
-            }
+            $respuesta = CreateTransactionService::execute($dpo);
 
+            if (!$respuesta['success']) {
+                DB::rollBack();
+                return $this->sendError($respuesta['message'], 500);
+            }
+            $transaction = $respuesta['transaction'];
             DB::commit();
-        }
-        catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('Error al crear la transacción: ' . $e->getMessage(), 500);
-        }
 
+            return $this->sendResponse($transaction, 'Transaction creado con éxito.');
 
-        return $this->sendResponse($transaction->toArray(), 'Transaction creado con éxito.');
+        } catch (\Throwable $th) {
+            return $this->sendError('Error al crear la transacción: ' . $th->getMessage(), 500);
+        }
     }
 
     /**
      * Display the specified Transaction.
      * GET|HEAD /transactions/{id}
      */
-    public function show(Transaction $transaction)
+    public
+    function show(Transaction $transaction)
     {
         return $this->sendResponse($transaction->toArray(), 'Transaction recuperado con éxito.');
     }
@@ -120,7 +128,8 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Update the specified Transaction in storage.
      * PUT/PATCH /transactions/{id}
      */
-    public function update(UpdateTransactionApiRequest $request, $id): JsonResponse
+    public
+    function update(UpdateTransactionApiRequest $request, $id): JsonResponse
     {
         $transaction = Transaction::findOrFail($id);
         $transaction->update($request->validated());
@@ -131,7 +140,8 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Remove the specified Transaction from storage.
      * DELETE /transactions/{id}
      */
-    public function destroy(Transaction $transaction): JsonResponse
+    public
+    function destroy(Transaction $transaction): JsonResponse
     {
         $transaction->delete();
         return $this->sendResponse(null, 'Transaction eliminado con éxito.');

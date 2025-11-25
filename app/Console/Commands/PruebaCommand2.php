@@ -36,11 +36,10 @@ class PruebaCommand2 extends Command
             'is_recurring' => 0,
         ];
 
-        $transaccionador = new CreateTransactionService();
 
         $dpo = TransactionDTO::fromArray($datos);
 
-        $respuesta = $transaccionador->createTransaction($dpo);
+        $respuesta = CreateTransactionService::execute($dpo);
 
         dd($respuesta);
     }

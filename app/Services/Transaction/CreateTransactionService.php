@@ -9,15 +9,13 @@ use Illuminate\Support\Facades\DB;
 class CreateTransactionService
 {
 
-    public function createTransaction(TransactionDTO $data): array
+    public static function execute(TransactionDTO $data): array
     {
         try {
             DB::beginTransaction();
 
             $payload = $data->toArray();
-
             $payload['transaction_date'] = now();
-
             $transaction = Transaction::create($payload);
 
             if($transaction->category->isExpense()){
