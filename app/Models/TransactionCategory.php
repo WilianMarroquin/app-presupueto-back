@@ -66,6 +66,8 @@ class TransactionCategory extends Model
     const INGRESOS_ESPORADICOS = 13;
     const INGRESOS_PASIVOS = 14;
 
+    CONST TARJETA_DE_CREDITO = 55;
+
 
     protected $fillable = [
         'name',

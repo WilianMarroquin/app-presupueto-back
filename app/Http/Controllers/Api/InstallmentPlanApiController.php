@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\TransactionCategory;
+use App\Models\TransactionPaymentMethod;
+use App\Services\Transaction\CreateTransactionService;
+use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateInstallmentPlanApiRequest;
@@ -10,6 +14,7 @@ use App\Http\Requests\Api\UpdateInstallmentPlanApiRequest;
 use App\Models\InstallmentPlan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -117,9 +122,35 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
         $request->validate([
             'installment_plan_id' => 'required|exists:installment_plans,id',
             'provision_id' => 'required|exists:credit_card_provisions,id',
+            'account_id' => 'required|exists:accounts,id',
+            'description' => 'nullable|string',
         ]);
 
+        $installmentPlan = InstallmentPlan::findOrFail($request->installment_plan_id);
 
-        return $this->sendResponse([], 'Pago realizado con éxito.');
+        try {
+            DB::beginTransaction();
+            $datos = [
+                'category_id' => TransactionCategory::TARJETA_DE_CREDITO,
+                'account_id' => $request->account_id,
+                'amount' => $installmentPlan->monthlyFee,
+                'description' => $request->description ?? 'Pago de cuota del plan de cuotas',
+                'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
+                'is_recurring' => 1,
+            ];
+
+            $dpo = TransactionDTO::fromArray($datos);
+            $respuesta = CreateTransactionService::execute($dpo);
+            if (!$respuesta['success']) {
+                return $this->sendError($respuesta['message'], 500);
+            }
+
+            $transaction = $respuesta['transaction'];
+            DB::commit();
+            return $this->sendResponse($transaction, 'Transacción creada con éxito.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('Provision no encontrada para el plan de cuotas.', 404);
+        }
     }
 }

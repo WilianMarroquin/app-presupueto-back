@@ -114,7 +114,6 @@ class InstallmentPlan extends Model
     {
         return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id')
             ->where('status', CreditCardProvisions::STATUS_SETTLED);
-
     }
 
     public function payments(): HasMany
@@ -122,5 +121,15 @@ class InstallmentPlan extends Model
         return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id');
     }
 
+    public function getMonthlyFeeAttribute(): float
+    {
+        if ($this->total_installments <= 0) {
+            return 0;
+        }
+
+        $monthlyFee = $this->total_amount / $this->total_installments;
+
+        return round($monthlyFee, 2);
+    }
 
 }

@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('analytics/expense/by/categories', [App\Http\Controllers\Api\AnalyticsApiController::class, 'getTotalExpensesByCategory']);
 
+    Route::post('installment_plans/pay', [App\Http\Controllers\Api\InstallmentPlanApiController::class, 'payFee']);
+
 });
 
 require __DIR__.'/auth.php';
