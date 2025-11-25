@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->parameters(['budgets' => 'budget']);
 
     Route::apiResource('installment_plans', App\Http\Controllers\Api\InstallmentPlanApiController::class)
-        ->parameters(['installment_plans' => 'installmentplan']);
+        ->parameters(['installment_plans' => 'installmentPlan']);
 
     Route::apiResource('credit_card_provisions', App\Http\Controllers\Api\CreditCardProvisionsApiController::class)
         ->parameters(['credit_card_provisions' => 'creditcardprovisions']);

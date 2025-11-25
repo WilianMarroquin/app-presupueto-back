@@ -55,6 +55,9 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
                 'start_date',
                 'status'
             ])
+            ->allowedIncludes([
+                'paymentsMade'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -70,6 +73,9 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
     {
         $input = $request->all();
 
+        $input['status'] = InstallmentPlan::STATUS_ACTIVE;
+        $input['start_date'] = now();
+
         $installment_plans = InstallmentPlan::create($input);
 
         return $this->sendResponse($installment_plans->toArray(), 'InstallmentPlan creado con éxito.');
@@ -79,9 +85,10 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
      * Display the specified InstallmentPlan.
      * GET|HEAD /installment_plans/{id}
      */
-    public function show(InstallmentPlan $installmentplan)
+    public function show(InstallmentPlan $installmentPlan)
     {
-        return $this->sendResponse($installmentplan->toArray(), 'InstallmentPlan recuperado con éxito.');
+        $installmentPlan->load('payments');
+        return $this->sendResponse($installmentPlan->toArray(), 'InstallmentPlan recuperado con éxito.');
     }
 
     /**
@@ -103,5 +110,16 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
     {
         $installmentplan->delete();
         return $this->sendResponse(null, 'InstallmentPlan eliminado con éxito.');
+    }
+
+    public function payFee(Request $request): JsonResponse
+    {
+        $request->validate([
+            'installment_plan_id' => 'required|exists:installment_plans,id',
+            'provision_id' => 'required|exists:credit_card_provisions,id',
+        ]);
+
+
+        return $this->sendResponse([], 'Pago realizado con éxito.');
     }
 }

@@ -87,8 +87,6 @@ class InstallmentPlan extends Model
         'total_amount' => 'required|numeric',
         'total_installments' => 'required|integer',
         'interest_rate' => 'required|numeric',
-        'start_date' => 'required|date',
-        'status' => 'required|string',
     ];
 
 
@@ -100,6 +98,10 @@ class InstallmentPlan extends Model
     public static $messages = [
 
     ];
+
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
 
 
     /**
@@ -113,6 +115,11 @@ class InstallmentPlan extends Model
         return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id')
             ->where('status', CreditCardProvisions::STATUS_SETTLED);
 
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id');
     }
 
 
