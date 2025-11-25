@@ -74,6 +74,16 @@ class MenuOpcionesTableSeeder extends Seeder
             "parent_id" => null
         ]);
 
+        MenuOpcion::create([
+            "titulo" => "Installment Plan",
+            "icono" => "ri-calendar-check-line",
+            "ruta" => "installment-plans",
+            "orden" => 6,
+            "action" => "Listar Planes de Pago",
+            "subject" => "InstallmentPlan",
+            "parent_id" => null
+        ]);
+
         enableForeignKeys();
 
     }

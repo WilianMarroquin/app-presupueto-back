@@ -18,6 +18,7 @@ class InstallmentPlanPermisosTableSeeder extends Seeder
 
         $permisos = [
             'Ver Installment Planes',
+            'Listar Planes de Pago',
             'Crear Installment Planes',
             'Editar Installment Planes',
             'Eliminar Installment Planes',
