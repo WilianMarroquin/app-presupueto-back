@@ -42,7 +42,7 @@ class PruebaCommand2 extends Command
 //        $respuesta = CreateTransactionService::execute($dpo);
 //
 //        dd($respuesta);
-        $transactionCategory = \App\Models\TransactionCategory::find(1);
+//        $transactionCategory = \App\Models\TransactionCategory::find(1);
 
 //        $transactionCategory->tags()->create([
 //            'name' => 'Test Tag',
@@ -50,10 +50,16 @@ class PruebaCommand2 extends Command
 //            'type' => 'transaction_category',
 //            'color' => '#FF5733',
 //        ]);
+//
+//        $transactionCategory->syncKeywords(['shell', 'texaco', 'otro']);
+//
+//        $this->info('Tags sincronizados correctamente.');
 
-        $transactionCategory->syncKeywords(['shell', 'texaco', 'otro']);
+        $ai = new \App\Services\AIService();
 
-        $this->info('Tags sincronizados correctamente.');
+        $resultado = $ai->categorize("Servicio a mi motocicleta", ["Alimentación", "Transporte", "Hogar"]);
+
+        dd($resultado);
 
     }
 }
