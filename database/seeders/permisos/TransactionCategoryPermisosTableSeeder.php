@@ -17,10 +17,11 @@ class TransactionCategoryPermisosTableSeeder extends Seeder
     {
 
         $permisos = [
-            'Ver Transaction Categoryes',
-            'Crear Transaction Categoryes',
-            'Editar Transaction Categoryes',
-            'Eliminar Transaction Categoryes',
+            'Ver Transaction Categories',
+            'Listar Categorías',
+            'Crear Transaction Categories',
+            'Editar Transaction Categories',
+            'Eliminar Transaction Categories',
         ];
 
         foreach ($permisos as $permiso) {

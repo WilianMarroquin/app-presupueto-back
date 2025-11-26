@@ -84,6 +84,16 @@ class MenuOpcionesTableSeeder extends Seeder
             "parent_id" => null
         ]);
 
+        MenuOpcion::create([
+            "titulo" => "Categories",
+            "icono" => "ri-folder-line",
+            "ruta" => "transaction-categories",
+            "orden" => 6,
+            "action" => "Listar Categorías",
+            "subject" => "TransactionCategory",
+            "parent_id" => null
+        ]);
+
         enableForeignKeys();
 
     }
