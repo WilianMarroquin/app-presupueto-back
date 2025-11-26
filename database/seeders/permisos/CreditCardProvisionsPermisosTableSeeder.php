@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\permisos;
 
-use App\Models\Role;
-use Illuminate\Database\Seeder;
 use App\Models\Permission;
+use App\Models\Rol;
+use Illuminate\Database\Seeder;
 
 class CreditCardProvisionsPermisosTableSeeder extends Seeder
 {
@@ -27,11 +27,11 @@ class CreditCardProvisionsPermisosTableSeeder extends Seeder
             Permission::create([
                 'name' => $permiso,
                 'subject' => 'CreditCardProvisions',
-                'guard_name' => 'api',
+                'guard_name' => 'web',
             ]);
         }
 
-        $admin = Role::where('name', Role::ADMIN)
+        $admin = Rol::where('name', Rol::ADMINISTRADOR)
             ->first();
 
         $admin->givePermissionTo($permisos);

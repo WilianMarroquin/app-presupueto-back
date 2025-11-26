@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $installment_plan_id
@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardProvisions whereYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardProvisions withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardProvisions withoutTrashed()
+ * @property-read \App\Models\InstallmentPlan $plan
  * @mixin \Eloquent
  */
 class CreditCardProvisions extends Model
