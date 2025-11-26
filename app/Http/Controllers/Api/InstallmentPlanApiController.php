@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\CreditCardProvisions;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
 use App\Services\Transaction\CreateTransactionService;
@@ -127,6 +128,7 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
         ]);
 
         $installmentPlan = InstallmentPlan::findOrFail($request->installment_plan_id);
+        $provision = CreditCardProvisions::findOrFail($request->provision_id);
 
         try {
             DB::beginTransaction();
@@ -141,6 +143,13 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
 
             $dpo = TransactionDTO::fromArray($datos);
             $respuesta = CreateTransactionService::execute($dpo);
+
+            $provision->update([
+                'status' => CreditCardProvisions::STATUS_SETTLED,
+                'transaction_id' => $respuesta['transaction']['id'],
+            ]);
+
+
             if (!$respuesta['success']) {
                 return $this->sendError($respuesta['message'], 500);
             }
@@ -150,7 +159,7 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
             return $this->sendResponse($transaction, 'Transacción creada con éxito.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->sendError('Provision no encontrada para el plan de cuotas.', 404);
+            return $this->sendError('Error al crear la transacción: ' . $e->getMessage(), 500);
         }
     }
 }
