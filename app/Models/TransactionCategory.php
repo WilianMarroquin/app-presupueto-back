@@ -75,7 +75,6 @@ class TransactionCategory extends Model
         'name',
         'type',
         'description',
-        'color',
         'icon',
         'parent_id'
     ];
@@ -94,7 +93,6 @@ class TransactionCategory extends Model
         'type' => 'string',
         'description' => 'string',
         'icon' => 'string',
-        'color' => 'string',
         'parent_id' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
@@ -113,7 +111,6 @@ class TransactionCategory extends Model
         'description' => 'required|string',
         'parent_id' => 'integer',
         'icon' => 'nullable|string|max:100',
-        'color' => 'nullable|string|max:100',
     ];
 
 
