@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -37,6 +37,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InstallmentPlan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InstallmentPlan withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InstallmentPlan withoutTrashed()
+ * @property-read float $monthly_fee
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CreditCardProvisions> $payments
+ * @property-read int|null $payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CreditCardProvisions> $paymentsMade
+ * @property-read int|null $payments_made_count
  * @mixin \Eloquent
  */
 class InstallmentPlan extends Model
