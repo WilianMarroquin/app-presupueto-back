@@ -27,20 +27,33 @@ class PruebaCommand2 extends Command
      */
     public function handle()
     {
-        $datos = [
-            'category_id' => 1,
-            'account_id' => 1,
-            'amount' => 5,
-            'description' => 'Test Transaction',
-            'payment_method_id' => 1,
-            'is_recurring' => 0,
-        ];
+//        $datos = [
+//            'category_id' => 1,
+//            'account_id' => 1,
+//            'amount' => 5,
+//            'description' => 'Test Transaction',
+//            'payment_method_id' => 1,
+//            'is_recurring' => 0,
+//        ];
+//
+//
+//        $dpo = TransactionDTO::fromArray($datos);
+//
+//        $respuesta = CreateTransactionService::execute($dpo);
+//
+//        dd($respuesta);
+        $transactionCategory = \App\Models\TransactionCategory::find(1);
 
+//        $transactionCategory->tags()->create([
+//            'name' => 'Test Tag',
+//            'slug' => 'test-tag',
+//            'type' => 'transaction_category',
+//            'color' => '#FF5733',
+//        ]);
 
-        $dpo = TransactionDTO::fromArray($datos);
+        $transactionCategory->syncKeywords(['shell', 'texaco', 'otro']);
 
-        $respuesta = CreateTransactionService::execute($dpo);
+        $this->info('Tags sincronizados correctamente.');
 
-        dd($respuesta);
     }
 }

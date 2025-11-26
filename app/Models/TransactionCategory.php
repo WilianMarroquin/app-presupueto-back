@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Traits\HasTags;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -48,6 +49,7 @@ class TransactionCategory extends Model
 
     use SoftDeletes;
     use HasFactory;
+    use HasTags;
 
     protected $table = 'transaction_categories';
 
