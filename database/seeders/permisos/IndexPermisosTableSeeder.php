@@ -3,7 +3,7 @@
 namespace Database\Seeders\permisos;
 
 use App\Models\Permission;
-use App\Models\Role;
+use App\Models\Rol;
 use Illuminate\Database\Seeder;
 
 class IndexPermisosTableSeeder extends Seeder

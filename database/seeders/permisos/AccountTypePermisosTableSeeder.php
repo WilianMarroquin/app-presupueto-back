@@ -3,7 +3,7 @@
 namespace Database\Seeders\permisos;
 
 use App\Models\Permission;
-use App\Models\Role;
+use App\Models\Rol;
 use Illuminate\Database\Seeder;
 
 class AccountTypePermisosTableSeeder extends Seeder
@@ -27,11 +27,11 @@ class AccountTypePermisosTableSeeder extends Seeder
             Permission::create([
                 'name' => $permiso,
                 'subject' => 'AccountType',
-                'guard_name' => 'api',
+                'guard_name' => 'web',
             ]);
         }
 
-        $admin = Role::where('name', Role::ADMIN)
+        $admin = Rol::where('name', Rol::ADMINISTRADOR)
             ->first();
 
         $admin->givePermissionTo($permisos);

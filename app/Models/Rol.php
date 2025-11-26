@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -83,6 +83,11 @@ class Rol extends SpatieRole
     public static $messages = [
 
     ];
+
+    const ADMINISTRADOR = 'Administrador';
+    const EMPLEADO_= 'Empleado';
+    const PROGRAMADOR = 'Programador';
+    const SUPER_ADMIN = 'Super Admin';
 
     /**
      * Accessor for relationships
