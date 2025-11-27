@@ -20,13 +20,14 @@ class AccountTableSeeder extends Seeder
         Account::truncate();
 
         Account::create([
-            'name' => 'Cooperativa Guayacán (Transaccional)',
+            'name' => 'Cooperativa Guayacán',
             'type_id' => AccountType::BANK,
             'currency_id' => AccountCurrency::QUETZAL,
             'initial_balance' => 0,
             'current_balance' => 0,
             'nature' => 'asset',
             'is_active' => 1,
+            'description' => 'Cuenta de Ahorros en Cooperativa Guayacán',
         ]);
 
         Account::create([
@@ -37,6 +38,7 @@ class AccountTableSeeder extends Seeder
             'current_balance' => 0,
             'nature' => 'asset',
             'is_active' => 1,
+            'description' => 'Cuenta Transaccional',
         ]);
 
         Account::create([
@@ -47,6 +49,7 @@ class AccountTableSeeder extends Seeder
             'current_balance' => 0,
             'nature' => 'liability',
             'is_active' => 1,
+            'description' => 'Tarjeta de Crédito BAC Credomatic',
         ]);
 
         Account::create([
@@ -57,6 +60,7 @@ class AccountTableSeeder extends Seeder
             'current_balance' => 0,
             'nature' => 'liability',
             'is_active' => 1,
+            'description' => 'Tarjeta de Crédito Cooperativa Guayacán',
         ]);
 
         enableForeignKeys();

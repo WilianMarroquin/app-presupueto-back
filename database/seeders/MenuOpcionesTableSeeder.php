@@ -94,6 +94,16 @@ class MenuOpcionesTableSeeder extends Seeder
             "parent_id" => null
         ]);
 
+        MenuOpcion::create([
+            "titulo" => "Credit Cards",
+            "icono" => "ri-credit-card-line",
+            "ruta" => "credit-cards",
+            "orden" => 7,
+            "action" => "Listar Credit Card",
+            "subject" => "Account",
+            "parent_id" => null
+        ]);
+
         enableForeignKeys();
 
     }

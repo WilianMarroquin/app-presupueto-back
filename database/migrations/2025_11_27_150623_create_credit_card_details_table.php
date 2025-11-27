@@ -15,7 +15,6 @@ return new class extends Migration
                 ->constrained('accounts')
                 ->onDelete('cascade');
 
-            $table->string('bank_name', 50); // Ej: Banrural, BAC
             $table->string('alias', 50)->nullable(); // Ej: Visa Oro
             $table->string('network', 20); // visa, mastercard, amex
             $table->string('color', 7)->default('#000000'); // Hex del plástico

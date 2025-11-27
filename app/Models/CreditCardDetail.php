@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $account_id
@@ -55,7 +55,6 @@ class CreditCardDetail extends Model
 
     protected $fillable = [
         'account_id',
-        'bank_name',
         'alias',
         'network',
         'color',
@@ -73,7 +72,6 @@ class CreditCardDetail extends Model
     protected $casts = [
         'id' => 'integer',
         'account_id' => 'integer',
-        'bank_name' => 'string',
         'alias' => 'string',
         'network' => 'string',
         'color' => 'string',
@@ -93,7 +91,6 @@ class CreditCardDetail extends Model
      */
     public static $rules = [
         'account_id' => 'required|integer|unique:credit_card_details,account_id',
-        'bank_name' => 'required|string|max:50',
         'alias' => 'nullable|string|max:50',
         'network' => 'required|string|max:20',
         'color' => 'required|string|max:7',

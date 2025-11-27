@@ -63,12 +63,12 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
                     'current_balance' => 0,
                     'is_active' => true,
                     'nature' => 'liability', // Pasivo
+                    'description' => $request->description
                 ]);
 
                 // 2. Crear el Detalle (El Hijo)
                 // Usamos la relación para crear. Laravel inyecta el account_id solo.
                 return $account->creditCardDetail()->create([
-                    'bank_name' => $request->bank_name,
                     'alias' => $request->alias,
                     'network' => $request->network,
                     'color' => $request->color,
@@ -85,7 +85,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
             // Si algo falló, Laravel ya deshizo los cambios en la DB automáticamente.
             // Aquí logueas el error y respondes feo al front.
             \Log::error("Error creando TC: " . $e->getMessage());
-            return $this->sendError('Error al crear la tarjeta.', [], 500);
+            return $this->sendError('Error al crear la tarjeta.'. $e->getMessage(), 500);
         }
     }
 

@@ -16,7 +16,7 @@ class StoreCreditCardRequest extends FormRequest
     {
         // Reglas específicas de la tarjeta
         $cardRules = [
-            'bank_name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100'],
             'alias' => ['required', 'string', 'max:50'], // Alias corto es mejor
             // Tip: Usa Rule::in para que sea más legible
             'network' => ['required', Rule::in(['Visa', 'MasterCard', 'American Express', 'Discover'])],
@@ -24,13 +24,14 @@ class StoreCreditCardRequest extends FormRequest
             'last_4' => ['required', 'digits:4'], // 'digits:4' es más preciso que regex
             'cutoff_day' => ['required', 'integer', 'between:1,31'],
             'payment_day' => ['required', 'integer', 'between:1,31'],
-            'currency_id' => ['required', 'exists:currencies,id'], // Validar que la moneda exista
+            'currency_id' => ['required', 'exists:account_currencys,id'], // Validar que la moneda exista
+            'description' => ['required', 'string', 'max:255'], // Descripción opcional pero útil
         ];
 
         // Fusión con reglas de Account (si realmente lo necesitas)
         // Personalmente, prefiero definirlas aquí explícitamente para evitar efectos secundarios
         // si cambias las reglas generales de Account.
-        return array_merge($cardRules, Account::$rules);
+        return $cardRules;
     }
 
     public function messages()

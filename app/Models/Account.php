@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -65,6 +65,7 @@ class Account extends Model
         'is_active',
         'nature',
         'bank_name',
+        'description',
     ];
 
 

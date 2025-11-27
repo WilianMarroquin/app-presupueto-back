@@ -55,7 +55,11 @@ class AccountApiController extends AppbaseController implements HasMiddleware
                 'current_balance',
                 'is_active'
             ])
-            ->allowedIncludes('type', 'currency')
+            ->allowedIncludes([
+                'type',
+                'currency',
+                'creditCardDetail'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
