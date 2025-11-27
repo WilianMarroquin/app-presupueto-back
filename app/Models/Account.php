@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withoutTrashed()
  * @property-read \App\Models\AccountType $type
  * @property-read \App\Models\AccountCurrency $currency
+ * @property string $nature
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereNature($value)
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -121,20 +123,35 @@ class Account extends Model
         return $this->belongsTo(AccountType::class, 'type_id', 'id');
     }
 
-    public function accredit(float $monto): void
+    public function withdraw(float $amount): void
     {
-        $this->current_balance += $monto;
-        $this->save();
-    }
-
-    public function debit(float $monto): void
-    {
-        if($this->current_balance < $monto){
-            throw new \DomainException('Fondos insuficientes en la cuenta.');
+        if ($this->nature === 'liability') {
+            $this->current_balance += $amount;
+        } else {
+            if ($this->current_balance < $amount) {
+                throw new \Exception('Saldo insuficiente para retirar ' . $amount);
+            }
+            $this->current_balance -= $amount;
         }
 
-        $this->current_balance -= $monto;
         $this->save();
     }
+
+    /**
+     * Procesa una ENTRADA de dinero (Ingreso / Pago a la Tarjeta).
+     * * @param float $amount
+     * @return void
+     */
+    public function depositary(float $amount): void
+    {
+        if ($this->nature === 'liability') {
+            $this->current_balance -= $amount;
+        } else {
+            $this->current_balance += $amount;
+        }
+
+        $this->save();
+    }
+
 
 }

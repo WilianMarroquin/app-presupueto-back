@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -42,6 +42,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TransactionCategory> $subCategories
  * @property-read int|null $sub_categories_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereName($value)
+ * @property string|null $icon
+ * @property string|null $color
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereIcon($value)
  * @mixin \Eloquent
  */
 class TransactionCategory extends Model

@@ -25,6 +25,7 @@ class AccountTableSeeder extends Seeder
             'currency_id' => AccountCurrency::QUETZAL,
             'initial_balance' => 0,
             'current_balance' => 0,
+            'nature' => 'asset',
             'is_active' => 1,
         ]);
 
@@ -34,6 +35,27 @@ class AccountTableSeeder extends Seeder
             'currency_id' => AccountCurrency::QUETZAL,
             'initial_balance' => 0,
             'current_balance' => 0,
+            'nature' => 'asset',
+            'is_active' => 1,
+        ]);
+
+        Account::create([
+            'name' => 'TC BAC Credomatic',
+            'type_id' => AccountType::CREDIT_CARD,
+            'currency_id' => AccountCurrency::QUETZAL,
+            'initial_balance' => 0,
+            'current_balance' => 0,
+            'nature' => 'liability',
+            'is_active' => 1,
+        ]);
+
+        Account::create([
+            'name' => 'TC Cooperativa Guayacán',
+            'type_id' => AccountType::CREDIT_CARD,
+            'currency_id' => AccountCurrency::QUETZAL,
+            'initial_balance' => 0,
+            'current_balance' => 0,
+            'nature' => 'liability',
             'is_active' => 1,
         ]);
 

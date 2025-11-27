@@ -2,6 +2,7 @@
 
 namespace App\Services\Transaction;
 
+use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Services\AIService;
@@ -20,19 +21,20 @@ class CreateTransactionService
         try {
             $category = $this->getCategory($data->description);
             DB::beginTransaction();
+
+            $account = Account::findOrFail($data->account_id);
             $payload = $data->toArray();
             $payload['transaction_date'] = now();
             $payload['category_id'] = $category->id;
-
-            Log::info('Payload para crear transacción: ', $payload);
+            $payload['is_settled'] = ($account->nature === 'asset');
 
             $transaction = Transaction::create($payload);
 
             if($transaction->category->isExpense()){
-                $transaction->account->debit($transaction->amount);
+                $account->withdraw($transaction->amount);
             }
             if($transaction->category->isIncome()){
-                $transaction->account->accredit($transaction->amount);
+                $account->depositary($transaction->amount);
             }
 
             DB::commit();

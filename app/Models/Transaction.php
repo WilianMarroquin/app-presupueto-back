@@ -47,6 +47,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read \App\Models\TransactionCategory $category
  * @property-read \App\Models\TransactionPaymentMethod $paymentMethod
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCreatedAt($value)
+ * @property int $is_settled
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereIsSettled($value)
  * @mixin \Eloquent
  */
 class Transaction extends Model
@@ -65,6 +67,7 @@ class Transaction extends Model
         'description',
         'transaction_date',
         'payment_method_id',
+        'is_settled',
     ];
 
 
@@ -81,6 +84,7 @@ class Transaction extends Model
         'description' => 'string',
         'transaction_date' => 'date',
         'payment_method_id' => 'integer',
+        'is_settled' => 'boolean',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
