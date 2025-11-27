@@ -45,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('installment_plans/pay', [App\Http\Controllers\Api\InstallmentPlanApiController::class, 'payFee']);
 
+    Route::post('create/credit/card', [App\Http\Controllers\Api\CreditCardApiController::class, 'store']);
+
 });
 
 require __DIR__.'/auth.php';

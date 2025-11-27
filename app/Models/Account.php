@@ -5,11 +5,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -43,6 +44,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read \App\Models\AccountCurrency $currency
  * @property string $nature
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereNature($value)
+ * @property-read \App\Models\CreditCardDetail|null $creditCardDetail
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -55,13 +57,15 @@ class Account extends Model
 
 
     protected $fillable = [
-            'name',
-            'type_id',
-            'currency_id',
-            'initial_balance',
-            'current_balance',
-            'is_active'
-        ];
+        'name',
+        'type_id',
+        'currency_id',
+        'initial_balance',
+        'current_balance',
+        'is_active',
+        'nature',
+        'bank_name',
+    ];
 
 
     /**
@@ -95,6 +99,7 @@ class Account extends Model
             'initial_balance' => 'required|numeric',
             'current_balance' => 'required|numeric',
             'is_active' => 'required|integer',
+            'description' => 'required|string',
         ];
 
 
@@ -153,5 +158,9 @@ class Account extends Model
         $this->save();
     }
 
+    public function creditCardDetail(): HasOne
+    {
+        return $this->hasOne(CreditCardDetail::class, 'account_id', 'id');
+    }
 
 }

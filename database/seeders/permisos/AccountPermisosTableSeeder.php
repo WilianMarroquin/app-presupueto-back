@@ -21,6 +21,12 @@ class AccountPermisosTableSeeder extends Seeder
             'Crear Accountes',
             'Editar Accountes',
             'Eliminar Accountes',
+
+            'Listar Credit Card',
+            'Ver Credit Card',
+            'Crear Credit Card',
+            'Editar Credit Card',
+            'Eliminar Credit Card',
         ];
 
         foreach ($permisos as $permiso) {

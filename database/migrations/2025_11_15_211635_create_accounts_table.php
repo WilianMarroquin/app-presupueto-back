@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->text('description');
             $table->unsignedBigInteger('type_id')->index('fk_accounts_account_types1_idx');
             $table->unsignedInteger('currency_id')->index('fk_accounts_account_currencys1_idx');
             $table->float('initial_balance', 15);
