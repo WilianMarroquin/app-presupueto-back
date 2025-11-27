@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('amount', 15);
             $table->text('description');
             $table->date('transaction_date');
+            $table->boolean('is_settled')->default(false);
             $table->unsignedBigInteger('payment_method_id')->index('fk_transactions_transaction_payment_methods1_idx');
             $table->timestamps();
             $table->softDeletes();

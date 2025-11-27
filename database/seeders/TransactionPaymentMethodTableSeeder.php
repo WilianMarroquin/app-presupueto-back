@@ -20,6 +20,7 @@ class TransactionPaymentMethodTableSeeder extends Seeder
         TransactionPaymentMethod::create(['name' => 'Efectivo']);
         TransactionPaymentMethod::create(['name' => 'Tarjeta de débito']);
         TransactionPaymentMethod::create(['name' => 'Transferencia']);
+        TransactionPaymentMethod::create(['name' => 'Tarjeta de Crédito']);
 
         enableForeignKeys();
 

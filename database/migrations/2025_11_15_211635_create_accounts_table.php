@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('currency_id')->index('fk_accounts_account_currencys1_idx');
             $table->float('initial_balance', 15);
             $table->float('current_balance', 15);
+            $table->enum('nature', ['asset', 'liability'])->default('asset');
             $table->tinyInteger('is_active');
             $table->timestamps();
             $table->softDeletes();

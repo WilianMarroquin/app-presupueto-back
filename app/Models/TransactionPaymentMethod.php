@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -44,6 +44,7 @@ class TransactionPaymentMethod extends Model
     const EFECTIVO = 1;
     const TARJETA_DE_DEBITO = 2;
     const TRANSFERENCIA = 3;
+    const TARJETA_DE_CREDITO = 4;
 
     /**
      * The attributes that should be casted to native types.

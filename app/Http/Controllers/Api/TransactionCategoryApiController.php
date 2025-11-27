@@ -51,6 +51,7 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
                 'type',
                 'description',
             ])
+            ->allowedIncludes(['tags'])
             ->defaultSort('-id')
             ->jsonPaginate(request('per_page') ?? 10);
 
