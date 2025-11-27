@@ -20,19 +20,53 @@ class BudgetTableSeeder extends Seeder
         Budget::truncate();
 
         Budget::create([
+            'amount' => 9200,
+            'category_id' => TransactionCategory::SALARIO,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
+        Budget::create([
+            'amount' => 0,
+            'category_id' => TransactionCategory::NEGOCIOS,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
+        Budget::create([
+            'amount' => 0,
+            'category_id' => TransactionCategory::INVERSIONES,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
+        Budget::create([
+            'amount' => 0,
+            'category_id' => TransactionCategory::OTROS_INGRESOS,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
+        Budget::create([
             'amount' => 800,
             'category_id' => TransactionCategory::VIVIENDA,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+
         Budget::create([
-            'amount' => 1000,
+            'amount' => 600,
             'category_id' => TransactionCategory::ALIMENTACION,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+
         Budget::create([
             'amount' => 325,
             'category_id' => TransactionCategory::TRANSPORTE,
@@ -40,13 +74,31 @@ class BudgetTableSeeder extends Seeder
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+
         Budget::create([
             'amount' => 250,
-            'category_id' => TransactionCategory::SALUD,
+            'category_id' => TransactionCategory::Salud_Y_Bienestar,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+
+        Budget::create([
+            'amount' => 500,
+            'category_id' => TransactionCategory::OCIO_Y_SOCIAL,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
+        Budget::create([
+            'amount' => 300,
+            'category_id' => TransactionCategory::COMPRAS,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+
         Budget::create([
             'amount' => 250,
             'category_id' => TransactionCategory::EDUCACION,
@@ -54,41 +106,15 @@ class BudgetTableSeeder extends Seeder
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+
         Budget::create([
-            'amount' => 500,
-            'category_id' => TransactionCategory::ENTRETENIMIENTO,
+            'amount' => 200,
+            'category_id' => TransactionCategory::FINANZAS,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
-        Budget::create([
-            'amount' => 300,
-            'category_id' => TransactionCategory::CUIDADO_PERSONAL,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-        Budget::create([
-            'amount' => 0,
-            'category_id' => TransactionCategory::SEGUROS,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-        Budget::create([
-            'amount' => 3100,
-            'category_id' => TransactionCategory::DEUDAS_Y_PRESTAMOS,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-        Budget::create([
-            'amount' => 300,
-            'category_id' => TransactionCategory::OTROS_GASTOS,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
+
 
         enableForeignKeys();
     }
