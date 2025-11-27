@@ -45,16 +45,12 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
                 'nombre',
                 'type',
                 'description',
-                'parent_id',
-                AllowedFilter::Custom('only_parents', new \App\Filters\OnlyParentCategoriesFilter())
             ])
             ->allowedSorts([
                 'nombre',
                 'type',
                 'description',
-                'parent_id'
             ])
-            ->allowedIncludes(['subCategories'])
             ->defaultSort('-id')
             ->jsonPaginate(request('per_page') ?? 10);
 

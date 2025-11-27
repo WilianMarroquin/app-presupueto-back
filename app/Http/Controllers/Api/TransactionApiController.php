@@ -86,19 +86,18 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
     {
         $input = $request->all();
 
+        $createTransactionService = new CreateTransactionService();
         try {
             DB::beginTransaction();
             $datos = [
-                'category_id' => $input['category_id'],
                 'account_id' => $input['account_id'],
                 'amount' => $input['amount'],
                 'description' => $input['description'],
                 'payment_method_id' => $input['payment_method_id'],
-                'is_recurring' => $input['is_recurring'] ?? 0,
             ];
             $dpo = TransactionDTO::fromArray($datos);
 
-            $respuesta = CreateTransactionService::execute($dpo);
+            $respuesta = $createTransactionService->execute($dpo);
 
             if (!$respuesta['success']) {
                 DB::rollBack();

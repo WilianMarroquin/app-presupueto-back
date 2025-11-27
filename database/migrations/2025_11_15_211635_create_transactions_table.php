@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description');
             $table->date('transaction_date');
             $table->unsignedBigInteger('payment_method_id')->index('fk_transactions_transaction_payment_methods1_idx');
-            $table->tinyInteger('is_recurring');
             $table->timestamps();
             $table->softDeletes();
         });

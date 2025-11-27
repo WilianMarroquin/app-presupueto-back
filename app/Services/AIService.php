@@ -37,7 +37,7 @@ class AIService
                 'contents' => [
                     ['parts' => [['text' => $prompt]]]
                 ]
-            ]);
+            ])->throw();;
 
 
         if ($response->failed()) {

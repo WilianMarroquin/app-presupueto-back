@@ -21,22 +21,17 @@ class AnalyticsApiController extends AppBaseController
             $transactions->whereDate('transaction_date', '<=', $request->input('end_date'));
         }
 
-        $data = $transactions->whereHas('category.parent') // Solo transacciones con subcategoría (que tiene padre)
-            ->whereHas('category', function($query) {
+        $data = $transactions->whereHas('category', function($query) {
                 $query->where('type', TransactionCategory::CATEGORY_TYPE_EXPENSE);
             })
             ->get();
 
-        // Agrupar por categoría padre y sumar montos
         $totals = $data
-            ->groupBy(function ($transaction) {
-                return optional($transaction->category->parent)->id;
-            })
+            ->groupBy('category_id')
             ->map(function ($group) {
-                $parent = $group->first()->category->parent ?? null;
                 return [
-                    'category_id' => optional($parent)->id,
-                    'category_name' => optional($parent)->name,
+                    'category_id' => $group->first()->category_id,
+                    'category_name' => $group->first()->category->name,
                     'total_amount' => $group->sum('amount'),
                 ];
             })

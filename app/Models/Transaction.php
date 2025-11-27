@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -58,16 +58,14 @@ class Transaction extends Model
     protected $table = 'transactions';
 
 
-    protected $fillable =
-        [
-    'category_id',
-    'account_id',
-    'amount',
-    'description',
-    'transaction_date',
-    'payment_method_id',
-    'is_recurring',
-];
+    protected $fillable = [
+        'category_id',
+        'account_id',
+        'amount',
+        'description',
+        'transaction_date',
+        'payment_method_id',
+    ];
 
 
     /**
@@ -75,8 +73,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'category_id' => 'integer',
         'account_id' => 'integer',
@@ -84,11 +81,9 @@ class Transaction extends Model
         'description' => 'string',
         'transaction_date' => 'date',
         'payment_method_id' => 'integer',
-        'is_recurring' => 'boolean',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
-
 
 
     /**
@@ -96,15 +91,12 @@ class Transaction extends Model
      *
      * @var array
      */
-    public static $rules =
-    [
-    'category_id' => 'required|integer',
-    'account_id' => 'required|integer',
-    'amount' => 'required|numeric',
-    'description' => 'required|string',
-    'payment_method_id' => 'required|integer',
-    'is_recurring' => 'required|boolean',
-];
+    public static $rules = [
+        'account_id' => 'required|integer',
+        'amount' => 'required|numeric',
+        'description' => 'required|string',
+        'payment_method_id' => 'required|integer',
+    ];
 
 
     /**
@@ -112,7 +104,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -124,17 +116,17 @@ class Transaction extends Model
      */
     public function account(): BelongsTo
     {
-    return $this->belongsTo(Account::class,'account_id','id');
+        return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
     public function category(): BelongsTo
     {
-    return $this->belongsTo(TransactionCategory::class,'category_id','id');
+        return $this->belongsTo(TransactionCategory::class, 'category_id', 'id');
     }
 
     public function paymentMethod(): BelongsTo
     {
-    return $this->belongsTo(TransactionPaymentMethod::class,'payment_method_id','id');
+        return $this->belongsTo(TransactionPaymentMethod::class, 'payment_method_id', 'id');
     }
 
 

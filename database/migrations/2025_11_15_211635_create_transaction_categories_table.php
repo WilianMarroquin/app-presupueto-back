@@ -15,9 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name', 100);
             $table->enum('type', ['Income', 'Expense']);
-            $table->text('description');
             $table->string('icon', 100)->nullable();
-            $table->unsignedBigInteger('parent_id')->index('fk_transaction_categories_transaction_categories1_idx')->nullable();
+            $table->string('color', 100)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
