@@ -19,7 +19,10 @@ class CreateTransactionService
     {
 
         try {
-            $category = $this->getCategory($data->description);
+            $category = $data->category_id
+                ? TransactionCategory::findOrFail($data->category_id)
+                : $this->getCategory($data->description);
+
             DB::beginTransaction();
 
             $account = Account::findOrFail($data->account_id);

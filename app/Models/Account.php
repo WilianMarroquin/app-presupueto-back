@@ -139,7 +139,7 @@ class Account extends Model
             $this->current_balance += $amount;
         } else {
             if ($this->current_balance < $amount) {
-                throw new \Exception('Saldo insuficiente para retirar ' . $amount);
+                throw new \Exception('Saldo insuficiente para retirar ' . $amount . ' de la cuenta ' . $this->name);
             }
             $this->current_balance -= $amount;
         }

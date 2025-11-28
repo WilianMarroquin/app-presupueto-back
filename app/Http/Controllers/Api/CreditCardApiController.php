@@ -7,6 +7,10 @@ use App\Http\Requests\StoreCreditCardRequest;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\CreditCardDetail;
+use App\Models\TransactionCategory;
+use App\Models\TransactionPaymentMethod;
+use App\Services\Transaction\CreateTransactionService;
+use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateCreditCardProvisionsApiRequest;
@@ -29,11 +33,11 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:Listar Credit Card', only: ['index']),
-            new Middleware('permission:Ver Credit Card', only: ['show']),
+//            new Middleware('permission:Listar Credit Card', only: ['index']),
+//            new Middleware('permission:Ver Credit Card', only: ['show']),
             new Middleware('permission:Crear Credit Card', only: ['store']),
-            new Middleware('permission:Editar Credit Card', only: ['update']),
-            new Middleware('permission:Eliminar Credit Card', only: ['destroy']),
+//            new Middleware('permission:Editar Credit Card', only: ['update']),
+//            new Middleware('permission:Eliminar Credit Card', only: ['destroy']),
         ];
     }
 
@@ -95,6 +99,53 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
         $creditcardprovisions = CreditCardProvisions::findOrFail($id);
         $creditcardprovisions->update($request->validated());
         return $this->sendResponse($creditcardprovisions, 'CreditCardProvisions actualizado con éxito.');
+    }
+
+    public function payment(Request $request): JsonResponse
+    {
+        $request->validate([
+            'credit_card_id' => 'required|exists:accounts,id',
+            'from_account_id' => 'required|exists:accounts,id',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        $account = Account::findOrFail($request->credit_card_id);
+        $createTransactionService = new CreateTransactionService();
+
+        try {
+            DB::beginTransaction();
+            $account->current_balance = 0;
+            $account->save();
+
+            foreach ($account->transactionsPending as $transaction) {
+                $transaction->is_settled = 1;
+                $transaction->save();
+            }
+
+            $datos = [
+                'account_id' => $request->from_account_id,
+                'amount' => $request->amount,
+                'description' => 'Pago de tarjeta de crédito: ' . $account->name,
+                'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
+                'category_id' => TransactionCategory::FINANZAS,
+            ];
+
+            $dpo = TransactionDTO::fromArray($datos);
+            $respuesta = $createTransactionService->execute($dpo);
+
+            if (!$respuesta['success']) {
+                DB::rollBack();
+                return $this->sendError($respuesta['message'], 500);
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->sendError('Error al procesar el pago: ' . $th->getMessage(), 500);
+        }
+
+        return $this->sendSuccess('Pago realizado con éxito.');
+
     }
 
 }
