@@ -55,27 +55,27 @@ class AIService
 
     public function getDailyCoach(array $context): string
     {
-
         $prompt = "
-    Actúa como un entrenador financiero personal sarcástico pero motivador.
-    Analiza el comportamiento financiero de mi usuario AYER ({$context['fecha']}) y dale una frase corta (máx 25 palabras).
+    Actúa como un asesor financiero personal, analítico y directo.
+    Analiza el comportamiento financiero de mi usuario AYER ({$context['fecha']}) y dame un resumen estratégico (máximo 40 palabras).
 
-    DATOS:
-    - Gasto ayer: Q.{$context['gasto_ayer']}
-    - En qué gastó más: {$context['categoria_top']}
-    - Meta diaria ideal: Q.{$context['meta_diaria_segura']}
-    - Le quedan Q.{$context['presupuesto_restante']} para {$context['dias_restantes']} días.
+    DATOS DEL USUARIO:
+    - Gasto total ayer: Q.{$context['gasto_ayer']}
+    - Categoría de mayor consumo: {$context['categoria_top']}
+    - Meta diaria segura (Daily Safe Spend): Q.{$context['meta_diaria_segura']}
+    - Presupuesto restante del mes: Q.{$context['presupuesto_restante']} para {$context['dias_restantes']} días.
 
-    REGLAS:
-    1. Si 'Gasto ayer' es 0: Felicítalo efusivamente. Usa emoji 🛡️.
-    2. Si 'Gasto ayer' > 'Meta diaria ideal': Regáñalo suavemente mencionando la categoría culpable. Usa emoji 📉.
-    3. Si 'Gasto ayer' < 'Meta diaria ideal': Motívalo a seguir así. Usa emoji 🚀.
-    4. Sé breve, directo y usa jerga guatemalteca muy leve si aplica (opcional).
+    INSTRUCCIONES DE RESPUESTA:
+    Genera un mensaje con esta estructura lógica:
+    1. OBSERVACIÓN: Menciona cuánto gastó y en qué (si hubo gasto).
+    2. ANÁLISIS: Compara brevemente con la meta diaria.
+    3. RECOMENDACIÓN:
+       - Si el gasto fue 0: 'Excelente estrategia de ahorro total.'
+       - Si el gasto > Meta: 'Superaste tu promedio diario. Hoy te sugiero reducir gastos hormiga para compensar.'
+       - Si el gasto < Meta: 'Te mantuviste bajo control. Continúa con esta disciplina.'
 
-    Responde SOLO con el texto del consejo.
+    Tu tono debe ser profesional, útil y alentador. Usa un emoji al final acorde al resultado.
     ";
-
-
 
         try {
             $response = Http::withHeaders(['Content-Type' => 'application/json'])
@@ -87,10 +87,15 @@ class AIService
 
         } catch (\Exception $e) {
             \Log::error("Gemini Coach Error: " . $e->getMessage());
-            // Fallback si la IA falla (Plan B manual)
-            if ($context['gasto_ayer'] == 0) return "¡Ayer no gastaste nada! Sigue así campeón. 🛡️";
-            if ($context['gasto_ayer'] > $context['meta_diaria_segura']) return "Te pasaste ayer. Hoy toca apretarse el cincho. 📉";
-            return "Vas bien. Mantén el ritmo hoy. 🚀";
+
+            // Fallbacks manuales (Por si la IA falla, mantenemos el estilo de asesor)
+            if ($context['gasto_ayer'] == 0) {
+                return "Ayer no registraste gastos. Es una excelente noticia para tu liquidez mensual. ¡Sigue así! 🛡️";
+            }
+            if ($context['gasto_ayer'] > $context['meta_diaria_segura']) {
+                return "Ayer gastaste Q.{$context['gasto_ayer']}, superando tu promedio ideal. Hoy te recomiendo moderación en {$context['categoria_top']} para equilibrar. 📉";
+            }
+            return "Ayer gastaste Q.{$context['gasto_ayer']}, manteniéndote dentro de lo saludable. Tu presupuesto sigue estable. 🚀";
         }
     }
 }
