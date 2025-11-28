@@ -29,6 +29,7 @@ provider:
     FRONTEND_URL: https://mrqn-labs.com
     SANCTUM_STATEFUL_DOMAINS: mrqn-labs.com,api.mrqn-labs.com
     MYSQL_ATTR_SSL_CA: /etc/pki/tls/certs/ca-bundle.crt
+    GEMINI_API_KEY: ${ssm:/app-budget/GEMINI_API_KEY}
 
 plugins:
   - ./vendor/bref/bref

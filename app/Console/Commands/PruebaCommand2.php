@@ -4,10 +4,13 @@ namespace App\Console\Commands;
 
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
+use App\Traits\HomeTrait;
 use Illuminate\Console\Command;
 
 class PruebaCommand2 extends Command
 {
+    use HomeTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -55,11 +58,14 @@ class PruebaCommand2 extends Command
 //
 //        $this->info('Tags sincronizados correctamente.');
 
-        $ai = new \App\Services\AIService();
+//        $ai = new \App\Services\AIService();
+//
+//        $resultado = $ai->categorize("Servicio a mi motocicleta", ["Alimentación", "Transporte", "Hogar"]);
+//
+//        dd($resultado);
 
-        $resultado = $ai->categorize("Servicio a mi motocicleta", ["Alimentación", "Transporte", "Hogar"]);
-
-        dd($resultado);
+        $disponibleHoy = $this->getDaylyCoatch();
+        dd($disponibleHoy);
 
     }
 }

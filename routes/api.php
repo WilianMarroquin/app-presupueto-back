@@ -49,6 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('credit/card/payment', [App\Http\Controllers\Api\CreditCardApiController::class, 'payment']);
 
+    Route::get('home/details/daily', [App\Http\Controllers\Api\HomeApiController::class, 'detailDaily']);
+
 });
 
 require __DIR__.'/auth.php';

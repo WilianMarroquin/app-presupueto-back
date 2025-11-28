@@ -52,4 +52,45 @@ class AIService
 
         return json_decode($cleanJson, true);
     }
+
+    public function getDailyCoach(array $context): string
+    {
+
+        $prompt = "
+    Actúa como un entrenador financiero personal sarcástico pero motivador.
+    Analiza el comportamiento financiero de mi usuario AYER ({$context['fecha']}) y dale una frase corta (máx 25 palabras).
+
+    DATOS:
+    - Gasto ayer: Q.{$context['gasto_ayer']}
+    - En qué gastó más: {$context['categoria_top']}
+    - Meta diaria ideal: Q.{$context['meta_diaria_segura']}
+    - Le quedan Q.{$context['presupuesto_restante']} para {$context['dias_restantes']} días.
+
+    REGLAS:
+    1. Si 'Gasto ayer' es 0: Felicítalo efusivamente. Usa emoji 🛡️.
+    2. Si 'Gasto ayer' > 'Meta diaria ideal': Regáñalo suavemente mencionando la categoría culpable. Usa emoji 📉.
+    3. Si 'Gasto ayer' < 'Meta diaria ideal': Motívalo a seguir así. Usa emoji 🚀.
+    4. Sé breve, directo y usa jerga guatemalteca muy leve si aplica (opcional).
+
+    Responde SOLO con el texto del consejo.
+    ";
+
+
+
+        try {
+            $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                ->post("{$this->baseUrl}?key={$this->apiKey}", [
+                    'contents' => [['parts' => [['text' => $prompt]]]]
+                ])->throw();
+
+            return $response->json()['candidates'][0]['content']['parts'][0]['text'];
+
+        } catch (\Exception $e) {
+            \Log::error("Gemini Coach Error: " . $e->getMessage());
+            // Fallback si la IA falla (Plan B manual)
+            if ($context['gasto_ayer'] == 0) return "¡Ayer no gastaste nada! Sigue así campeón. 🛡️";
+            if ($context['gasto_ayer'] > $context['meta_diaria_segura']) return "Te pasaste ayer. Hoy toca apretarse el cincho. 📉";
+            return "Vas bien. Mantén el ritmo hoy. 🚀";
+        }
+    }
 }
