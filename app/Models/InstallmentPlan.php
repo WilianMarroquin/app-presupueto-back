@@ -4,13 +4,14 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -43,6 +44,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read int|null $payments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CreditCardProvisions> $paymentsMade
  * @property-read int|null $payments_made_count
+ * @property int $account_id
+ * @property-read \App\Models\Account|null $creditCard
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|InstallmentPlan whereAccountId($value)
  * @mixin \Eloquent
  */
 class InstallmentPlan extends Model
@@ -141,6 +145,12 @@ class InstallmentPlan extends Model
         $monthlyFee = $this->total_amount / $this->total_installments;
 
         return round($monthlyFee, 2);
+    }
+
+    public function creditCard(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'credit_card_id', 'id');
+
     }
 
 }

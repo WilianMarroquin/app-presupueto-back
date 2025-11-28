@@ -144,6 +144,12 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
             $dpo = TransactionDTO::fromArray($datos);
             $respuesta = $createTransactionService->execute($dpo);
 
+            $cardCredit = $installmentPlan->creditCard;
+
+            $cardCredit->update([
+                'current_balance' => $cardCredit->current_balance - $installmentPlan->monthlyFee,
+            ]);
+
             $provision->update([
                 'is_settled' => 1,
             ]);

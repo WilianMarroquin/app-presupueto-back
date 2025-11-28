@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -46,6 +46,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $nature
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereNature($value)
  * @property-read \App\Models\CreditCardDetail|null $creditCardDetail
+ * @property string $description
+ * @property-read string $text
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaction> $transactionsPending
+ * @property-read int|null $transactions_pending_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDescription($value)
  * @mixin \Eloquent
  */
 class Account extends Model
@@ -136,7 +141,7 @@ class Account extends Model
     public function withdraw(float $amount): void
     {
         if ($this->nature === 'liability') {
-            $this->current_balance += $amount;
+//            $this->current_balance += $amount;
         } else {
             if ($this->current_balance < $amount) {
                 throw new \Exception('Saldo insuficiente para retirar ' . $amount . ' de la cuenta ' . $this->name);

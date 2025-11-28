@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $account_id
@@ -42,6 +42,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardDetail whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardDetail withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardDetail withoutTrashed()
+ * @property float $credit_limit
+ * @property mixed $0
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CreditCardDetail whereCreditLimit($value)
  * @mixin \Eloquent
  */
 class CreditCardDetail extends Model
