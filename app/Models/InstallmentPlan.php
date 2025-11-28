@@ -119,7 +119,7 @@ class InstallmentPlan extends Model
     public function paymentsMade(): BelongsToMany
     {
         return $this->payments()
-            ->where('is_settled', 0);
+            ->where('is_settled', 1);
     }
 
     public function payments(): BelongsToMany

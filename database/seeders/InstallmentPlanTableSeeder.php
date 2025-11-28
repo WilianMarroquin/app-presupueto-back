@@ -23,6 +23,7 @@ class InstallmentPlanTableSeeder extends Seeder
             'total_installments' => 10,
             'interest_rate' => 0,
             'start_date' => '2025-11-23',
+            'account_id' => 4,
             'status' => 'active',
         ]);
 

@@ -96,7 +96,7 @@ class MenuOpcionesTableSeeder extends Seeder
 
         MenuOpcion::create([
             "titulo" => "Credit Cards",
-            "icono" => "ri-credit-card-line",
+            "icono" => "ri-bank-card-fill",
             "ruta" => "credit-cards",
             "orden" => 7,
             "action" => "Listar Credit Card",

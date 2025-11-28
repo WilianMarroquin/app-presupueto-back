@@ -18,8 +18,14 @@ return new class extends Migration
             $table->integer('total_installments');
             $table->decimal('interest_rate', 5, 2)->default(0);
             $table->date('start_date');
+            $table->unsignedBigInteger('account_id');
 
             $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
+
+            $table->foreign('account_id')
+                ->references('id')
+                ->on('accounts')
+                ->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
