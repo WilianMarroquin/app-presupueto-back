@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -111,7 +111,6 @@ class Transaction extends Model
     public static $messages = [
 
     ];
-
 
     /**
      * Accessor for relationships

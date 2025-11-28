@@ -60,7 +60,8 @@ class CreditCardDetail extends Model
         'color',
         'last_4',
         'cutoff_day',
-        'payment_day'
+        'payment_day',
+        'credit_limit',
     ];
 
 
@@ -78,6 +79,7 @@ class CreditCardDetail extends Model
         'last_4' => 'string',
         'cutoff_day' => 'integer',
         'payment_day' => 'integer',
+        'credit_limit',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -97,6 +99,7 @@ class CreditCardDetail extends Model
         'last_4' => 'required|string|max:4',
         'cutoff_day' => 'required|integer',
         'payment_day' => 'required|integer',
+        'credit_limit' => 'required|numeric|min:0',
     ];
 
 

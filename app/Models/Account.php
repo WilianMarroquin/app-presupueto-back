@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -87,6 +88,9 @@ class Account extends Model
             'deleted_at' => 'timestamp',
         ];
 
+    protected $appends = [
+        'text',
+    ];
 
     /**
      * Validation rules
@@ -164,4 +168,14 @@ class Account extends Model
         return $this->hasOne(CreditCardDetail::class, 'account_id', 'id');
     }
 
+    public function getTextAttribute(): string
+    {
+        return $this->name . ' (' . $this->currency->symbol . ')'. ' - ' . $this->description;
+    }
+
+    public function transactionsPending(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'account_id', 'id')
+            ->where('is_settled', 0);
+    }
 }

@@ -75,6 +75,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
                     'last_4' => $request->last_4,
                     'cutoff_day' => $request->cutoff_day,
                     'payment_day' => $request->payment_day,
+                    'credit_limit' => $request->credit_limit,
                 ]);
             });
 

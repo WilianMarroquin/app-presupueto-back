@@ -26,6 +26,7 @@ class StoreCreditCardRequest extends FormRequest
             'payment_day' => ['required', 'integer', 'between:1,31'],
             'currency_id' => ['required', 'exists:account_currencys,id'], // Validar que la moneda exista
             'description' => ['required', 'string', 'max:255'], // Descripción opcional pero útil
+            'credit_limit' => ['required', 'numeric', 'min:0'], // Límite de crédito
         ];
 
         // Fusión con reglas de Account (si realmente lo necesitas)
