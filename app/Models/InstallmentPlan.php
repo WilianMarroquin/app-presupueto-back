@@ -4,12 +4,13 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -115,15 +116,20 @@ class InstallmentPlan extends Model
      * @var array
      */
 
-    public function paymentsMade(): HasMany
+    public function paymentsMade(): BelongsToMany
     {
-        return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id')
-            ->where('status', CreditCardProvisions::STATUS_SETTLED);
+        return $this->payments()
+            ->where('is_settled', 0);
     }
 
-    public function payments(): HasMany
+    public function payments(): BelongsToMany
     {
-        return $this->hasMany(CreditCardProvisions::class, 'installment_plan_id', 'id');
+        return $this->belongsToMany(
+            Transaction::class,
+            'installment_plan_transaction',
+            'installment_plan_id',
+            'transaction_id'
+        )->withPivot('installment_number');
     }
 
     public function getMonthlyFeeAttribute(): float

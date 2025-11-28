@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\CreditCardProvisions;
+use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
 use App\Services\Transaction\CreateTransactionService;
@@ -122,33 +123,30 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
     {
         $request->validate([
             'installment_plan_id' => 'required|exists:installment_plans,id',
-            'provision_id' => 'required|exists:credit_card_provisions,id',
+            'provision_id' => 'required|exists:transactions,id',
             'account_id' => 'required|exists:accounts,id',
-            'description' => 'nullable|string',
         ]);
 
         $installmentPlan = InstallmentPlan::findOrFail($request->installment_plan_id);
-        $provision = CreditCardProvisions::findOrFail($request->provision_id);
+        $provision = Transaction::findOrFail($request->provision_id);
+        $createTransactionService = new CreateTransactionService();
 
         try {
             DB::beginTransaction();
             $datos = [
-                'category_id' => TransactionCategory::TARJETA_DE_CREDITO,
+                'category_id' => TransactionCategory::FINANZAS,
                 'account_id' => $request->account_id,
                 'amount' => $installmentPlan->monthlyFee,
-                'description' => $request->description ?? 'Pago de cuota del plan de cuotas',
+                'description' => 'Pago de cuota del plan de cuotas: ' . $installmentPlan->name,
                 'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
-                'is_recurring' => 1,
             ];
 
             $dpo = TransactionDTO::fromArray($datos);
-            $respuesta = CreateTransactionService::execute($dpo);
+            $respuesta = $createTransactionService->execute($dpo);
 
             $provision->update([
-                'status' => CreditCardProvisions::STATUS_SETTLED,
-                'transaction_id' => $respuesta['transaction']['id'],
+                'is_settled' => 1,
             ]);
-
 
             if (!$respuesta['success']) {
                 return $this->sendError($respuesta['message'], 500);
