@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Account;
 use App\Models\AccountCurrency;
 use App\Models\AccountType;
+use App\Models\CreditCardDetail;
 use Illuminate\Database\Seeder;
 
 class AccountTableSeeder extends Seeder
@@ -18,6 +19,7 @@ class AccountTableSeeder extends Seeder
     {
         disableForeignKeys();
         Account::truncate();
+        CreditCardDetail::truncate();
 
         Account::create([
             'name' => 'Cooperativa Guayacán',
