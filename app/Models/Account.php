@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -141,7 +141,7 @@ class Account extends Model
     public function withdraw(float $amount): void
     {
         if ($this->nature === 'liability') {
-//            $this->current_balance += $amount;
+            $this->current_balance += $amount;
         } else {
             if ($this->current_balance < $amount) {
                 throw new \Exception('Saldo insuficiente para retirar ' . $amount . ' de la cuenta ' . $this->name);
