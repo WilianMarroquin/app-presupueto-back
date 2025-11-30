@@ -91,6 +91,9 @@ class TransactionCategory extends Model
     const CATEGORY_TYPE_INCOME = 'Income';
     const CATEGORY_TYPE_EXPENSE = 'Expense';
 
+    const CATEGORY_TYPE_TRANSFER = 'Transfer';
+
+
     /**
      * The attributes that should be casted to native types.
      *
@@ -143,5 +146,8 @@ class TransactionCategory extends Model
     {
         return $this->type === self::CATEGORY_TYPE_INCOME;
     }
-
+    public function isTransfer(): bool
+    {
+        return $this->type === self::CATEGORY_TYPE_TRANSFER;
+    }
 }

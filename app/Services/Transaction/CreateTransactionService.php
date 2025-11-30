@@ -33,7 +33,7 @@ class CreateTransactionService
 
             $transaction = Transaction::create($payload);
 
-            if($transaction->category->isExpense()){
+            if($transaction->category->isExpense() || $transaction->category->isTransfer()){
                 $account->withdraw($transaction->amount);
             }
             if($transaction->category->isIncome()){
