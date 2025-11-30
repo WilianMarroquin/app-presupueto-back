@@ -50,7 +50,7 @@ class CreatePendingQuotaCommand extends Command
                 'amount' => $plan->monthly_fee,
                 'description' => 'VisaCuota ' . $plan->name . ' N° ' . $nextInstallmentNumber,
                 'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
-                'category_id' => TransactionCategory::FINANZAS,
+                'category_id' => TransactionCategory::GASTOS_FINANCIEROS,
             ];
 
             $dpo = TransactionDTO::fromArray($datos);

@@ -25,7 +25,7 @@ trait HomeTrait
         // 2. Definir qué NO es "Dinero de Bolsillo"
         // ID 12 = Finanzas (Deudas, TC, Créditos)
         // Tip: También podrías agregar aquí el ID de Vivienda (Renta) si es fijo.
-        $categoriasExcluidas = [TransactionCategory::FINANZAS];
+        $categoriasExcluidas = [TransactionCategory::PAGOS_TC];
 
         // 3. Traer SOLO Presupuestos Variables
         $budgets = Budget::where('start_date', '<=', $today)
@@ -94,7 +94,7 @@ trait HomeTrait
         // Esto no ejecuta la query todavía, solo prepara el "molde"
         $baseExpenseQuery = Transaction::whereHas('category', function ($q) {
             $q->where('type', 'expense')
-            ->where('id', '!=', TransactionCategory::FINANZAS);
+            ->where('id', '!=', TransactionCategory::PAGOS_TC);
         });
 
         // 3. DATOS DE HOY (El Nuevo Requerimiento)

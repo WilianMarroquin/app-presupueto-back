@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -59,18 +59,24 @@ class TransactionCategory extends Model
 
     protected $table = 'transaction_categories';
 
+    // --- INGRESOS ---
     const SALARIO = 1;
     const NEGOCIOS = 2;
     const INVERSIONES = 3;
     const OTROS_INGRESOS = 4;
+
+// --- GASTOS (Expense) ---
     const VIVIENDA = 5;
     const ALIMENTACION = 6;
     const TRANSPORTE = 7;
-    const Salud_Y_Bienestar = 8;
+    const SALUD_Y_BIENESTAR = 8; // Corregí el case para consistencia
     const OCIO_Y_SOCIAL = 9;
     const COMPRAS = 10;
     const EDUCACION = 11;
-    const FINANZAS = 12;
+    const GASTOS_FINANCIEROS = 12; // Solo intereses, comisiones, seguros (Type: Expense)
+
+// --- TRANSFERENCIAS (Transfer) ---
+    const PAGOS_TC = 13; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
 
 
     protected $fillable = [

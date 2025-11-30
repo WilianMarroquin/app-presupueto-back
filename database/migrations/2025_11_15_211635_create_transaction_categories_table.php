@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transaction_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 100);
-            $table->enum('type', ['Income', 'Expense']);
+            $table->enum('type', ['Income', 'Expense', 'Transfer']);
             $table->string('icon', 100)->nullable();
             $table->string('color', 100)->nullable();
             $table->timestamps();

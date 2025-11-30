@@ -134,7 +134,7 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
         try {
             DB::beginTransaction();
             $datos = [
-                'category_id' => TransactionCategory::FINANZAS,
+                'category_id' => TransactionCategory::PAGOS_TC,
                 'account_id' => $request->account_id,
                 'amount' => $installmentPlan->monthlyFee,
                 'description' => 'Pago de cuota del plan de cuotas: ' . $installmentPlan->name,

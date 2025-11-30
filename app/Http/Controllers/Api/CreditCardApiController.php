@@ -127,7 +127,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
                 'amount' => $request->amount,
                 'description' => 'Pago de tarjeta de crédito: ' . $account->name,
                 'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
-                'category_id' => TransactionCategory::FINANZAS,
+                'category_id' => TransactionCategory::PAGOS_TC,
             ];
 
             $dpo = TransactionDTO::fromArray($datos);
