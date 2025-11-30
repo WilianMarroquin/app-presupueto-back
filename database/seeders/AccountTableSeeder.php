@@ -26,7 +26,7 @@ class AccountTableSeeder extends Seeder
             'type_id' => AccountType::BANK,
             'currency_id' => AccountCurrency::QUETZAL,
             'initial_balance' => 0,
-            'current_balance' => 0,
+            'current_balance' => 1000,
             'nature' => 'asset',
             'is_active' => 1,
             'description' => 'Cuenta de Ahorros en Cooperativa Guayacán',

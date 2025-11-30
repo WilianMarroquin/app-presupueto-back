@@ -65,14 +65,14 @@ trait HomeTrait
     {
         $context = $this->getDailyContext();
 
-        $aiService = new AIService();
+//        $aiService = new AIService();
 
-        $respuestaIa = $aiService->getDailyCoach($context);
+//        $respuestaIa = $aiService->getDailyCoach($context);
 
         return [
             'estado_alerta' => $context['estado_alerta'],
             'total_gastado_hoy' => $context['total_gastado_hoy'],
-            'respuesta_ai' => $respuestaIa,
+//            'respuesta_ai' => $respuestaIa,
         ];
     }
 

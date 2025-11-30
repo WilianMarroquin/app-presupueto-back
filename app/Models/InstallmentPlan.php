@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -110,7 +110,7 @@ class InstallmentPlan extends Model
     ];
 
     const STATUS_ACTIVE = 'active';
-    const STATUS_INACTIVE = 'completed';
+    const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
 
 
@@ -149,7 +149,7 @@ class InstallmentPlan extends Model
 
     public function creditCard(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'credit_card_id', 'id');
+        return $this->belongsTo(Account::class, 'account_id', 'id');
 
     }
 

@@ -39,7 +39,7 @@ class CreatePendingQuotaCommand extends Command
 
         foreach ($installmentsPendings as $plan) {
             if ($plan->payments_count >= $plan->total_installments) {
-                $plan->update(['status' => 'completed']);
+                $plan->update(['status' => InstallmentPlan::STATUS_COMPLETED]);
                 continue;
             }
 

@@ -24,7 +24,7 @@ class HomeApiController extends AppBaseController
         $data = [
             'disponible_hoy' => $disponibleHoy,
             'gastado_hoy' => $mensajeDiario['total_gastado_hoy'],
-            'mensaje_diario' => $mensajeDiario['respuesta_ai'],
+//            'mensaje_diario' => $mensajeDiario['respuesta_ai'],
             'estado_alerta' => $mensajeDiario['estado_alerta'],
         ];
 
