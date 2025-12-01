@@ -184,8 +184,6 @@ class Account extends Model
             ->where('is_settled', 0);
     }
 
-    public function isCreditCard(): bool
-    {
-        return $this->type_id === AccountType::CREDIT_CARD;
-    }
+
+
 }

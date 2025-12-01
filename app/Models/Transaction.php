@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -68,6 +68,7 @@ class Transaction extends Model
         'transaction_date',
         'payment_method_id',
         'is_settled',
+        'settled_amount',
     ];
 
 
@@ -85,6 +86,7 @@ class Transaction extends Model
         'transaction_date' => 'date',
         'payment_method_id' => 'integer',
         'is_settled' => 'boolean',
+        'settled_amount' => 'float',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
@@ -100,6 +102,7 @@ class Transaction extends Model
         'amount' => 'required|numeric',
         'description' => 'required|string',
         'payment_method_id' => 'required|integer',
+        'settled_amount' => 'nullable|numeric',
     ];
 
 

@@ -152,6 +152,7 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
 
             $provision->update([
                 'is_settled' => 1,
+                'settled_amount' => $provision->amount,
             ]);
 
             if (!$respuesta['success']) {

@@ -106,28 +106,74 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
         $request->validate([
             'credit_card_id' => 'required|exists:accounts,id',
             'from_account_id' => 'required|exists:accounts,id',
-            'amount' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0.01', // Evitar pagos de 0
         ]);
 
-        $account = Account::findOrFail($request->credit_card_id);
+        $creditCard = Account::findOrFail($request->credit_card_id);
+
+//         Validación Opcional: No permitir pagar más de la deuda actual
+         if ($request->amount > $creditCard->current_balance) {
+             return $this->sendError('El monto excede la deuda actual.', 422);
+         }
+
         $createTransactionService = new CreateTransactionService();
 
         try {
             DB::beginTransaction();
-            $account->current_balance = 0;
-            $account->save();
 
-            foreach ($account->transactionsPending as $transaction) {
-                $transaction->is_settled = 1;
-                $transaction->save();
+            // 1. ALGORITMO DE CUBETA DE AGUA (Pago de Transacciones)
+            // Obtenemos las pendientes ordenadas por fecha (Lo viejo se paga primero)
+            // Asumo que 'transactionsPending' es una relación que filtra 'is_settled = 0'
+            $pendingTransactions = $creditCard->transactionsPending()
+                ->orderBy('transaction_date', 'asc')
+                ->get();
+
+            $remanentePago = $request->amount;
+
+            foreach ($pendingTransactions as $transaction) {
+                // Si ya se acabó el dinero del pago, paramos el bucle
+                if ($remanentePago <= 0) break;
+
+                // ¿Cuánto falta para llenar este vaso?
+                // (Monto original - Lo que ya se había abonado antes)
+                $saldoFaltanteTransaccion = $transaction->amount - $transaction->settled_amount;
+
+                // Corrección de precisión flotante pequeña (opcional pero buena práctica)
+                $saldoFaltanteTransaccion = round($saldoFaltanteTransaccion, 2);
+
+                if ($remanentePago >= $saldoFaltanteTransaccion) {
+                    // CASO A: Nos alcanza para liquidar esta transacción completa
+                    $transaction->settled_amount = $transaction->amount;
+                    $transaction->is_settled = true; // ¡Vaso lleno!
+                    $transaction->save();
+
+                    // Restamos lo que usamos de nuestra cubeta
+                    $remanentePago -= $saldoFaltanteTransaccion;
+
+                } else {
+                    // CASO B: Pago Parcial (No alcanza para llenar el vaso)
+                    $transaction->settled_amount += $remanentePago;
+                    // is_settled sigue siendo false
+                    $transaction->save();
+
+                    // Se acabó la cubeta
+                    $remanentePago = 0;
+                }
             }
 
+            // 2. ACTUALIZAR EL SALDO DE LA TARJETA
+            // En lugar de resetear a 0, le "depositamos" el pago para que baje la deuda.
+            // Usamos tu método del modelo Account (depositary / depositar)
+            $creditCard->depositary($request->amount);
+
+            // 3. REGISTRAR LA SALIDA DEL DINERO (Banco)
             $datos = [
                 'account_id' => $request->from_account_id,
                 'amount' => $request->amount,
-                'description' => 'Pago de tarjeta de crédito: ' . $account->name,
+                'description' => 'Abono a TC: ' . $creditCard->name,
                 'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
                 'category_id' => TransactionCategory::PAGOS_TC,
+                'is_settled' => true // El pago sale del banco liquidado
             ];
 
             $dpo = TransactionDTO::fromArray($datos);
@@ -145,7 +191,6 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
         }
 
         return $this->sendSuccess('Pago realizado con éxito.');
-
     }
 
 }

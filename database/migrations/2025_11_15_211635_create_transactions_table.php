@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->date('transaction_date');
             $table->boolean('is_settled')->default(false);
+            $table->decimal('settled_amount', 12, 2)->default(0);
             $table->unsignedBigInteger('payment_method_id')->index('fk_transactions_transaction_payment_methods1_idx');
             $table->timestamps();
             $table->softDeletes();

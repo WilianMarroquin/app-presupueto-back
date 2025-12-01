@@ -29,7 +29,14 @@ class CreateTransactionService
             $payload = $data->toArray();
             $payload['transaction_date'] = now();
             $payload['category_id'] = $category->id;
-            $payload['is_settled'] = ($account->nature === 'asset');
+
+            if ($account->nature === 'asset') {
+                $payload['is_settled'] = true;
+                $payload['settled_amount'] = $data->amount;
+            } else {
+                $payload['is_settled'] = false;
+                $payload['settled_amount'] = 0;
+            }
 
             $transaction = Transaction::create($payload);
 
