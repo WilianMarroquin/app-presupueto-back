@@ -56,14 +56,14 @@ functions:
       # CORREGIDO: Usamos httpApi para coincidir con apiType: http
       - httpApi: '*'
       # Esta es la función que ejecuta comandos de artisan
-    console:
-      handler: artisan
-      layers:
-        - ${bref:layer.php-82} # O la versión que uses
-      events:
-        - schedule:
-            rate: rate(1 minute)
-            input: '"schedule:run"'
+#    console:
+#      handler: artisan
+#      layers:
+#        - ${bref:layer.php-82} # O la versión que uses
+#      events:
+#        - schedule:
+#            rate: rate(1 minute)
+#            input: '"schedule:run"'
 
 package:
   exclude:

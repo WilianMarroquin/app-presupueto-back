@@ -17,7 +17,11 @@ class InstallmentPlanTableSeeder extends Seeder
         disableForeignKeys();
         InstallmentPlan::truncate();
 
-        InstallmentPlan::create([
+        InstallmentPlan::firstOrCreate(
+            [
+                'name' => 'Apple Watch'
+            ],
+            [
             'name' => 'Apple Watch',
             'total_amount' => 1799,
             'total_installments' => 12,
@@ -27,7 +31,11 @@ class InstallmentPlanTableSeeder extends Seeder
             'status' => 'active',
         ]);
 
-        InstallmentPlan::create([
+        InstallmentPlan::firstOrCreate(
+            [
+                'name' => 'Monito, Teclado y Mouse'
+            ],
+            [
             'name' => 'Monito, Teclado y Mouse',
             'total_amount' => 2467.56,
             'total_installments' => 12,
@@ -36,8 +44,12 @@ class InstallmentPlanTableSeeder extends Seeder
             'account_id' => 4,
             'status' => 'active',
         ]);
-
-        InstallmentPlan::create([
+//
+        InstallmentPlan::firstOrCreate(
+            [
+                'name' => 'Iphone 12 Pro'
+            ],
+            [
             'name' => 'Iphone 12 Pro',
             'total_amount' => 2650,
             'total_installments' => 12,
@@ -46,8 +58,12 @@ class InstallmentPlanTableSeeder extends Seeder
             'account_id' => 4,
             'status' => 'active',
         ]);
-
-        InstallmentPlan::create([
+//
+        InstallmentPlan::firstOrCreate(
+            [
+                'name' => 'Closet'
+            ],
+            [
             'name' => 'Closet',
             'total_amount' => 2500,
             'total_installments' => 10,

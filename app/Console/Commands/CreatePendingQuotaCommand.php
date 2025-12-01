@@ -33,6 +33,7 @@ class CreatePendingQuotaCommand extends Command
     {
         $installmentsPendings = InstallmentPlan::where('status', InstallmentPlan::STATUS_ACTIVE)
             ->withCount('payments')
+            ->where('name', 'Closet')
             ->get();
 
         $createTransactionService = new CreateTransactionService();

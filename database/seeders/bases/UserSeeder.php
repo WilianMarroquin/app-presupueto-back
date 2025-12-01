@@ -15,16 +15,16 @@ class UserSeeder extends Seeder
     {
 
         User::firstOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'wilimarroquin61@gmail.com'],
             [
-                'primer_nombre' => 'Admin',
-                'segundo_nombre' => '',
-                'primer_apellido' => 'Admin',
-                'segundo_apellido' => '',
-                'usuario' => 'Admin',
+                'primer_nombre' => 'Wilian',
+                'segundo_nombre' => 'Alberto',
+                'primer_apellido' => 'Marroquin',
+                'segundo_apellido' => 'Morales',
+                'usuario' => 'wilian',
                 'estado_id' => UserEstado::ACTIVO,
                 'email' => 'admin@gmail.com',
-                'password' => bcrypt('12345'),
+                'password' => bcrypt('WILIAN.123.gt'),
             ]);
     }
 }
