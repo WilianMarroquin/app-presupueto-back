@@ -101,6 +101,18 @@ class TransactionCategoryTableSeeder extends Seeder
                 'icon' => 'ri-exchange-dollar-line',
                 'color' => '#795548' // Café / Neutro
             ],
+            [
+                'name' => 'Tecnología & Suscripciones',
+                'type' => 'Expense',
+                'icon' => 'ri-macbook-line',
+                'color' => '#607D8B'
+            ],
+            [
+                'name' => 'Ahorro & Metas',
+                'type' => 'Transfer', // Clave: Es movimiento, no pérdida.
+                'icon' => 'ri-safe-2-fill', // Una caja fuerte (Seguridad)
+                'color' => '#00BCD4' // Cyan / Turquesa (Frescura y Futuro)
+            ],
         ];
 
         foreach ($categories as $cat) {

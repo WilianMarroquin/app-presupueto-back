@@ -78,6 +78,9 @@ class TransactionCategory extends Model
 // --- TRANSFERENCIAS (Transfer) ---
     const PAGOS_TC = 13; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
 
+    const TECNOLOGIA_Y_SUSCRIPCIONES = 552000; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
+    const AHORRO_Y_METAS = 552001; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
+
 
     protected $fillable = [
         'name',
