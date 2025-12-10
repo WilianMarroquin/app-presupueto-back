@@ -20,38 +20,6 @@ class BudgetTableSeeder extends Seeder
         Budget::truncate();
 
         Budget::create([
-            'amount' => 9200,
-            'category_id' => TransactionCategory::SALARIO,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-
-        Budget::create([
-            'amount' => 0,
-            'category_id' => TransactionCategory::NEGOCIOS,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-
-        Budget::create([
-            'amount' => 0,
-            'category_id' => TransactionCategory::INVERSIONES,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-
-        Budget::create([
-            'amount' => 0,
-            'category_id' => TransactionCategory::OTROS_INGRESOS,
-            'period_types_id' => BudgetPeriodType::MENSUAL,
-            'start_date' => now()->startOfMonth(),
-            'end_date' => now()->endOfMonth(),
-        ]);
-
-        Budget::create([
             'amount' => 800,
             'category_id' => TransactionCategory::VIVIENDA,
             'period_types_id' => BudgetPeriodType::MENSUAL,
@@ -68,7 +36,7 @@ class BudgetTableSeeder extends Seeder
         ]);
 
         Budget::create([
-            'amount' => 325,
+            'amount' => 350,
             'category_id' => TransactionCategory::TRANSPORTE,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
@@ -108,7 +76,7 @@ class BudgetTableSeeder extends Seeder
         ]);
 
         Budget::create([
-            'amount' => 3100,
+            'amount' => 3600,
             'category_id' => TransactionCategory::GASTOS_FINANCIEROS,
             'period_types_id' => BudgetPeriodType::MENSUAL,
             'start_date' => now()->startOfMonth(),
