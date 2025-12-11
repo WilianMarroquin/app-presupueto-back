@@ -57,7 +57,7 @@ class PruebaCommand2 extends Command
 //
 //        $this->info('Tags sincronizados correctamente.');
 
-        $mensaje = "Registra un gasto de 35 quetzales en compra de gasolina a mi tc de back";
+        $mensaje = "Compre una playera Adidas por 10 en efectivo, cargalo a mi cuenta transaccional";
 
         ProcessVoiceTransactionJob::dispatch($mensaje);
 

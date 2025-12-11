@@ -111,7 +111,7 @@ class AIService
         // Usamos 'select' para enviar solo lo necesario y ahorrar tokens.
         // El formato será: [{"id":1,"name":"Comida"}, {"id":2,"name":"Gasolina"}]
         $categoriesJson = TransactionCategory::select('id', 'name')->get()->toJson();
-        $accountsJson = Account::select('id', 'name')->get()->toJson();
+        $accountsJson = Account::select('id', 'name', 'description')->get()->toJson();
         $paymentMethodsJson = TransactionPaymentMethod::select('id', 'name')->get()->toJson();
 
         $prompt = <<<EOT

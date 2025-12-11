@@ -62,10 +62,9 @@ class ProcessVoiceTransactionJob implements ShouldQueue
                 DB::rollBack();
                 $this->fail(new \Exception($respuesta['message']));
             }
-
-            Log::info("Transacción creada exitosamente: " . $respuesta['transaction']->id);
             DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error("Error crítico en ProcessVoiceTransaction: " . $e->getMessage());
             $this->fail($e);
         }
