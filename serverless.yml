@@ -76,8 +76,6 @@ constructs:
       handler: Bref\LaravelBridge\Queue\QueueHandler
       runtime: php-82
       timeout: 60 # Dale 60s para que Gemini piense tranquilo
-      layers:
-        - ${bref:layer.php-82} # Nota: Versión CLI (sin FPM)
 package:
   exclude:
     - node_modules/**
