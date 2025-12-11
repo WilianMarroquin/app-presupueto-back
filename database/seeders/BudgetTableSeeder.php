@@ -82,6 +82,20 @@ class BudgetTableSeeder extends Seeder
             'start_date' => now()->startOfMonth(),
             'end_date' => now()->endOfMonth(),
         ]);
+        Budget::create([
+            'amount' => 75,
+            'category_id' => TransactionCategory::TECNOLOGIA_Y_SUSCRIPCIONES,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
+        Budget::create([
+            'amount' => 600,
+            'category_id' => TransactionCategory::OTROS_GASTOS,
+            'period_types_id' => BudgetPeriodType::MENSUAL,
+            'start_date' => now()->startOfMonth(),
+            'end_date' => now()->endOfMonth(),
+        ]);
 
         enableForeignKeys();
     }
