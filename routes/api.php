@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('home/details/daily', [App\Http\Controllers\Api\HomeApiController::class, 'detailDaily']);
 
+    Route::post('/voice-command', [\App\Http\Controllers\Api\VoiceCommandApiController::class, 'store']);
+
 });
 
 require __DIR__.'/auth.php';

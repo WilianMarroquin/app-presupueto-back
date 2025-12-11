@@ -11,17 +11,19 @@ provider:
     APP_ENV: local
     APP_DEBUG: true
     APP_KEY: ${ssm:/app-budget/APP_KEY}
+
+    # Base de datos
     DB_CONNECTION: mysql
     DB_HOST: ${ssm:/app-budget/DB_HOST}
-
-    # 4000 es correcto si usas PlanetScale. Si usas RDS normal es 3306.
     DB_PORT: 4000
-
     DB_DATABASE: ${ssm:/app-budget/DB_DATABASE}
     DB_USERNAME: ${ssm:/app-budget/DB_USERNAME}
-
-    # CORREGIDO: Se agregó la referencia a SSM
     DB_PASSWORD: ${ssm:/app-budget/DB_PASSWORD}
+
+    # Queue
+    QUEUE_CONNECTION: sqs
+    SQS_QUEUE: ${construct:jobs.queueUrl}
+    SQS_PREFIX: ''
 
     SESSION_DRIVER: cookie
     CACHE_DRIVER: array
@@ -34,7 +36,7 @@ provider:
 plugins:
   - ./vendor/bref/bref
   - serverless-domain-manager
-
+  - serverless-lift
 custom:
   customDomain:
     domainName: api.mrqn-labs.com
@@ -64,7 +66,18 @@ functions:
 #        - schedule:
 #            rate: rate(1 minute)
 #            input: '"schedule:run"'
-
+constructs:
+  # Aquí nace el Worker
+  jobs:
+    type: queue
+    worker:
+      # Usa el handler oficial de Bref para Laravel
+      # ¡No necesitas crear un archivo worker.php manual!
+      handler: Bref\LaravelBridge\Queue\QueueHandler
+      runtime: php-82
+      timeout: 60 # Dale 60s para que Gemini piense tranquilo
+      layers:
+        - ${bref:layer.php-82} # Nota: Versión CLI (sin FPM)
 package:
   exclude:
     - node_modules/**

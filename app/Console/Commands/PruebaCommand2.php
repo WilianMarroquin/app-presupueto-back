@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ProcessVoiceTransactionJob;
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
 use App\Traits\HomeTrait;
@@ -38,8 +39,6 @@ class PruebaCommand2 extends Command
 //            'payment_method_id' => 1,
 //            'is_recurring' => 0,
 //        ];
-//
-//
 //        $dpo = TransactionDTO::fromArray($datos);
 //
 //        $respuesta = CreateTransactionService::execute($dpo);
@@ -58,14 +57,23 @@ class PruebaCommand2 extends Command
 //
 //        $this->info('Tags sincronizados correctamente.');
 
+        $mensaje = "Registra un gasto de 35 quetzales en compra de gasolina a mi tc de back";
+
+        ProcessVoiceTransactionJob::dispatch($mensaje);
+
 //        $ai = new \App\Services\AIService();
+//
+//        $respuesta = $ai->getDataForVoice($mensaje);
+//
+//        dd($respuesta);
+
 //
 //        $resultado = $ai->categorize("Servicio a mi motocicleta", ["Alimentación", "Transporte", "Hogar"]);
 //
 //        dd($resultado);
-
-        $disponibleHoy = $this->getDaylyCoatch();
-        dd($disponibleHoy);
+//
+//        $disponibleHoy = $this->getDaylyCoatch();
+//        dd($disponibleHoy);
 
     }
 }

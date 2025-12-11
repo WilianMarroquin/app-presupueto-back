@@ -175,7 +175,7 @@ class Account extends Model
 
     public function getTextAttribute(): string
     {
-        return $this->name . ' (' . $this->currency->symbol . ')'. ' - ' . $this->description;
+        return $this->name . ' (' . $this?->currency?->symbol . ')'. ' - ' . $this->description;
     }
 
     public function transactionsPending(): HasMany
