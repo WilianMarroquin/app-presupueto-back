@@ -26,6 +26,7 @@ class IndexPermisosTableSeeder extends Seeder
             TransactionCategoryPermisosTableSeeder::class,
             TransactionPaymentMethodPermisosTableSeeder::class,
             TransactionPermisosTableSeeder::class,
+            BudgetItemDetailPermisosTableSeeder::class
         ]);
 
     }
