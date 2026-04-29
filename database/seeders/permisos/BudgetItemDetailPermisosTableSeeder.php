@@ -3,7 +3,7 @@
 namespace Database\Seeders\permisos;
 
 use App\Models\Permission;
-use App\Models\Role;
+use App\Models\Rol;
 use Illuminate\Database\Seeder;
 
 class BudgetItemDetailPermisosTableSeeder extends Seeder
@@ -31,7 +31,7 @@ class BudgetItemDetailPermisosTableSeeder extends Seeder
             ]);
         }
 
-        $admin = Role::where('name', Role::ADMIN)
+        $admin = Rol::where('name', Rol::ADMINISTRADOR)
             ->first();
 
         $admin->givePermissionTo($permisos);

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
+use App\Models\Rol;
 use Illuminate\Database\Seeder;
 use App\Models\Permission;
 
@@ -31,7 +31,7 @@ class CreditCardDetailPermisosTableSeeder extends Seeder
             ]);
         }
 
-        $admin = Role::where('name', Role::ADMIN)
+        $admin = Rol::where('name', Rol::ADMINISTRADOR)
             ->first();
 
         $admin->givePermissionTo($permisos);
