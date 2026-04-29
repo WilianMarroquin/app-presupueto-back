@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TransactionPaymentMethodTableSeeder::class);
         $this->call(MenuOpcionesTableSeeder::class);
         $this->call(BudgetPeriodTypeTableSeeder::class);
-        $this->call(BudgetTableSeeder::class);
         $this->call(InstallmentPlanTableSeeder::class);
 
         //Permisos

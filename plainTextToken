@@ -1,0 +1,2 @@
+Error:
+Serverless command "bref:cli -- args=tinker --execute="echo App\Models\User::first()-;"" not found. Run "serverless help" for a list of all available commands.

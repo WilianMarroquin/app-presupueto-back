@@ -16,7 +16,8 @@ class AIService
     {
         $this->apiKey = config('services.gemini.key');
         // CAMBIO AQUÍ: De 'gemini-1.5-flash' a 'gemini-2.5-flash'
-        $this->baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+//        $this->baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+        $this->baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent';
     }
 
     public function categorize(string $userText, array $categories)

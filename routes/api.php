@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,3 +64,16 @@ Route::prefix('libres')->group(function () {
 
 });
 
+
+Route::get('/generar-llave-maestra', function () {
+    // Busca tu usuario (ID 1 o el que sea)
+    $user = User::first();
+
+    // Crea el token
+    $token = $user->createToken('iPhone-Jarvis')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'mensaje' => 'Copia esto y bórra esta ruta inmediatamente.'
+    ]);
+});
