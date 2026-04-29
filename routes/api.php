@@ -58,6 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_items', App\Http\Controllers\Api\BudgetItemApiController::class)
         ->parameters(['budget_items' => 'budgetitem']);
 
+    Route::apiResource('budget_templates', App\Http\Controllers\Api\BudgetTemplateApiController::class)
+        ->parameters(['budget_templates' => 'budgettemplate']);
+
 });
 
 Route::post('/voice-command', [\App\Http\Controllers\Api\VoiceCommandApiController::class, 'store']);

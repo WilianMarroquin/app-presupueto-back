@@ -15,7 +15,7 @@ return new class extends Migration
             $create->text('description')->nullable();
 
             // Tipo de periodo para lógica de UI (mensual, trimestral, etc.)
-            $create->string('period_type')->default('monthly');
+            $create->foreignId('budget_period_type_id')->constrained()->onDelete('cascade');
 
             // Un campo extra para saber el total proyectado sin sumar detalles cada vez
             $create->decimal('total_estimated_amount', 12, 2)->default(0);
