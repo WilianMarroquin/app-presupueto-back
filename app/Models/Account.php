@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -51,6 +51,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaction> $transactionsPending
  * @property-read int|null $transactions_pending_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDescription($value)
+ * @property int $user_id
+ * @property int $is_transactional
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereIsTransactional($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUserId($value)
  * @mixin \Eloquent
  */
 class Account extends Model

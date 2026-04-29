@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItemDetail whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItemDetail whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItemDetail whereUpdatedAt($value)
+ * @property-read \App\Models\BudgetItem $budgetItem
  * @mixin \Eloquent
  */
 class BudgetItemDetail extends Model

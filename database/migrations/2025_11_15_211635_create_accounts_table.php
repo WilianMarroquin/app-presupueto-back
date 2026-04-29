@@ -17,10 +17,12 @@ return new class extends Migration
             $table->text('description');
             $table->unsignedBigInteger('type_id')->index('fk_accounts_account_types1_idx');
             $table->unsignedInteger('currency_id')->index('fk_accounts_account_currencys1_idx');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->float('initial_balance', 15);
             $table->float('current_balance', 15);
             $table->enum('nature', ['asset', 'liability'])->default('asset');
             $table->tinyInteger('is_active');
+            $table->tinyInteger('is_transactional')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

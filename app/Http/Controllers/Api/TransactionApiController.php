@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\TransactionCategory;
+use App\Models\TransactionPaymentMethod;
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -117,8 +119,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Display the specified Transaction.
      * GET|HEAD /transactions/{id}
      */
-    public
-    function show(Transaction $transaction)
+    public function show(Transaction $transaction)
     {
         return $this->sendResponse($transaction->toArray(), 'Transaction recuperado con éxito.');
     }
@@ -127,8 +128,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Update the specified Transaction in storage.
      * PUT/PATCH /transactions/{id}
      */
-    public
-    function update(UpdateTransactionApiRequest $request, $id): JsonResponse
+    public function update(UpdateTransactionApiRequest $request, $id): JsonResponse
     {
         $transaction = Transaction::findOrFail($id);
         $transaction->update($request->validated());
@@ -139,10 +139,51 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Remove the specified Transaction from storage.
      * DELETE /transactions/{id}
      */
-    public
-    function destroy(Transaction $transaction): JsonResponse
+    public function destroy(Transaction $transaction): JsonResponse
     {
         $transaction->delete();
         return $this->sendResponse(null, 'Transaction eliminado con éxito.');
+    }
+
+    public function registrarIngresoSalario(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric',
+        ]);
+
+        $account = $request->user()->accountTransactional;
+
+        if(!$account) {
+            return $this->sendError('No se encontró una cuenta transaccional para el usuario.');
+        }
+
+        $createTransactionService = new CreateTransactionService();
+
+        try {
+            $datos = [
+                'account_id' => $account->id,
+                'amount' => $request->input('amount'),
+                'description' => 'Ingreso de salario',
+                'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
+                'category_id' => TransactionCategory::SALARIO,
+            ];
+
+            $dpo = TransactionDTO::fromArray($datos);
+
+            $respuesta = $createTransactionService->execute($dpo);
+
+            if (!$respuesta['success']) {
+                DB::rollBack();
+                return $this->sendError($respuesta['message'], 500);
+            }
+            $transaction = $respuesta['transaction'];
+            DB::commit();
+
+            return $this->sendResponse($transaction, 'Transaction creado con éxito.');
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('Error al registrar el ingreso de salario: ' . $e->getMessage(), 500);
+        }
     }
 }

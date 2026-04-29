@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereTotalEstimatedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereUserId($value)
+ * @property int $budget_period_type_id
+ * @property-read \App\Models\BudgetPeriodType|null $period
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereBudgetPeriodTypeId($value)
  * @mixin \Eloquent
  */
 class BudgetTemplate extends Model

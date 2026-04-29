@@ -27,12 +27,22 @@ class MenuOpcionesTableSeeder extends Seeder
             "parent_id" => null
         ]);
 
+//        MenuOpcion::create([
+//            "titulo" => "Transactions",
+//            "icono" => "ri-exchange-line",
+//            "ruta" => "transactions",
+//            "orden" => 1,
+//            "action" => "Listar Transactiones",
+//            "subject" => "Transaction",
+//            "parent_id" => null
+//        ]);
+
         MenuOpcion::create([
-            "titulo" => "Transactions",
-            "icono" => "ri-exchange-line",
-            "ruta" => "transactions",
+            "titulo" => "Acciones Rápidas",
+            "icono" => "ri-flashlight-line",
+            "ruta" => "acciones-rapidas",
             "orden" => 1,
-            "action" => "Listar Transactiones",
+            "action" => "Listar Acciones Rápidas",
             "subject" => "Transaction",
             "parent_id" => null
         ]);

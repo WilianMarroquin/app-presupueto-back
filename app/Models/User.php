@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $primer_nombre
@@ -61,6 +63,11 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsuario($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
+ * @property-read \App\Models\Account|null $accountTransactional
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property-read int|null $accounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasMedia
@@ -174,13 +181,13 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole('Super Admin');
 
     }
 
-    public function getNombreCompletoAttribute()
+    public function getNombreCompletoAttribute(): string
     {
         return $this->primer_nombre . ' ' . $this->segundo_nombre . ' ' . $this->primer_apellido . ' ' . $this->segundo_apellido;
 
@@ -196,12 +203,20 @@ class User extends Authenticatable implements HasMedia
         }
     }
 
-    public function estado()
+    public function estado(): HasOne
     {
         return $this->hasOne(UserEstado::class, 'id', 'estado_id');
-
     }
 
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class, 'user_id', 'id');
+    }
 
+    public function accountTransactional(): HasOne
+    {
+        return $this->hasOne(Account::class, 'user_id', 'id')
+            ->where('is_transactional', 1);
+    }
 
 }

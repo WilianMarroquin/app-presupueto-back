@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('transaction_payment_methods', App\Http\Controllers\Api\TransactionPaymentMethodApiController::class)
         ->parameters(['transaction_payment_methods' => 'transactionpaymentmethod']);
 
+    Route::post('transactions_registrar_ingreso_salario', [App\Http\Controllers\Api\TransactionApiController::class, 'registrarIngresoSalario']);
+
     Route::apiResource('transactions', App\Http\Controllers\Api\TransactionApiController::class)
         ->parameters(['transactions' => 'transaction']);
 

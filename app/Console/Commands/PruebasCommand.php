@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
+use http\Client\Curl\User;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -32,6 +33,12 @@ class PruebasCommand extends Command
 
     public function handle()
     {
+
+        $user = \App\Models\User::find(1);
+
+        dd($user->accountTransactional);
+
+
         $datos = $this->readExcel();
         $sqlQueries = []; // <--- 1. Array para guardar los queries
         $now = now()->toDateTimeString(); // <--- 2. Obtener el timestamp actual

@@ -30,6 +30,7 @@ class AccountTableSeeder extends Seeder
             'nature' => 'asset',
             'is_active' => 1,
             'description' => 'Cuenta Transaccional',
+            'user_id' => 1
         ]);
 
         Account::create([
@@ -41,6 +42,7 @@ class AccountTableSeeder extends Seeder
             'nature' => 'asset',
             'is_active' => 1,
             'description' => 'Cuenta de Ahorros en Cooperativa Guayacán',
+            'user_id' => 1
         ]);
 
         Account::create([
@@ -52,6 +54,7 @@ class AccountTableSeeder extends Seeder
             'nature' => 'asset',
             'is_active' => 1,
             'description' => 'Cuenta de Ahorros en Cooperativa Guayacán',
+            'user_id' => 1
         ]);
 
         $tcBack = Account::create([
@@ -63,6 +66,7 @@ class AccountTableSeeder extends Seeder
             'nature' => 'liability',
             'is_active' => 1,
             'description' => 'Tarjeta de Crédito BAC Credomatic',
+            'user_id' => 1
         ]);
 
         $tcBack->creditCardDetail()->create([
@@ -84,6 +88,7 @@ class AccountTableSeeder extends Seeder
             'nature' => 'liability',
             'is_active' => 1,
             'description' => 'Tarjeta de Crédito Cooperativa Guayacán',
+            'user_id' => 1
         ]);
 
         $tcCope->creditCardDetail()->create([
