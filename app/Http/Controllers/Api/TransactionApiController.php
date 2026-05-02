@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Console\Commands\CreatePendingQuotaCommand;
 use App\Http\Controllers\AppBaseController;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
@@ -14,6 +15,7 @@ use App\Http\Requests\Api\UpdateTransactionApiRequest;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -185,5 +187,12 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
             DB::rollBack();
             return $this->sendError('Error al registrar el ingreso de salario: ' . $e->getMessage(), 500);
         }
+    }
+
+    public function registrarVisaCuotas(Request $request)
+    {
+        Artisan::call('app:create-pending-quota-command');
+
+        return $this->sendSuccess('Proceso de registro de cuotas Visa ejecutado con éxito.');
     }
 }

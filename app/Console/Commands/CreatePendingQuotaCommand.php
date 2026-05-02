@@ -8,6 +8,7 @@ use App\Models\TransactionPaymentMethod;
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CreatePendingQuotaCommand extends Command
 {
@@ -33,7 +34,6 @@ class CreatePendingQuotaCommand extends Command
     {
         $installmentsPendings = InstallmentPlan::where('status', InstallmentPlan::STATUS_ACTIVE)
             ->withCount('payments')
-            ->where('name', 'Closet')
             ->get();
 
         $createTransactionService = new CreateTransactionService();
@@ -56,7 +56,6 @@ class CreatePendingQuotaCommand extends Command
 
             $dpo = TransactionDTO::fromArray($datos);
 
-            // Asumo que tu servicio devuelve la transacción creada dentro de 'data' o similar
             $respuesta = $createTransactionService->execute($dpo);
 
             if (!$respuesta['success']) {
@@ -74,9 +73,7 @@ class CreatePendingQuotaCommand extends Command
                 'amount'             => $plan->monthly_fee
             ]);
 
-            $this->info("Cuota {$nextInstallmentNumber} generada para el plan {$plan->name}");
         }
-
-        return Command::SUCCESS;
+//        return Command::SUCCESS;
     }
 }

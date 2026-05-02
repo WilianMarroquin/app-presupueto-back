@@ -66,6 +66,31 @@ functions:
 #        - schedule:
 #            rate: rate(1 minute)
 #            input: '"schedule:run"'
+#  visacuotas-cron:
+#    handler: artisan
+#    description: 'Carga cuotas pendientes de visacuotas el día 1 del mes'
+#    timeout: 120 # Dale suficiente tiempo si procesa muchos registros
+#    layers:
+#      - ${bref:layer.php-82} # Importante: Usar php-82 (CLI), no fpm
+#    events:
+#      - schedule:
+#          rate: cron(0 6 1 * ? *)
+#          input: '"app:create-pending-quota-command"'
+
+#  visacuotas-cron:
+#    handler: artisan
+#    description: 'Carga cuotas pendientes de visacuotas (TEST: cada 2 minutos)'
+#    timeout: 120
+#    layers:
+#      - ${bref:layer.php-82}
+#    events:
+#      - schedule:
+#          # Se ejecutará cada 2 minutos
+#          rate: rate(2 minutes)
+#          # Recuerda poner el nombre real de tu comando aquí
+#          input: '"app:create-pending-quota-command"'
+#          enabled: false  # <--- AGREGA ESTA LÍNEA
+
 constructs:
   # Aquí nace el Worker
   jobs:
