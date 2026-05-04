@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $budget_template_id
@@ -30,6 +30,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItem whereTransactionCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItem whereUpdatedAt($value)
  * @property-read \App\Models\BudgetTemplate $budgetTemplate
+ * @property-read \App\Models\TransactionCategory $category
+ * @property-read mixed $monto_total_details
+ * @property-read \App\Models\BudgetTemplate $template
  * @mixin \Eloquent
  */
 class BudgetItem extends Model

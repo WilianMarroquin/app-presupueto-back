@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -35,6 +35,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $budget_budget_period_type_id_id
  * @property-read \App\Models\BudgetPeriodType|null $period
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereBudgetPeriodTypeId($value)
+ * @property-read bool $esta_activa
+ * @property-read mixed $total_expense_amount
+ * @property-read mixed $total_income_amount
+ * @property-read mixed $total_saving
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BudgetItem> $items
+ * @property-read int|null $items_count
+ * @property-read \App\Models\BudgetPeriodType $periodType
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BudgetPeriod> $periods
+ * @property-read int|null $periods_count
  * @mixin \Eloquent
  */
 class BudgetTemplate extends Model

@@ -61,6 +61,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_items', App\Http\Controllers\Api\BudgetItemApiController::class)
         ->parameters(['budget_items' => 'budgetitem']);
 
+    Route::post('budget_templates/activar/{budget_template}', [App\Http\Controllers\Api\BudgetTemplateApiController::class, 'activated']);
+
     Route::apiResource('budget_templates', App\Http\Controllers\Api\BudgetTemplateApiController::class)
         ->parameters(['budget_templates' => 'budgettemplate']);
 

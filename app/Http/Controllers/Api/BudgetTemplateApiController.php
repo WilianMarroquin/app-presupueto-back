@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\BudgetPeriod;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateBudgetTemplateApiRequest;
@@ -10,6 +11,7 @@ use App\Http\Requests\Api\UpdateBudgetTemplateApiRequest;
 use App\Models\BudgetTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -110,4 +112,34 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
         $budgettemplate->delete();
         return $this->sendResponse(null, 'BudgetTemplate eliminado con éxito.');
     }
+
+
+    public function activated(BudgetTemplate $budget_template)
+    {
+        $user = auth()->user();
+
+        return DB::transaction(function () use ($user, $budget_template) {
+
+            /** @var BudgetPeriod $ultimaPlantillaActiva */
+            $ultimaPlantillaActiva = $user->latestActiveBudgetTemplate;
+
+            if ($ultimaPlantillaActiva) {
+                $ultimaPlantillaActiva->update([
+                    'is_active' => false,
+                    'end_date'  => today(),
+                ]);
+            }
+
+            $user->budgetPeriods()->create([
+                'budget_template_id' => $budget_template->id,
+                'start_date'         => today(),
+                'end_date'           => today()->addYears(10),
+                'is_active'          => true,
+                'total_budgeted'     => $budget_template->total_estimated_amount ?? 0,
+            ]);
+
+            return $this->sendSuccess('Presupuesto activado con éxito.');
+        });
+    }
+
 }

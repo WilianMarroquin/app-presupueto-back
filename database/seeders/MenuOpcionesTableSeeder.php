@@ -10,6 +10,7 @@ class MenuOpcionesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * Para ejecutar este seeder: php artisan db:seed --class=MenuOpcionesTableSeeder
      */
     public function run(): void
     {
@@ -54,6 +55,16 @@ class MenuOpcionesTableSeeder extends Seeder
             "orden" => 2,
             "action" => "Listar Categorías",
             "subject" => "TransactionCategory",
+            "parent_id" => null
+        ]);
+
+        MenuOpcion::create([
+            "titulo" => "Budgets",
+            "icono" => "ri-pie-chart-line",
+            "ruta" => "template-budget",
+            "orden" => 2,
+            "action" => "Listar Budgetes",
+            "subject" => "Budget",
             "parent_id" => null
         ]);
 

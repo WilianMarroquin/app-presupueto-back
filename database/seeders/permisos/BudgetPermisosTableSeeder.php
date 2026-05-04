@@ -17,6 +17,7 @@ class BudgetPermisosTableSeeder extends Seeder
     {
 
         $permisos = [
+            'Listar Budgetes',
             'Ver Budgetes',
             'Crear Budgetes',
             'Editar Budgetes',

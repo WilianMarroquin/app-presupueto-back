@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $primer_nombre
@@ -68,6 +68,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $accounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BudgetPeriod> $budgetPeriods
+ * @property-read int|null $budget_periods_count
+ * @property-read \App\Models\BudgetTemplate|null $latestActiveBudgetTemplate
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasMedia
@@ -217,6 +220,18 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(Account::class, 'user_id', 'id')
             ->where('is_transactional', 1);
+    }
+
+    public function budgetPeriods(): HasMany
+    {
+        return $this->hasMany(BudgetPeriod::class, 'user_id', 'id');
+    }
+
+    public function latestActiveBudgetTemplate(): HasOne
+    {
+        return $this->hasOne(BudgetPeriod::class)
+            ->where('is_active', true)
+            ->latestOfMany();
     }
 
 }
