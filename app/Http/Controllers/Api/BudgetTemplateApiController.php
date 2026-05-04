@@ -133,7 +133,7 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
             $user->budgetPeriods()->create([
                 'budget_template_id' => $budget_template->id,
                 'start_date'         => today(),
-                'end_date'           => today()->addYears(10),
+                'end_date'           => null,
                 'is_active'          => true,
                 'total_budgeted'     => $budget_template->total_estimated_amount ?? 0,
             ]);
