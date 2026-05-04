@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -69,18 +70,17 @@ class TransactionCategory extends Model
     const VIVIENDA = 5;
     const ALIMENTACION = 6;
     const TRANSPORTE = 7;
-    const SALUD_Y_BIENESTAR = 8; // Corregí el case para consistencia
+    const SALUD_Y_BIENESTAR = 8;
     const OCIO_Y_SOCIAL = 9;
     const COMPRAS = 10;
     const EDUCACION = 11;
-    const GASTOS_FINANCIEROS = 12; // Solo intereses, comisiones, seguros (Type: Expense)
+    const GASTOS_FINANCIEROS = 12;
 
-// --- TRANSFERENCIAS (Transfer) ---
-    const PAGOS_TC = 13; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
+    const PAGOS_TC = 13;
 
-    const TECNOLOGIA_Y_SUSCRIPCIONES = 552000; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
-    const AHORRO_Y_METAS = 552001; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
-    const OTROS_GASTOS = 831829; // ¡NUEVA! Pagos de tarjeta y movimientos entre cuentas (Type: Transfer)
+    const TECNOLOGIA_Y_SUSCRIPCIONES = 14;
+    const AHORRO_Y_METAS = 15;
+    const OTROS_GASTOS = 16;
 
 
     protected $fillable = [
@@ -153,5 +153,17 @@ class TransactionCategory extends Model
     public function isTransfer(): bool
     {
         return $this->type === self::CATEGORY_TYPE_TRANSFER;
+    }
+
+    public function scopeExcludeIds($query, string $ids)
+    {
+        $idsArray = explode('-', $ids);
+
+        return $query->whereNotIn('id', $idsArray);
+    }
+
+    public function scopeSinTransaccionesInternas($query)
+    {
+        return $query->where('id', '!=', self::PAGOS_TC);
     }
 }

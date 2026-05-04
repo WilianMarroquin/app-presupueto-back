@@ -42,16 +42,20 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     {
         $transaction_categories = QueryBuilder::for(TransactionCategory::class)
             ->allowedFilters([
-                'nombre',
+                'name',
                 'type',
                 'description',
+                AllowedFilter::scope('excludeIds', 'excludeIds'),
+                AllowedFilter::scope('sinTransaccionesInternas', 'sinTransaccionesInternas'),
             ])
             ->allowedSorts([
                 'nombre',
                 'type',
                 'description',
             ])
-            ->allowedIncludes(['tags'])
+            ->allowedIncludes([
+                'tags'
+            ])
             ->defaultSort('-id')
             ->jsonPaginate(request('per_page') ?? 10);
 

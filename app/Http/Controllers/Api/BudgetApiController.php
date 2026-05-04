@@ -42,14 +42,12 @@ class BudgetApiController extends AppbaseController implements HasMiddleware
             ->allowedFilters([
                 'amount',
                 'period_types_id',
-                'category_id',
                 'start_date',
                 'end_date'
             ])
             ->allowedSorts([
                 'amount',
                 'period_types_id',
-                'category_id',
                 'start_date',
                 'end_date'
             ])

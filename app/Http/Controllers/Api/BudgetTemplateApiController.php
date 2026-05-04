@@ -40,19 +40,22 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
     {
         $budget_templates = QueryBuilder::for(BudgetTemplate::class)
             ->allowedFilters([
-    'user_id',
-    'name',
-    'description',
-    'period_type',
-    'total_estimated_amount'
-])
+                'user_id',
+                'name',
+                'description',
+                'period_type',
+                'total_estimated_amount'
+            ])
             ->allowedSorts([
-    'user_id',
-    'name',
-    'description',
-    'period_type',
-    'total_estimated_amount'
-])
+                'user_id',
+                'name',
+                'description',
+                'period_type',
+                'total_estimated_amount'
+            ])
+            ->allowedIncludes([
+                'periodType'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -88,9 +91,9 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
     }
 
     /**
-    * Update the specified BudgetTemplate in storage.
-    * PUT/PATCH /budget_templates/{id}
-    */
+     * Update the specified BudgetTemplate in storage.
+     * PUT/PATCH /budget_templates/{id}
+     */
     public function update(UpdateBudgetTemplateApiRequest $request, $id): JsonResponse
     {
         $budgettemplate = BudgetTemplate::findOrFail($id);
@@ -99,9 +102,9 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
     }
 
     /**
-    * Remove the specified BudgetTemplate from storage.
-    * DELETE /budget_templates/{id}
-    */
+     * Remove the specified BudgetTemplate from storage.
+     * DELETE /budget_templates/{id}
+     */
     public function destroy(BudgetTemplate $budgettemplate): JsonResponse
     {
         $budgettemplate->delete();

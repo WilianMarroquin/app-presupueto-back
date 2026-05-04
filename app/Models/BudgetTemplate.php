@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
@@ -76,14 +77,13 @@ class BudgetTemplate extends Model
      *
      * @var array
      */
-    public static $rules =
-        [
-            'user_id' => 'integer',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'budget_period_type_id' => 'required|integer',
-            'total_estimated_amount' => 'numeric',
-        ];
+    public static $rules = [
+        'user_id' => 'integer',
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'budget_period_type_id' => 'required|integer',
+        'total_estimated_amount' => 'numeric',
+    ];
 
 
     /**
@@ -95,6 +95,12 @@ class BudgetTemplate extends Model
 
     ];
 
+    protected $appends = [
+        'total_expense_amount',
+        'total_income_amount',
+        'total_saving',
+        'esta_activa'
+    ];
 
     /**
      * Accessor for relationships
@@ -106,9 +112,55 @@ class BudgetTemplate extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function period(): BelongsTo
+    public function periodType(): BelongsTo
     {
-        return $this->belongsTo(BudgetPeriodType::class, 'budget_period_type_id', 'name');
+        return $this->belongsTo(BudgetPeriodType::class, 'budget_period_type_id', 'id');
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(BudgetItem::class, 'budget_template_id', 'id');
+    }
+
+    public function periods(): HasMany
+    {
+        return $this->hasMany(BudgetPeriod::class, 'budget_template_id', 'id');
+    }
+
+    public function getTotalExpenseAmountAttribute()
+    {
+        return $this->items()
+            ->whereHas('category', function ($query) {
+                $query->where(function ($subQuery) {
+                    $subQuery->where('type', TransactionCategory::CATEGORY_TYPE_EXPENSE)
+                        ->orWhere('id', TransactionCategory::AHORRO_Y_METAS);
+                });
+            })->sum('category_limit');
+    }
+
+    public function getTotalIncomeAmountAttribute()
+    {
+        return $this->items()
+            ->whereHas('category', function ($query) {
+                $query->where('type', TransactionCategory::CATEGORY_TYPE_INCOME);
+            })->sum('category_limit');
+    }
+
+    public function getTotalSavingAttribute()
+    {
+        return $this->items()->where('transaction_category_id', TransactionCategory::AHORRO_Y_METAS)
+            ->sum('category_limit');
+    }
+
+    public function getEstaActivaAttribute(): bool
+    {
+        $currentDate = now();
+
+        return $this->periods()
+            ->where('start_date', '<=', $currentDate)
+            ->whereNull('end_date')
+            ->where('is_active', true)
+            ->exists();
     }
 
 }

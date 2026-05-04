@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateBudgetItemApiRequest;
 use App\Models\BudgetItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -36,11 +37,11 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
      * Display a listing of the Budget_items.
      * GET|HEAD /budget_items
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
         $budget_items = QueryBuilder::for(BudgetItem::class)
             ->allowedFilters([
-                'budget_template_id',
+                AllowedFilter::exact('budget_template_id'),
                 'transaction_category_id',
                 'category_limit',
                 'notes'
@@ -55,8 +56,8 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
                 'template',
                 'category'
             ])
-            ->defaultSort('-id') // Ordenar por defecto por fecha descendente
-            ->Paginate(request('page.size') ?? 10);
+            ->defaultSort('-id')
+            ->jsonPaginate();
 
         return $this->sendResponse($budget_items, 'budget_items recuperados con éxito.');
     }
