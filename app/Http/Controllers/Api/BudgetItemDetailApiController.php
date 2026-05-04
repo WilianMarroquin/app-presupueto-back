@@ -40,15 +40,15 @@ class BudgetItemDetailApiController extends AppbaseController implements HasMidd
     {
         $budget_item_details = QueryBuilder::for(BudgetItemDetail::class)
             ->allowedFilters([
-    'budget_item_id',
-    'name',
-    'amount'
-])
+                'budget_item_id',
+                'name',
+                'amount'
+            ])
             ->allowedSorts([
-    'budget_item_id',
-    'name',
-    'amount'
-])
+                'budget_item_id',
+                'name',
+                'amount'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -79,9 +79,9 @@ class BudgetItemDetailApiController extends AppbaseController implements HasMidd
     }
 
     /**
-    * Update the specified BudgetItemDetail in storage.
-    * PUT/PATCH /budget_item_details/{id}
-    */
+     * Update the specified BudgetItemDetail in storage.
+     * PUT/PATCH /budget_item_details/{id}
+     */
     public function update(UpdateBudgetItemDetailApiRequest $request, $id): JsonResponse
     {
         $budgetitemdetail = BudgetItemDetail::findOrFail($id);
@@ -90,9 +90,9 @@ class BudgetItemDetailApiController extends AppbaseController implements HasMidd
     }
 
     /**
-    * Remove the specified BudgetItemDetail from storage.
-    * DELETE /budget_item_details/{id}
-    */
+     * Remove the specified BudgetItemDetail from storage.
+     * DELETE /budget_item_details/{id}
+     */
     public function destroy(BudgetItemDetail $budgetitemdetail): JsonResponse
     {
         $budgetitemdetail->delete();

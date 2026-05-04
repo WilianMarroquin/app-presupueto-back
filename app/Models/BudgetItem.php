@@ -6,9 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $budget_template_id
@@ -34,19 +35,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BudgetItem extends Model
 {
 
-    
+
     use HasFactory;
 
     protected $table = 'budget_items';
 
 
-    protected $fillable =
-        [
-    'budget_template_id',
-    'transaction_category_id',
-    'category_limit',
-    'notes'
-];
+    protected $fillable = [
+        'budget_template_id',
+        'transaction_category_id',
+        'category_limit',
+        'notes'
+    ];
 
 
     /**
@@ -54,8 +54,7 @@ class BudgetItem extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'budget_template_id' => 'integer',
         'transaction_category_id' => 'integer',
@@ -66,19 +65,17 @@ class BudgetItem extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'budget_template_id' => 'required|integer',
-    'transaction_category_id' => 'required|integer',
-    'category_limit' => 'required|numeric',
-    'notes' => 'nullable|string',
-];
+    public static $rules = [
+        'budget_template_id' => 'required|integer',
+        'transaction_category_id' => 'required|integer',
+        'category_limit' => 'required|numeric',
+        'notes' => 'nullable|string',
+    ];
 
 
     /**
@@ -86,7 +83,7 @@ class BudgetItem extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -96,14 +93,20 @@ class BudgetItem extends Model
      *
      * @var array
      */
-    public function budgetTemplate()
+    public function template(): BelongsTo
     {
-    return $this->belongsTo(BudgetTemplate::class,'budget_template_id','id');
+        return $this->belongsTo(BudgetTemplate::class, 'budget_template_id', 'id');
     }
 
-    public function transactionCategory()
+    public function category(): BelongsTo
     {
-    return $this->belongsTo(TransactionCategory::class,'transaction_category_id','id');
+        return $this->belongsTo(TransactionCategory::class, 'transaction_category_id', 'id');
+    }
+
+    public function getMontoTotalDetailsAttribute()
+    {
+        return $this->hasMany(BudgetItemDetail::class, 'budget_item_id', 'id')
+            ->sum('amount');
     }
 
 }

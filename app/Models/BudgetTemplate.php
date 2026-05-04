@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
  * @property string $name
  * @property string|null $description
- * @property string $period_type
+ * @property string $budget_period_type_id
  * @property float $total_estimated_amount
  * @property int|null $created_at
  * @property int|null $updated_at
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereTotalEstimatedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereUserId($value)
- * @property int $budget_period_type_id
+ * @property int $budget_budget_period_type_id_id
  * @property-read \App\Models\BudgetPeriodType|null $period
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetTemplate whereBudgetPeriodTypeId($value)
  * @mixin \Eloquent
@@ -49,7 +49,7 @@ class BudgetTemplate extends Model
         'user_id',
         'name',
         'description',
-        'period_type',
+        'budget_period_type_id',
         'total_estimated_amount'
     ];
 
@@ -64,7 +64,7 @@ class BudgetTemplate extends Model
         'user_id' => 'integer',
         'name' => 'string',
         'description' => 'string',
-        'period_type' => 'string',
+        'budget_period_type_id' => 'string',
         'total_estimated_amount' => 'float',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
@@ -78,11 +78,11 @@ class BudgetTemplate extends Model
      */
     public static $rules =
         [
-            'user_id' => 'required|integer',
+            'user_id' => 'integer',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'period_type' => 'required|string|max:255',
-            'total_estimated_amount' => 'required|numeric',
+            'budget_period_type_id' => 'required|integer',
+            'total_estimated_amount' => 'numeric',
         ];
 
 
@@ -108,7 +108,7 @@ class BudgetTemplate extends Model
 
     public function period(): BelongsTo
     {
-        return $this->belongsTo(BudgetPeriodType::class, 'period_type', 'name');
+        return $this->belongsTo(BudgetPeriodType::class, 'budget_period_type_id', 'name');
     }
 
 }

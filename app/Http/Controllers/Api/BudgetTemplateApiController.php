@@ -66,11 +66,16 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
      */
     public function store(CreateBudgetTemplateApiRequest $request): JsonResponse
     {
+
+        $request->merge([
+            'user_id' => auth()->id(),
+        ]);
+
         $input = $request->all();
 
         $budget_templates = BudgetTemplate::create($input);
 
-        return $this->sendResponse($budget_templates->toArray(), 'BudgetTemplate creado con éxito.');
+        return $this->sendResponse($budget_templates->toArray(), 'Budget Template created successfully');
     }
 
     /**

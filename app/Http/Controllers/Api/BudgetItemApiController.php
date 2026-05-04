@@ -40,17 +40,21 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
     {
         $budget_items = QueryBuilder::for(BudgetItem::class)
             ->allowedFilters([
-    'budget_template_id',
-    'transaction_category_id',
-    'category_limit',
-    'notes'
-])
+                'budget_template_id',
+                'transaction_category_id',
+                'category_limit',
+                'notes'
+            ])
             ->allowedSorts([
-    'budget_template_id',
-    'transaction_category_id',
-    'category_limit',
-    'notes'
-])
+                'budget_template_id',
+                'transaction_category_id',
+                'category_limit',
+                'notes'
+            ])
+            ->allowedIncludes([
+                'template',
+                'category'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -81,9 +85,9 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Update the specified BudgetItem in storage.
-    * PUT/PATCH /budget_items/{id}
-    */
+     * Update the specified BudgetItem in storage.
+     * PUT/PATCH /budget_items/{id}
+     */
     public function update(UpdateBudgetItemApiRequest $request, $id): JsonResponse
     {
         $budgetitem = BudgetItem::findOrFail($id);
@@ -92,9 +96,9 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-    * Remove the specified BudgetItem from storage.
-    * DELETE /budget_items/{id}
-    */
+     * Remove the specified BudgetItem from storage.
+     * DELETE /budget_items/{id}
+     */
     public function destroy(BudgetItem $budgetitem): JsonResponse
     {
         $budgetitem->delete();
