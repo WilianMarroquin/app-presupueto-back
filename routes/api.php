@@ -12,6 +12,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     require __DIR__.'/admin/api.php';
 
+
     Route::apiResource('transaction_categories', App\Http\Controllers\Api\TransactionCategoryApiController::class)
         ->parameters(['transaction_categories' => 'transactioncategory']);
 
@@ -61,7 +62,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_items', App\Http\Controllers\Api\BudgetItemApiController::class)
         ->parameters(['budget_items' => 'budgetitem']);
 
+    Route::get('budget_templates/active', [App\Http\Controllers\Api\BudgetTemplateApiController::class, 'getActiveBudgetLimits']);
+
+
     Route::post('budget_templates/activar/{budget_template}', [App\Http\Controllers\Api\BudgetTemplateApiController::class, 'activated']);
+
 
     Route::apiResource('budget_templates', App\Http\Controllers\Api\BudgetTemplateApiController::class)
         ->parameters(['budget_templates' => 'budgettemplate']);

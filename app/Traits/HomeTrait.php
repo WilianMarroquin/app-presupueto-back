@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Budget;
+use App\Models\BudgetTemplate;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Services\AIService;
@@ -16,62 +17,91 @@ trait HomeTrait
 
     public function getDisponibleHoy(): float
     {
-        $today = now();
+        $today = today();
+        $user = auth()->user();
 
-        // 1. Rango del Mes
-        $startOfMonth = $today->copy()->startOfMonth();
-        $endOfMonth = $today->copy()->endOfMonth();
+        $activePeriod = $user->latestActiveBudgetTemplate;
 
-        // 2. Definir qué NO es "Dinero de Bolsillo"
-        // ID 12 = Finanzas (Deudas, TC, Créditos)
-        // Tip: También podrías agregar aquí el ID de Vivienda (Renta) si es fijo.
-        $categoriasExcluidas = [TransactionCategory::PAGOS_TC];
+        if (!$activePeriod || !$activePeriod->start_date) {
+            return 0.0;
+        }
 
-        // 3. Traer SOLO Presupuestos Variables
-        $budgets = Budget::where('start_date', '<=', $today)
-            ->where('end_date', '>=', $today)
-            ->whereNotIn('category_id', $categoriasExcluidas) // <--- EL FILTRO MÁGICO
+        $startDate = Carbon::parse($activePeriod->start_date);
+
+        // --- LÓGICA DE TIMEBOXING (Enmarcado de Tiempo) ---
+        // Determinamos el ciclo real de evaluación basado en la frecuencia de la plantilla
+        // Asumimos que puedes acceder a la relación period->name ('Mensual', 'Anual', etc.)
+        $frecuencia = $activePeriod->budgetTemplate->period->name ?? 'Mensual';
+
+        if ($frecuencia === 'Anual') {
+            $rangoInicio = $today->copy()->startOfYear();
+            $rangoFin = $activePeriod->end_date ? Carbon::parse($activePeriod->end_date) : $today->copy()->endOfYear();
+        } else {
+            // Por defecto: Evaluación Mensual
+            $rangoInicio = $today->copy()->startOfMonth();
+            $rangoFin = $activePeriod->end_date ? Carbon::parse($activePeriod->end_date) : $today->copy()->endOfMonth();
+        }
+
+        // Edge Case: Si el periodo se activó estrictamente DESPUÉS del inicio normal del ciclo
+        // (Ej. Un presupuesto nuevo que arrancó el 15 de mayo y no retroactivamente)
+        if ($startDate->gt($rangoInicio)) {
+            $rangoInicio = $startDate->copy();
+        }
+
+        // Sanity Check: ¿Estamos fuera de la caja de tiempo?
+        if ($today->gt($rangoFin) || $today->lt($rangoInicio)) {
+            return 0.0;
+        }
+
+        $categoriasFijas = [TransactionCategory::PAGOS_TC];
+
+        // OJO: Recuperé tu filtro de 'Expense' (Gastos Puros).
+        // Si no lo pones, el sistema restará cosas que no debe de tu dinero de bolsillo.
+        $budgetItems = $activePeriod->budgetTemplate->items()
+            ->whereHas('category', function ($query) {
+                // Ajusta "Expense" al valor exacto de tu Enum o String en la DB
+                $query->where('type', 'Expense');
+            })
+            ->whereNotIn('transaction_category_id', $categoriasFijas)
             ->get();
 
-        // 4. Calcular lo Gastado (Solo de esas categorías)
-        // Obtenemos los IDs que sí nos interesan para filtrar las transacciones también
-        $categoryIds = $budgets->pluck('category_id');
+        if ($budgetItems->isEmpty()) {
+            return 0.0;
+        }
 
-        $expenses = Transaction::whereBetween('transaction_date', [$startOfMonth, $endOfMonth])
-            ->whereIn('category_id', $categoryIds) // Optimización: Solo sumar gastos relevantes
+        $categoryIds = $budgetItems->pluck('transaction_category_id');
+
+        // Calculamos gastos SOLO en nuestra "caja de tiempo" actual
+        $expenses = Transaction::whereBetween('transaction_date', [$rangoInicio, $rangoFin])
+            ->whereIn('category_id', $categoryIds)
             ->select('category_id', DB::raw('sum(amount) as total_spent'))
             ->groupBy('category_id')
             ->pluck('total_spent', 'category_id');
 
         $totalRemaining = 0;
 
-        foreach ($budgets as $budget) {
-            $spent = $expenses[$budget->category_id] ?? 0;
-
-            // Sumamos lo que sobra
-            // Usamos max(0) para que si te pasaste en Comida, no reste al dinero de Gasolina
-            $totalRemaining += max(0, $budget->amount - $spent);
+        foreach ($budgetItems as $item) {
+            $spent = $expenses[$item->transaction_category_id] ?? 0;
+            $totalRemaining += max(0, $item->category_limit - $spent);
         }
 
-        // 5. Factor Tiempo
-        $daysRemaining = $today->diffInDays($endOfMonth) + 1;
+        // Factor Tiempo: Dividimos solo entre los días que quedan del ciclo actual
+        $daysRemaining = $today->diffInDays($rangoFin) + 1;
 
-        // 6. Resultado Final
-        // Esto es "Cuánto puedo gastar hoy en cosas variables sin endeudarme"
-        return ($daysRemaining > 0) ? ($totalRemaining / $daysRemaining) : 0;
+        return ($daysRemaining > 0) ? ($totalRemaining / $daysRemaining) : 0.0;
     }
 
     public function getDaylyCoatch(): array
     {
-        $context = $this->getDailyContext();
+//        $context = $this->getDailyContext();
 
 //        $aiService = new AIService();
 
 //        $respuestaIa = $aiService->getDailyCoach($context);
 
         return [
-            'estado_alerta' => $context['estado_alerta'],
-            'total_gastado_hoy' => $context['total_gastado_hoy'],
+            'estado_alerta' => 0,
+            'total_gastado_hoy' => 0,
 //            'respuesta_ai' => $respuestaIa,
         ];
     }
@@ -132,7 +162,7 @@ trait HomeTrait
 
         // 5. CONTEXTO GENERAL (Panorama del Mes)
         // Presupuesto Variable Total
-        $presupuestoTotalVariable = Budget::where('start_date', '<=', $now)
+        $presupuestoTotalVariable = BudgetTemplate::where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
             ->where('category_id', '!=', $excludedCatId)
             ->sum('amount');

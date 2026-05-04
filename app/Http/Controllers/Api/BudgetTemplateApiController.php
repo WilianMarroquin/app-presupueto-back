@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\BudgetPeriod;
+use Carbon\Carbon;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateBudgetTemplateApiRequest;
@@ -113,7 +114,6 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
         return $this->sendResponse(null, 'BudgetTemplate eliminado con éxito.');
     }
 
-
     public function activated(BudgetTemplate $budget_template)
     {
         $user = auth()->user();
@@ -123,23 +123,66 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
             /** @var BudgetPeriod $ultimaPlantillaActiva */
             $ultimaPlantillaActiva = $user->latestActiveBudgetTemplate;
 
+            // Definimos el inicio de este mes (ej. 1 de mayo)
+            $inicioMesActual = today()->startOfMonth();
+
             if ($ultimaPlantillaActiva) {
-                $ultimaPlantillaActiva->update([
-                    'is_active' => false,
-                    'end_date'  => today(),
-                ]);
+                $fechaInicioVieja = Carbon::parse($ultimaPlantillaActiva->start_date);
+
+                // MANEJO DEL EDGE CASE: ¿La plantilla vieja inició este mismo mes?
+                if ($fechaInicioVieja->gte($inicioMesActual)) {
+                    // Nunca vivió un mes completo. La eliminamos para mantener limpio el historial.
+                    // Nota: Usar forceDelete() si usas SoftDeletes, para borrar el rastro.
+                    $ultimaPlantillaActiva->delete();
+                } else {
+                    // CAMINO NORMAL (Cierre Histórico):
+                    // Cortamos el mes pasado exacto (ej. 30 de abril)
+                    $ultimaPlantillaActiva->update([
+                        'is_active' => false,
+                        'end_date'  => today()->subMonth()->endOfMonth(),
+                    ]);
+                }
             }
 
+            // ACTIVACIÓN RETROACTIVA:
+            // La nueva plantilla abarca todo el mes actual desde el día 1
             $user->budgetPeriods()->create([
                 'budget_template_id' => $budget_template->id,
-                'start_date'         => today(),
-                'end_date'           => null,
+                'start_date'         => $inicioMesActual,
+                'end_date'           => null, // Periodo abierto (Perpetual Budget)
                 'is_active'          => true,
                 'total_budgeted'     => $budget_template->total_estimated_amount ?? 0,
             ]);
 
             return $this->sendSuccess('Presupuesto activado con éxito.');
         });
+    }
+
+
+    public function getActiveBudgetLimits(): JsonResponse
+    {
+        $user = auth()->user();
+
+        /** @var BudgetPeriod $activePeriod */
+        $activePeriod = $user->latestActiveBudgetTemplate;
+
+        if (!$activePeriod) {
+            return $this->sendResponse([], 'No hay presupuesto activo.');
+        }
+
+        $budgetItems = $activePeriod->budgetTemplate->items()
+            ->with('category:id,name') // Cargamos la categoría para tener el nombre
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'category_id'   => $item->transaction_category_id,
+                    'category_name' => $item->category->name ?? 'Sin nombre',
+                    // Lo mandamos como 'amount' porque así lo suma tu computed en Vue
+                    'amount'        => (float) $item->category_limit,
+                ];
+            });
+
+        return $this->sendResponse($budgetItems, 'Límites recuperados con éxito.');
     }
 
 }
