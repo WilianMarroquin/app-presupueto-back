@@ -98,6 +98,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 'amount' => $input['amount'],
                 'description' => $input['description'],
                 'payment_method_id' => $input['payment_method_id'],
+                'category_id' => $input['category_id'],
             ];
             $dpo = TransactionDTO::fromArray($datos);
 

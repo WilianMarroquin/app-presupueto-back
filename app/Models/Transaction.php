@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -100,13 +100,13 @@ class Transaction extends Model
      * @var array
      */
     public static $rules = [
-        'account_id' => 'required|integer',
-        'amount' => 'required|numeric',
-        'description' => 'required|string',
+        'account_id'        => 'required|integer',
+        'amount'            => 'required|numeric',
+        'description'       => 'required_without:category_id|nullable|string',
+        'category_id'       => 'required_without:description|nullable|integer',
         'payment_method_id' => 'required|integer',
-        'settled_amount' => 'nullable|numeric',
+        'settled_amount'    => 'nullable|numeric',
     ];
-
 
     /**
      * Custom messages for validation

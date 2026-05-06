@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->index('fk_transactions_transaction_categories1_idx');
             $table->unsignedBigInteger('account_id')->index('fk_transactions_accounts1_idx');
             $table->float('amount', 15);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->date('transaction_date');
             $table->boolean('is_settled')->default(false);
             $table->decimal('settled_amount', 12, 2)->default(0);
