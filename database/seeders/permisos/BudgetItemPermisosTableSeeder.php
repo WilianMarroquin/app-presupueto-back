@@ -27,7 +27,7 @@ class BudgetItemPermisosTableSeeder extends Seeder
             Permission::create([
                 'name' => $permiso,
                 'subject' => 'BudgetItem',
-                'guard_name' => 'api',
+                'guard_name' => 'web',
             ]);
         }
 

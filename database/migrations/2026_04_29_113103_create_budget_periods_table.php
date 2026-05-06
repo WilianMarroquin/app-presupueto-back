@@ -14,7 +14,7 @@ return new class extends Migration
             $create->foreignId('budget_template_id')->constrained()->onDelete('cascade');
 
             $create->date('start_date');
-            $create->date('end_date');
+            $create->date('end_date')->nullable();
 
             $create->boolean('is_active')->default(false);
 

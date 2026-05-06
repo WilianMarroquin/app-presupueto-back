@@ -27,7 +27,7 @@ class CreditCardDetailPermisosTableSeeder extends Seeder
             Permission::create([
                 'name' => $permiso,
                 'subject' => 'CreditCardDetail',
-                'guard_name' => 'api',
+                'guard_name' => 'web',
             ]);
         }
 
