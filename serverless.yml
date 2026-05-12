@@ -58,6 +58,12 @@ functions:
       # CORREGIDO: Usamos httpApi para coincidir con apiType: http
       - httpApi: '*'
       # Esta es la función que ejecuta comandos de artisan
+  artisan:
+    handler: artisan
+    description: 'Ejecutor de comandos de consola Artisan'
+    timeout: 120
+    layers:
+      - ${bref:layer.php-82}
 #    console:
 #      handler: artisan
 #      layers:

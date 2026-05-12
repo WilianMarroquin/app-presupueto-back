@@ -14,9 +14,9 @@ use App\Http\Requests\Api\CreateTransactionApiRequest;
 use App\Http\Requests\Api\UpdateTransactionApiRequest;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -58,6 +58,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 'created_ad',
                 AllowedFilter::custom('date_range', new \App\Filters\Transactions\TransactionDateRangeFilter()),
                 AllowedFilter::custom('category_id', new \App\Filters\Transactions\TransactionCategoryFilter()),
+                AllowedFilter::scope('soloEstasCategoriasIds','soloEstasCategoriasIds'),
             ])
             ->allowedSorts([
                 'id',
@@ -131,10 +132,20 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      * Update the specified Transaction in storage.
      * PUT/PATCH /transactions/{id}
      */
-    public function update(UpdateTransactionApiRequest $request, $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
+        $request->validate([
+            'category_id' => 'integer|exists:transaction_categories,id',
+            'comentario' => 'string|nullable',
+        ]);
+
         $transaction = Transaction::findOrFail($id);
-        $transaction->update($request->validated());
+
+        $transaction->update([
+            'category_id' => $request->input('category_id', $transaction->category_id),
+            'description' => $request->input('comentario', $transaction->notes),
+        ]);
+
         return $this->sendResponse($transaction, 'Transaction actualizado con éxito.');
     }
 

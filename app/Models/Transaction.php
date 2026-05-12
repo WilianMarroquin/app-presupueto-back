@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -137,5 +138,11 @@ class Transaction extends Model
         return $this->belongsTo(TransactionPaymentMethod::class, 'payment_method_id', 'id');
     }
 
+    public function scopeSoloEstasCategoriasIds(Builder $builder, string $categories)
+    {
+        $categoriesIds = explode('-', $categories);
+
+        return $builder->whereIn('category_id', $categoriesIds);
+    }
 
 }

@@ -182,7 +182,10 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
                 ];
             });
 
-        return $this->sendResponse($budgetItems, 'Límites recuperados con éxito.');
+        return $this->sendResponse([
+            'template_id' => $activePeriod->budget_template_id,
+            'items' => $budgetItems
+        ], 'Límites recuperados con éxito.');
     }
 
 }
