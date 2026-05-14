@@ -159,32 +159,45 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
     }
 
 
-    public function getActiveBudgetLimits(): JsonResponse
+    public function getActiveBudgetLimits(Request $request): JsonResponse
     {
+        $period_id = $request->input('period_id') ?? $request->query('period_id');
+
         $user = auth()->user();
 
-        /** @var BudgetPeriod $activePeriod */
-        $activePeriod = $user->latestActiveBudgetTemplate;
-
-        if (!$activePeriod) {
-            return $this->sendResponse([], 'No hay presupuesto activo.');
+        if ($period_id) {
+            $activePeriod = $user->budgetPeriods()->find($period_id);
+        } else {
+            $activePeriod = $user->latestActiveBudgetTemplate;
         }
 
-        $budgetItems = $activePeriod->budgetTemplate->items()
-            ->with('category:id,name') // Cargamos la categoría para tener el nombre
+        if (!$activePeriod) {
+            return $this->sendResponse([], 'No se encontró un presupuesto para este periodo.');
+        }
+
+        $budgetItems = DB::table('budget_items')
+            ->join('transaction_categories', 'budget_items.transaction_category_id', '=', 'transaction_categories.id')
+            ->where('budget_items.budget_template_id', $activePeriod->budget_template_id)
+            ->select(
+                'budget_items.transaction_category_id as category_id',
+                'transaction_categories.name as category_name',
+                'budget_items.category_limit as amount'
+            )
             ->get()
             ->map(function ($item) {
                 return [
-                    'category_id'   => $item->transaction_category_id,
-                    'category_name' => $item->category->name ?? 'Sin nombre',
-                    // Lo mandamos como 'amount' porque así lo suma tu computed en Vue
-                    'amount'        => (float) $item->category_limit,
+                    'category_id'   => $item->category_id,
+                    'category_name' => $item->category_name ?? 'Sin nombre',
+                    'amount'        => (float) $item->amount,
                 ];
             });
 
+        $activePeriod->loadMissing('budgetTemplate');
+
         return $this->sendResponse([
-            'template_id' => $activePeriod->budget_template_id,
-            'items' => $budgetItems
+            'template_id'   => $activePeriod->budget_template_id,
+            'template_name' => $activePeriod->budgetTemplate->name ?? 'Plantilla',
+            'items'         => $budgetItems
         ], 'Límites recuperados con éxito.');
     }
 

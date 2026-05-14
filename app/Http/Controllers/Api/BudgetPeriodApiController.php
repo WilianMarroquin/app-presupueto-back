@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateBudgetPeriodApiRequest;
 use App\Models\BudgetPeriod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -40,22 +41,27 @@ class BudgetPeriodApiController extends AppbaseController implements HasMiddlewa
     {
         $budget_periods = QueryBuilder::for(BudgetPeriod::class)
             ->allowedFilters([
-    'user_id',
-    'budget_template_id',
-    'start_date',
-    'end_date',
-    'is_active',
-    'total_budgeted'
-])
+                'user_id',
+                'budget_template_id',
+                'start_date',
+                'end_date',
+                'is_active',
+                'total_budgeted',
+                AllowedFilter::scope('conAtributoAdicional','conAtributoAdicional')
+            ])
             ->allowedSorts([
-    'user_id',
-    'budget_template_id',
-    'start_date',
-    'end_date',
-    'is_active',
-    'total_budgeted'
-])
-            ->defaultSort('-id') // Ordenar por defecto por fecha descendente
+                'user_id',
+                'budget_template_id',
+                'start_date',
+                'end_date',
+                'is_active',
+                'total_budgeted'
+            ])
+            ->allowedIncludes([
+                'budgetTemplate',
+                'user'
+            ])
+            ->defaultSort('-id')
             ->Paginate(request('page.size') ?? 10);
 
         return $this->sendResponse($budget_periods, 'budget_periods recuperados con éxito.');
@@ -85,9 +91,9 @@ class BudgetPeriodApiController extends AppbaseController implements HasMiddlewa
     }
 
     /**
-    * Update the specified BudgetPeriod in storage.
-    * PUT/PATCH /budget_periods/{id}
-    */
+     * Update the specified BudgetPeriod in storage.
+     * PUT/PATCH /budget_periods/{id}
+     */
     public function update(UpdateBudgetPeriodApiRequest $request, $id): JsonResponse
     {
         $budgetperiod = BudgetPeriod::findOrFail($id);
@@ -96,9 +102,9 @@ class BudgetPeriodApiController extends AppbaseController implements HasMiddlewa
     }
 
     /**
-    * Remove the specified BudgetPeriod from storage.
-    * DELETE /budget_periods/{id}
-    */
+     * Remove the specified BudgetPeriod from storage.
+     * DELETE /budget_periods/{id}
+     */
     public function destroy(BudgetPeriod $budgetperiod): JsonResponse
     {
         $budgetperiod->delete();

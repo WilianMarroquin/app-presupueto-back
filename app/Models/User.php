@@ -231,7 +231,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(BudgetPeriod::class)
             ->where('is_active', true)
-            ->latestOfMany();
+            ->latestOfMany('created_at');
     }
 
 }

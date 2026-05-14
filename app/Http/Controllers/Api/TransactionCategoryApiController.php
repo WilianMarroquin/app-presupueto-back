@@ -42,6 +42,7 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     {
         $transaction_categories = QueryBuilder::for(TransactionCategory::class)
             ->allowedFilters([
+                AllowedFilter::exact('id'),
                 'name',
                 'type',
                 'description',

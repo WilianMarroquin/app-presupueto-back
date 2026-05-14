@@ -6,9 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -38,21 +39,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BudgetPeriod extends Model
 {
 
-    
+
     use HasFactory;
 
     protected $table = 'budget_periods';
 
 
-    protected $fillable =
-        [
-    'user_id',
-    'budget_template_id',
-    'start_date',
-    'end_date',
-    'is_active',
-    'total_budgeted'
-];
+    protected $fillable = [
+        'user_id',
+        'budget_template_id',
+        'start_date',
+        'end_date',
+        'is_active',
+        'total_budgeted'
+    ];
 
 
     /**
@@ -60,8 +60,7 @@ class BudgetPeriod extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
         'budget_template_id' => 'integer',
@@ -74,29 +73,51 @@ class BudgetPeriod extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'user_id' => 'required|integer',
-    'budget_template_id' => 'required|integer',
-    'start_date' => 'required|date',
-    'end_date' => 'required|date',
-    'is_active' => 'required|integer',
-    'total_budgeted' => 'required|numeric',
-];
+    public static $rules = [
+        'user_id' => 'required|integer',
+        'budget_template_id' => 'required|integer',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date',
+        'is_active' => 'required|integer',
+        'total_budgeted' => 'required|numeric',
+    ];
 
+    public static $atributosAdicionalesPorScope = [];
+
+    protected function getArrayableAppends(): array
+    {
+        if (count(self::$atributosAdicionalesPorScope) > 0) {
+            $this->appends = array_merge($this->appends, self::$atributosAdicionalesPorScope);
+            return $this->appends;
+        }
+
+
+        return parent::getArrayableAppends();
+    }
+
+    public function scopeConAtributoAdicional($query, $atributoAdicionalNombre)
+    {
+        if (is_array($atributoAdicionalNombre)) {
+            self::$atributosAdicionalesPorScope = array_merge(self::$atributosAdicionalesPorScope, $atributoAdicionalNombre);
+            return $query;
+        } else {
+            self::$atributosAdicionalesPorScope[] = $atributoAdicionalNombre;
+        }
+
+        return $query;
+    }
 
     /**
      * Custom messages for validation
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -106,14 +127,21 @@ class BudgetPeriod extends Model
      *
      * @var array
      */
-    public function budgetTemplate()
+    public function budgetTemplate(): BelongsTo
     {
-    return $this->belongsTo(BudgetTemplate::class,'budget_template_id','id');
+        return $this->belongsTo(BudgetTemplate::class, 'budget_template_id', 'id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-    return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function getTextoAttribute(): string
+    {
+        $fechaFin = $this->end_date ? $this->end_date->format('d-m-Y') : 'Actualidad';
+
+        return ' (' . $this->start_date->format('d-m-Y') . ' - ' . $fechaFin . ')';
     }
 
 }
