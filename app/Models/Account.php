@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -73,6 +73,7 @@ class Account extends Model
         'initial_balance',
         'current_balance',
         'is_active',
+        'is_transactional',
         'nature',
         'bank_name',
         'description',
@@ -85,17 +86,18 @@ class Account extends Model
      * @var array
      */
     protected $casts = [
-            'id' => 'integer',
-            'name' => 'string',
-            'type_id' => 'integer',
-            'currency_id' => 'integer',
-            'initial_balance' => 'float',
-            'current_balance' => 'float',
-            'is_active' => 'integer',
-            'created_at' => 'timestamp',
-            'updated_at' => 'timestamp',
-            'deleted_at' => 'timestamp',
-        ];
+        'id' => 'integer',
+        'name' => 'string',
+        'type_id' => 'integer',
+        'currency_id' => 'integer',
+        'initial_balance' => 'float',
+        'current_balance' => 'float',
+        'is_active' => 'boolean',
+        'is_transactional' => 'boolean',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+        'deleted_at' => 'timestamp',
+    ];
 
     protected $appends = [
         'text',
@@ -107,14 +109,15 @@ class Account extends Model
      * @var array
      */
     public static $rules = [
-            'name' => 'required|string|max:45',
-            'type_id' => 'required|integer',
-            'currency_id' => 'required|integer',
-            'initial_balance' => 'required|numeric',
-            'current_balance' => 'required|numeric',
-            'is_active' => 'required|integer',
-            'description' => 'required|string',
-        ];
+        'name' => 'required|string|max:45',
+        'type_id' => 'required|integer',
+        'currency_id' => 'required|integer',
+        'initial_balance' => 'required|numeric',
+        'current_balance' => 'required|numeric',
+        'is_active' => 'required|boolean',
+        'is_transactional' => 'required|boolean',
+        'description' => 'required|string',
+    ];
 
 
     /**
@@ -179,7 +182,7 @@ class Account extends Model
 
     public function getTextAttribute(): string
     {
-        return $this->name . ' (' . $this?->currency?->symbol . ')'. ' - ' . $this->description;
+        return $this->name . ' (' . $this?->currency?->symbol . ')' . ' - ' . $this->description;
     }
 
     public function transactionsPending(): HasMany
@@ -187,7 +190,6 @@ class Account extends Model
         return $this->hasMany(Transaction::class, 'account_id', 'id')
             ->where('is_settled', 0);
     }
-
 
 
 }
