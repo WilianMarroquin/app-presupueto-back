@@ -2,6 +2,7 @@
 
 namespace App\Services\Transaction;
 
+use App\DTOs\transactions\TransactionResponseDTO;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
@@ -58,7 +59,7 @@ class CreateTransactionService
         }
         return [
             'success' => true,
-            'transaction' => $transaction->toArray(),
+            'transaction' => TransactionResponseDTO::fromModel($transaction),
             'message' => 'Transacción creada con éxito.',
         ];
 

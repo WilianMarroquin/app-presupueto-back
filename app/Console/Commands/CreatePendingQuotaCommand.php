@@ -68,7 +68,7 @@ class CreatePendingQuotaCommand extends Command
              */
             $transaction = $respuesta['transaction']; // Asegúrate que tu servicio retorne el modelo aquí
 
-            $plan->payments()->attach($transaction['id'], [
+            $plan->payments()->attach($transaction->id, [
                 'installment_number' => $nextInstallmentNumber,
                 'amount'             => $plan->monthly_fee
             ]);

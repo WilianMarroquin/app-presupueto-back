@@ -17,6 +17,7 @@ class FixedExpensePermisosTableSeeder extends Seeder
     {
 
         $permisos = [
+            'Listar Fixed Expenses',
             'Ver Fixed Expenses',
             'Crear Fixed Expenses',
             'Editar Fixed Expenses',

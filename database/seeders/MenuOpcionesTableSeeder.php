@@ -49,6 +49,16 @@ class MenuOpcionesTableSeeder extends Seeder
         ]);
 
         MenuOpcion::create([
+            "titulo" => "Fixed Expenses",
+            "icono" => "ri-file-list-3-line",
+            "ruta" => "fixed-expenses",
+            "orden" => 1,
+            "action" => "Listar Fixed Expenses",
+            "subject" => "FixedExpense",
+            "parent_id" => null
+        ]);
+
+        MenuOpcion::create([
             "titulo" => "Categories",
             "icono" => "ri-folder-line",
             "ruta" => "transaction-categories",
@@ -99,7 +109,7 @@ class MenuOpcionesTableSeeder extends Seeder
         ]);
 
         MenuOpcion::create([
-            "titulo" => "My Bank Accounts",
+            "titulo" => "My Accounts",
             "icono" => "ri-bank-line",
             "ruta" => "accounts",
             "orden" => 6,

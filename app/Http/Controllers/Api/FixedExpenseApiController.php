@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DTOs\transactions\TransactionResponseDTO;
 use App\Http\Controllers\AppBaseController;
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
@@ -127,6 +128,10 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
         $amount = $request->amount;
 
         if (!$accountId){
+            $cuentaTransaccional = usuarioAutenticado()->accountTransactional;
+            if(!$cuentaTransaccional) {
+                return $this->sendError('You not have account transactional.');
+            }
             $accountId = usuarioAutenticado()->accountTransactional->id;
         }
 
@@ -154,6 +159,9 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
                 return $this->sendError($respuesta['message'], 500);
             }
 
+            /**
+             * @var TransactionResponseDTO $transaction
+             */
             $transaction = $respuesta['transaction'];
 
             $fixed_expense->paidPeriods()
