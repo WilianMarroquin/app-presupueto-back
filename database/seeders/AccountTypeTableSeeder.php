@@ -20,9 +20,9 @@ class AccountTypeTableSeeder extends Seeder
 
         AccountType::truncate();
 
-        $bank       = AccountType::create(['name' => 'Bank']);
-        $cash       = AccountType::create(['name' => 'Cash']);
-        $creditCard = AccountType::create(['name' => 'Credit Card']);
+        $bank       = AccountType::firstOrCreate(['name' => 'Bank']);
+        $cash       = AccountType::firstOrCreate(['name' => 'Cash']);
+        $creditCard = AccountType::firstOrCreate(['name' => 'Credit Card']);
 //        $wallet     = AccountType::create(['name' => 'Wallet']);
 
         $bank->movementMethods()->sync([

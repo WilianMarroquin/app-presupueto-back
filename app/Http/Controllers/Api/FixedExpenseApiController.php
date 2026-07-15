@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -11,6 +12,7 @@ use App\Http\Requests\Api\UpdateFixedExpenseApiRequest;
 use App\Models\FixedExpense;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -116,6 +118,7 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
             'fixed_expense_id' => 'required',
             'amount' => 'nullable|numeric',
             'account_id' => 'nullable|integer',
+            'payment_method_id' => 'required|integer',
         ]);
 
         $actuallyPeriod = currentAccountingPeriod();
@@ -131,23 +134,42 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
             $amount = $fixed_expense->base_amount;
         }
 
-        $datos = [
+        $dataTransaction = [
             'account_id' => $accountId,
             'amount' => $amount,
             'description' => $fixed_expense->description,
-            'payment_method_id' => $input['payment_method_id'],
-            'category_id' => $input['category_id'],
+            'payment_method_id' => $request->payment_method_id,
+            'category_id' => $fixed_expense->transaction_category_id,
         ];
-        $dpo = TransactionDTO::fromArray($datos);
+        try {
+            DB::beginTransaction();
 
-        $respuesta = $createTransactionService->execute($dpo);
+            $dpo = TransactionDTO::fromArray($dataTransaction);
+            $createTransactionService = new CreateTransactionService();
 
-        $fixed_expense->paidPeriods()
-            ->create([
-            'budget_period_id' => $actuallyPeriod->id,
-            'transaction_id' => null,
-            'fixed_expense_id' => $fixed_expense->id,
-        ]);
+            $respuesta = $createTransactionService->execute($dpo);
 
+            if (!$respuesta['success']) {
+                DB::rollBack();
+                return $this->sendError($respuesta['message'], 500);
+            }
+
+            $transaction = $respuesta['transaction'];
+
+            $fixed_expense->paidPeriods()
+                ->create([
+                    'budget_period_id' => $actuallyPeriod->id,
+                    'transaction_id' => $transaction->id,
+                    'fixed_expense_id' => $fixed_expense->id,
+                ]);
+
+            DB::commit();
+        }
+        catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->sendError('Error al registrar el pago: ' . $th->getMessage(), 500);
+        }
+
+        return $this->sendSuccess('Fixed expense payment registered successfully.');
     }
 }

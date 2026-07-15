@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateAccountApiRequest;
 use App\Models\Account;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -45,7 +46,8 @@ class AccountApiController extends AppbaseController implements HasMiddleware
                 'currency_id',
                 'initial_balance',
                 'current_balance',
-                'is_active'
+                'is_active',
+                AllowedFilter::scope('onlyWithPermittedMovementId', 'onlyWithPermittedMovementId'),
             ])
             ->allowedSorts([
                 'name',
@@ -74,6 +76,8 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     public function store(CreateAccountApiRequest $request): JsonResponse
     {
         $input = $request->all();
+
+        $input['user_id'] = usuarioAutenticado()->id;
 
         $accounts = Account::create($input);
 

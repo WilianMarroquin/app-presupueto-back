@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -77,6 +78,7 @@ class Account extends Model
         'nature',
         'bank_name',
         'description',
+        'user_id',
     ];
 
 
@@ -191,5 +193,13 @@ class Account extends Model
             ->where('is_settled', 0);
     }
 
+    public function scopeOnlyWithPermittedMovementId(Builder $query, int $movementId): Builder
+    {
+        return $query->whereHas('type', function (Builder $query) use ($movementId) {
+            $query->whereHas('movementMethods', function (Builder $query) use ($movementId) {
+                $query->where('id', $movementId);
+            });
+        });
+    }
 
 }

@@ -94,7 +94,7 @@ class AccountType extends Model
             TransactionPaymentMethod::class,
             'account_types_has_payment_methods',
             'account_type_id',
-            'payment_method_id'
+            'transaction_payment_method_id'
         );
     }
 
