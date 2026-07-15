@@ -115,9 +115,9 @@ class Account extends Model
         'type_id' => 'required|integer',
         'currency_id' => 'required|integer',
         'initial_balance' => 'required|numeric',
-        'current_balance' => 'required|numeric',
+        'current_balance' => 'nullable|numeric',
         'is_active' => 'required|boolean',
-        'is_transactional' => 'required|boolean',
+        'is_transactional' => 'nullable|boolean',
         'description' => 'required|string',
     ];
 

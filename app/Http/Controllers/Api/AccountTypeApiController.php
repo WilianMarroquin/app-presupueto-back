@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateAccountTypeApiRequest;
 use App\Models\AccountType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -40,11 +41,12 @@ class AccountTypeApiController extends AppbaseController implements HasMiddlewar
     {
         $account_types = QueryBuilder::for(AccountType::class)
             ->allowedFilters([
-    'name'
-])
+                'name',
+                AllowedFilter::scope('withoutCreditCard','withoutCreditCard',),
+            ])
             ->allowedSorts([
-    'name'
-])
+                'name'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 
@@ -75,9 +77,9 @@ class AccountTypeApiController extends AppbaseController implements HasMiddlewar
     }
 
     /**
-    * Update the specified AccountType in storage.
-    * PUT/PATCH /account_types/{id}
-    */
+     * Update the specified AccountType in storage.
+     * PUT/PATCH /account_types/{id}
+     */
     public function update(UpdateAccountTypeApiRequest $request, $id): JsonResponse
     {
         $accounttype = AccountType::findOrFail($id);
@@ -86,9 +88,9 @@ class AccountTypeApiController extends AppbaseController implements HasMiddlewar
     }
 
     /**
-    * Remove the specified AccountType from storage.
-    * DELETE /account_types/{id}
-    */
+     * Remove the specified AccountType from storage.
+     * DELETE /account_types/{id}
+     */
     public function destroy(AccountType $accounttype): JsonResponse
     {
         $accounttype->delete();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -98,5 +99,8 @@ class AccountType extends Model
         );
     }
 
-
+    public function scopeWithoutCreditCard(Builder $query): Builder
+    {
+        return $query->whereNot('id', self::CREDIT_CARD);
+    }
 }

@@ -63,7 +63,7 @@ class AccountApiController extends AppbaseController implements HasMiddleware
                 'creditCardDetail'
             ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
-            ->Paginate(request('page.size') ?? 10);
+            ->jsonPaginate(request('page.size') ?? 10);
 
         return $this->sendResponse($accounts, 'accounts recuperados con éxito.');
     }
@@ -78,6 +78,7 @@ class AccountApiController extends AppbaseController implements HasMiddleware
         $input = $request->all();
 
         $input['user_id'] = usuarioAutenticado()->id;
+        $input['current_balance'] = $input['initial_balance'];
 
         $accounts = Account::create($input);
 
