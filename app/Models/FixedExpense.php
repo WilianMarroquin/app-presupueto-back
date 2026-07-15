@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $transaction_category_id
@@ -42,6 +42,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpense whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpense withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpense withoutTrashed()
+ * @property-read \App\Models\TransactionCategory $category
+ * @property-read bool $is_currently_paid
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FixedExpensePeriodPayment> $paidPeriods
+ * @property-read int|null $paid_periods_count
+ * @method static Builder<static>|FixedExpense conAtributoAdicional($atributoAdicionalNombre)
  * @mixin \Eloquent
  */
 class FixedExpense extends Model
@@ -155,8 +160,7 @@ class FixedExpense extends Model
 
     public function getIsCurrentlyPaidAttribute(): bool
     {
-        $periodoActual = BudgetPeriod::onlyCurrentAccountingPeriod()
-            ->first();
+        $periodoActual = currentAccountingPeriod();
 
         return $this->paidPeriods()
             ->where('budget_period_id', $periodoActual->id)

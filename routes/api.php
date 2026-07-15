@@ -76,6 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('fixed-expenses', App\Http\Controllers\Api\FixedExpenseApiController::class);
 
+    Route::post('fixed-expenses/pay', [App\Http\Controllers\Api\FixedExpenseApiController::class, 'pay']);
+
 });
 
 Route::post('/voice-command', [\App\Http\Controllers\Api\VoiceCommandApiController::class, 'store']);

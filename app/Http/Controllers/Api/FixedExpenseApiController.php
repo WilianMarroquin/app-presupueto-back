@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Services\Transaction\DOT\TransactionDTO;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateFixedExpenseApiRequest;
@@ -107,5 +108,46 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
     {
         $fixed_expense->delete();
         return $this->sendResponse(null, 'FixedExpense eliminado con éxito.');
+    }
+
+    public function pay(Request $request): JsonResponse
+    {
+        $request->validate([
+            'fixed_expense_id' => 'required',
+            'amount' => 'nullable|numeric',
+            'account_id' => 'nullable|integer',
+        ]);
+
+        $actuallyPeriod = currentAccountingPeriod();
+        $fixed_expense = FixedExpense::findOrFail($request->fixed_expense_id);
+        $accountId = $request->account_id;
+        $amount = $request->amount;
+
+        if (!$accountId){
+            $accountId = usuarioAutenticado()->accountTransactional->id;
+        }
+
+        if(!$amount) {
+            $amount = $fixed_expense->base_amount;
+        }
+
+        $datos = [
+            'account_id' => $accountId,
+            'amount' => $amount,
+            'description' => $fixed_expense->description,
+            'payment_method_id' => $input['payment_method_id'],
+            'category_id' => $input['category_id'],
+        ];
+        $dpo = TransactionDTO::fromArray($datos);
+
+        $respuesta = $createTransactionService->execute($dpo);
+
+        $fixed_expense->paidPeriods()
+            ->create([
+            'budget_period_id' => $actuallyPeriod->id,
+            'transaction_id' => null,
+            'fixed_expense_id' => $fixed_expense->id,
+        ]);
+
     }
 }

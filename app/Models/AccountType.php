@@ -4,11 +4,12 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -42,10 +43,9 @@ class AccountType extends Model
     const WALLET = 4;
 
 
-    protected $fillable =
-        [
-    'name'
-];
+    protected $fillable = [
+        'name'
+    ];
 
 
     /**
@@ -53,8 +53,7 @@ class AccountType extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'created_at' => 'timestamp',
@@ -63,16 +62,14 @@ class AccountType extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'name' => 'required|string|max:100',
-];
+    public static $rules = [
+        'name' => 'required|string|max:100',
+    ];
 
 
     /**
@@ -80,7 +77,7 @@ class AccountType extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -90,6 +87,16 @@ class AccountType extends Model
      *
      * @var array
      */
+
+    public function movementMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            TransactionPaymentMethod::class,
+            'account_types_has_payment_methods',
+            'account_type_id',
+            'payment_method_id'
+        );
+    }
 
 
 }

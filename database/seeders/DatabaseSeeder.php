@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
 
         //Catálogos
         $this->call(TransactionCategoryTableSeeder::class);
+        $this->call(TransactionPaymentMethodTableSeeder::class);
         $this->call(AccountTypeTableSeeder::class);
         $this->call(AccountCurrencyTableSeeder::class);
         $this->call(AccountTableSeeder::class);
-        $this->call(TransactionPaymentMethodTableSeeder::class);
         $this->call(MenuOpcionesTableSeeder::class);
         $this->call(BudgetPeriodTypeTableSeeder::class);
         $this->call(InstallmentPlanTableSeeder::class);

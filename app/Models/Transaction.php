@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $category_id
@@ -52,6 +52,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereIsSettled($value)
  * @property float $settled_amount
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereSettledAmount($value)
+ * @method static Builder<static>|Transaction soloEstasCategoriasIds(string $categories)
  * @mixin \Eloquent
  */
 class Transaction extends Model

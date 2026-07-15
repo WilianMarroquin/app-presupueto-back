@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 
@@ -27,23 +28,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpensePeriodPayment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpensePeriodPayment whereTransactionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FixedExpensePeriodPayment whereUpdatedAt($value)
+ * @property-read \App\Models\FixedExpense $fixedExpense
  * @mixin \Eloquent
  */
 class FixedExpensePeriodPayment extends Model
 {
 
-    
+
     use HasFactory;
 
     protected $table = 'fixed_expenses_period_paymets';
 
 
-    protected $fillable =
-        [
-    'budget_period_id',
-    'transaction_id',
-    'fixed_expense_id'
-];
+    protected $fillable = [
+        'budget_period_id',
+        'transaction_id',
+        'fixed_expense_id'
+    ];
 
 
     /**
@@ -51,8 +52,7 @@ class FixedExpensePeriodPayment extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'budget_period_id' => 'integer',
         'transaction_id' => 'integer',
@@ -62,18 +62,16 @@ class FixedExpensePeriodPayment extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'budget_period_id' => 'required|integer',
-    'transaction_id' => 'required|integer',
-    'fixed_expense_id' => 'required|integer',
-];
+    public static $rules = [
+        'budget_period_id' => 'required|integer',
+        'transaction_id' => 'required|integer',
+        'fixed_expense_id' => 'required|integer',
+    ];
 
 
     /**
@@ -81,7 +79,7 @@ class FixedExpensePeriodPayment extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -91,19 +89,19 @@ class FixedExpensePeriodPayment extends Model
      *
      * @var array
      */
-    public function budgetPeriod()
+    public function budgetPeriod(): BelongsTo
     {
-    return $this->belongsTo(BudgetPeriod::class,'budget_period_id','id');
+        return $this->belongsTo(BudgetPeriod::class, 'budget_period_id', 'id');
     }
 
-    public function fixedExpense()
+    public function fixedExpense(): BelongsTo
     {
-    return $this->belongsTo(FixedExpense::class,'fixed_expense_id','id');
+        return $this->belongsTo(FixedExpense::class, 'fixed_expense_id', 'id');
     }
 
-    public function transaction()
+    public function transaction(): BelongsTo
     {
-    return $this->belongsTo(Transaction::class,'transaction_id','id');
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
     }
 
 }

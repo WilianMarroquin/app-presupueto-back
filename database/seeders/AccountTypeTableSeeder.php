@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AccountType;
+use App\Models\TransactionPaymentMethod;
 use Illuminate\Database\Seeder;
 
 class AccountTypeTableSeeder extends Seeder
@@ -19,10 +20,28 @@ class AccountTypeTableSeeder extends Seeder
 
         AccountType::truncate();
 
-        AccountType::create(['name' => 'Bank']);
-        AccountType::create(['name' => 'Cash']);
-        AccountType::create(['name' => 'Credit Card']);
-        AccountType::create(['name' => 'Wallet']);
+        $bank       = AccountType::create(['name' => 'Bank']);
+        $cash       = AccountType::create(['name' => 'Cash']);
+        $creditCard = AccountType::create(['name' => 'Credit Card']);
+//        $wallet     = AccountType::create(['name' => 'Wallet']);
+
+        $bank->movementMethods()->sync([
+            TransactionPaymentMethod::TRANSFERENCIA,
+            TransactionPaymentMethod::TARJETA_DE_DEBITO,
+        ]);
+
+        $cash->movementMethods()->sync([
+            TransactionPaymentMethod::EFECTIVO,
+        ]);
+
+        $creditCard->movementMethods()->sync([
+            TransactionPaymentMethod::TARJETA_DE_CREDITO,
+        ]);
+
+//        $wallet->movementMethods()->sync([
+//            TransactionPaymentMethod::TRANSFERENCIA,
+//            TransactionPaymentMethod::EFECTIVO,
+//        ]);
 
         enableForeignKeys();
     }

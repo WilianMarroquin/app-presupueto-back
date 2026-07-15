@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $user_id
@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetPeriod whereTotalBudgeted($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetPeriod whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetPeriod whereUserId($value)
+ * @property-read string $texto
+ * @method static Builder<static>|BudgetPeriod conAtributoAdicional($atributoAdicionalNombre)
+ * @method static Builder<static>|BudgetPeriod onlyCurrentAccountingPeriod()
  * @mixin \Eloquent
  */
 class BudgetPeriod extends Model
