@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -142,6 +143,11 @@ class BudgetPeriod extends Model
         $fechaFin = $this->end_date ? $this->end_date->format('d-m-Y') : 'Actualidad';
 
         return ' (' . $this->start_date->format('d-m-Y') . ' - ' . $fechaFin . ')';
+    }
+
+    public function scopeOnlyCurrentAccountingPeriod(Builder $query): Builder
+    {
+        return $query->whereNull('end_date');
     }
 
 }

@@ -74,6 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_periods', App\Http\Controllers\Api\BudgetPeriodApiController::class)
         ->parameters(['budget_periods' => 'budgetperiod']);
 
+    Route::apiResource('fixed-expenses', App\Http\Controllers\Api\FixedExpenseApiController::class);
+
 });
 
 Route::post('/voice-command', [\App\Http\Controllers\Api\VoiceCommandApiController::class, 'store']);
@@ -99,3 +101,4 @@ Route::get('/generar-llave-maestra', function () {
         'mensaje' => 'Copia esto y bórra esta ruta inmediatamente.'
     ]);
 });
+
