@@ -25,6 +25,7 @@ provider:
     SQS_QUEUE: ${construct:jobs.queueUrl}
     SQS_PREFIX: ''
 
+    LOG_CHANNEL: stderr
     SESSION_DRIVER: cookie
     CACHE_DRIVER: array
     SESSION_DOMAIN: .mrqn-labs.com

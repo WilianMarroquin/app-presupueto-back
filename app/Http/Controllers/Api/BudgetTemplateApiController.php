@@ -178,6 +178,7 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
         $budgetItems = DB::table('budget_items')
             ->join('transaction_categories', 'budget_items.transaction_category_id', '=', 'transaction_categories.id')
             ->where('budget_items.budget_template_id', $activePeriod->budget_template_id)
+            ->where('transaction_categories.type', '=', 'Expense')
             ->select(
                 'budget_items.transaction_category_id as category_id',
                 'transaction_categories.name as category_name',
