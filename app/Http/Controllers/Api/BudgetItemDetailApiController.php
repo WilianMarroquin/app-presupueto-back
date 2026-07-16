@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdateBudgetItemDetailApiRequest;
 use App\Models\BudgetItemDetail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -40,7 +41,7 @@ class BudgetItemDetailApiController extends AppbaseController implements HasMidd
     {
         $budget_item_details = QueryBuilder::for(BudgetItemDetail::class)
             ->allowedFilters([
-                'budget_item_id',
+                AllowedFilter::exact('budget_item_id'),
                 'name',
                 'amount'
             ])
