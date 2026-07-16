@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\BudgetItem;
 use App\Models\BudgetPeriod;
 use Carbon\Carbon;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -175,21 +176,17 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
             return $this->sendResponse([], 'No se encontró un presupuesto para este periodo.');
         }
 
-        $budgetItems = DB::table('budget_items')
-            ->join('transaction_categories', 'budget_items.transaction_category_id', '=', 'transaction_categories.id')
-            ->where('budget_items.budget_template_id', $activePeriod->budget_template_id)
-            ->where('transaction_categories.type', '=', 'Expense')
-            ->select(
-                'budget_items.transaction_category_id as category_id',
-                'transaction_categories.name as category_name',
-                'budget_items.category_limit as amount'
-            )
+        $budgetItems = BudgetItem::with('category')
+            ->where('budget_template_id', $activePeriod->budget_template_id)
+            ->whereHas('category', function ($query) {
+                $query->where('type', 'Expense');
+            })
             ->get()
-            ->map(function ($item) {
+            ->map(function (BudgetItem $item) {
                 return [
-                    'category_id'   => $item->category_id,
-                    'category_name' => $item->category_name ?? 'Sin nombre',
-                    'amount'        => (float) $item->amount,
+                    'category_id'   => $item->transaction_category_id,
+                    'category_name' => $item->category->name ?? 'Sin nombre',
+                    'amount'        => (float) $item->category_limit,
                 ];
             });
 

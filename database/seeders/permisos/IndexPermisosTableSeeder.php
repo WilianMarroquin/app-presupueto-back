@@ -31,6 +31,8 @@ class IndexPermisosTableSeeder extends Seeder
             BudgetTemplatePermisosTableSeeder::class,
             FixedExpensePermisosTableSeeder::class,
             FixedExpensePeriodPaymentPermisosTableSeeder::class,
+            BudgetPeriodPermisosTableSeeder::class,
+            CreditCardDetailPermisosTableSeeder::class,
         ]);
 
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\permisos;
 
+use App\Models\Permission;
 use App\Models\Rol;
 use Illuminate\Database\Seeder;
-use App\Models\Permission;
 
 class CreditCardDetailPermisosTableSeeder extends Seeder
 {
