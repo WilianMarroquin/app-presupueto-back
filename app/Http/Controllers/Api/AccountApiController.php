@@ -79,6 +79,8 @@ class AccountApiController extends AppbaseController implements HasMiddleware
 
         $input['user_id'] = usuarioAutenticado()->id;
         $input['current_balance'] = $input['initial_balance'];
+        $input['is_transactional'] = false;
+        $input['is_active'] = true;
 
         $accounts = Account::create($input);
 
@@ -105,6 +107,16 @@ class AccountApiController extends AppbaseController implements HasMiddleware
      */
     public function update(UpdateAccountApiRequest $request, $id): JsonResponse
     {
+        if($request->is_transactional) {
+            $accountOfUser = Account::whereUserId($request->user_id)->get();
+
+            foreach ($accountOfUser as $account) {
+                $account->update([
+                    'is_transactional' => false
+                ]);
+            }
+        }
+
         $account = Account::findOrFail($id);
         $account->update($request->validated());
         return $this->sendResponse($account, 'Account actualizado con éxito.');
