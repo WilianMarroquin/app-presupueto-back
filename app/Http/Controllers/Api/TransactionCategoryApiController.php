@@ -71,6 +71,7 @@ class TransactionCategoryApiController extends AppbaseController implements HasM
     public function store(CreateTransactionCategoryApiRequest $request): JsonResponse
     {
         $input = $request->all();
+        $input['is_active'] = true;
 
         $transaction_categories = TransactionCategory::create($input);
 

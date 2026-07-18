@@ -48,6 +48,7 @@ class AccountApiController extends AppbaseController implements HasMiddleware
                 'current_balance',
                 'is_active',
                 AllowedFilter::scope('onlyWithPermittedMovementId', 'onlyWithPermittedMovementId'),
+                AllowedFilter::scope('withoutCreditCard', 'withoutCreditCard'),
             ])
             ->allowedSorts([
                 'name',

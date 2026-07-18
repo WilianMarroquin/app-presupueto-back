@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('type', ['Income', 'Expense', 'Transfer']);
             $table->string('icon', 100)->nullable();
             $table->string('color', 100)->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

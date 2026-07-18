@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -91,7 +91,8 @@ class TransactionCategory extends Model
         'description',
         'icon',
         'color',
-        'parent_id'
+        'parent_id',
+        'is_active',
     ];
 
     const CATEGORY_TYPE_INCOME = 'Income';
@@ -112,7 +113,6 @@ class TransactionCategory extends Model
         'description' => 'string',
         'icon' => 'string',
         'color' => 'string',
-        'parent_id' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -127,10 +127,9 @@ class TransactionCategory extends Model
     public static $rules = [
         'name' => 'required|string|max:100',
         'type' => 'required|string',
-        'description' => 'required|string',
-        'parent_id' => 'integer',
         'icon' => 'nullable|string|max:100',
         'color' => 'nullable|string|max:100',
+        'is_active' => 'nullable|boolean',
     ];
 
 

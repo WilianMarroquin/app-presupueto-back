@@ -202,4 +202,9 @@ class Account extends Model
         });
     }
 
+    public function scopeWithoutCreditCard(Builder $builder): Builder
+    {
+        return $builder->whereNot('type_id', AccountType::CREDIT_CARD);
+    }
+
 }
