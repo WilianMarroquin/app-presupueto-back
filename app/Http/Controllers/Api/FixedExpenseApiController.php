@@ -63,6 +63,9 @@ class FixedExpenseApiController extends AppbaseController implements HasMiddlewa
                 'is_variable',
                 'is_active'
             ])
+            ->allowedIncludes([
+                'category'
+            ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
 

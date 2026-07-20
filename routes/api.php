@@ -52,6 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('create/credit/card', [App\Http\Controllers\Api\CreditCardApiController::class, 'store']);
 
+    Route::put('update/credit/card/{id}', [App\Http\Controllers\Api\CreditCardApiController::class, 'update']);
+
     Route::post('credit/card/payment', [App\Http\Controllers\Api\CreditCardApiController::class, 'payment']);
 
     Route::get('home/details/daily', [App\Http\Controllers\Api\HomeApiController::class, 'detailDaily']);

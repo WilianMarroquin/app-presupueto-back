@@ -42,13 +42,6 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
     }
 
     /**
-     * Display a listing of the Credit_card_provisions.
-     * GET|HEAD /credit_card_provisions
-     */
-
-
-
-    /**
      * Store a newly created CreditCardProvisions in storage.
      * POST /credit_card_provisions
      */
@@ -95,11 +88,49 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
         }
     }
 
-    public function update(UpdateCreditCardProvisionsApiRequest $request, $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
-        $creditcardprovisions = CreditCardProvisions::findOrFail($id);
-        $creditcardprovisions->update($request->validated());
-        return $this->sendResponse($creditcardprovisions, 'CreditCardProvisions actualizado con éxito.');
+        $request->validate([
+            'name' => 'required|string',
+            'currency_id' => 'required|integer',
+            'description' => 'nullable|string',
+            'alias' => 'required|string',
+            'network' => 'required|string',
+            'color' => 'required|string',
+            'last_4' => 'required|string|size:4',
+            'cutoff_day' => 'required|numeric',
+            'payment_day' => 'required|integer',
+            'credit_limit' => 'required|numeric',
+        ]);
+
+        try {
+            $account = Account::findOrFail($id);
+
+            DB::transaction(function () use ($request, $account) {
+
+                $account->update([
+                    'name' => $request->alias,
+                    'currency_id' => $request->currency_id,
+                    'description' => $request->description,
+                ]);
+
+                $account->creditCardDetail->update([
+                    'alias' => $request->alias,
+                    'network' => $request->network,
+                    'color' => $request->color,
+                    'last_4' => $request->last_4,
+                    'cutoff_day' => $request->cutoff_day,
+                    'payment_day' => $request->payment_day,
+                    'credit_limit' => $request->credit_limit,
+                ]);
+            });
+
+            return $this->sendResponse($account->fresh(), 'Tarjeta actualizada con éxito.');
+
+        } catch (\Exception $e) {
+            \Log::error("Error actualizando TC: " . $e->getMessage());
+            return $this->sendError('Error al actualizar la tarjeta: ' . $e->getMessage(), 500);
+        }
     }
 
     public function payment(Request $request): JsonResponse
