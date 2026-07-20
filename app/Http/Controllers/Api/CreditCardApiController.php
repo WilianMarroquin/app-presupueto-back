@@ -53,7 +53,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
 
                 // 1. Crear la Cuenta Base (El Padre)
                 $account = Account::create([
-                    'name' => $request->alias,
+                    'name' => $request->name,
                     'user_id' => usuarioAutenticado()->id,
                     'type_id' => AccountType::CREDIT_CARD, // Sugerencia: Usa Enums si puedes
                     'currency_id' => $request->currency_id,
@@ -109,7 +109,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
             DB::transaction(function () use ($request, $account) {
 
                 $account->update([
-                    'name' => $request->alias,
+                    'name' => $request->name,
                     'currency_id' => $request->currency_id,
                     'description' => $request->description,
                 ]);

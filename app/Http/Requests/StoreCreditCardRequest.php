@@ -17,7 +17,6 @@ class StoreCreditCardRequest extends FormRequest
         // Reglas específicas de la tarjeta
         $cardRules = [
             'name' => ['required', 'string', 'max:100'],
-            'alias' => ['required', 'string', 'max:50'], // Alias corto es mejor
             // Tip: Usa Rule::in para que sea más legible
             'network' => ['required', Rule::in(['Visa', 'MasterCard', 'American Express', 'Discover'])],
             'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
