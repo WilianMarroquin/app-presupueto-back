@@ -117,43 +117,28 @@ class BudgetTemplateApiController extends AppbaseController implements HasMiddle
 
     public function activated(BudgetTemplate $budget_template)
     {
-        $user = auth()->user();
+        $user = usuarioAutenticado();
 
         return DB::transaction(function () use ($user, $budget_template) {
 
-            /** @var BudgetPeriod $ultimaPlantillaActiva */
-            $ultimaPlantillaActiva = $user->latestActiveBudgetTemplate;
+            /** @var BudgetPeriod $ultimoPeriodoActivo */
+            $ultimoPeriodoActivo = $user->latestActiveBudgetTemplate;
 
-            // Definimos el inicio de este mes (ej. 1 de mayo)
             $inicioMesActual = today()->startOfMonth();
 
-            if ($ultimaPlantillaActiva) {
-                $fechaInicioVieja = Carbon::parse($ultimaPlantillaActiva->start_date);
-
-                // MANEJO DEL EDGE CASE: ¿La plantilla vieja inició este mismo mes?
-                if ($fechaInicioVieja->gte($inicioMesActual)) {
-                    // Nunca vivió un mes completo. La eliminamos para mantener limpio el historial.
-                    // Nota: Usar forceDelete() si usas SoftDeletes, para borrar el rastro.
-                    $ultimaPlantillaActiva->delete();
-                } else {
-                    // CAMINO NORMAL (Cierre Histórico):
-                    // Cortamos el mes pasado exacto (ej. 30 de abril)
-                    $ultimaPlantillaActiva->update([
-                        'is_active' => false,
-                        'end_date'  => today()->subMonth()->endOfMonth(),
-                    ]);
-                }
+            if ($ultimoPeriodoActivo) {
+                $ultimoPeriodoActivo->update([
+                    'budget_template_id' => $budget_template->id,
+                ]);
+            } else {
+                $user->budgetPeriods()->create([
+                    'budget_template_id' => $budget_template->id,
+                    'start_date'         => $inicioMesActual,
+                    'end_date'           => null,
+                    'is_active'          => true,
+                    'total_budgeted'     => $budget_template->total_estimated_amount ?? 0,
+                ]);
             }
-
-            // ACTIVACIÓN RETROACTIVA:
-            // La nueva plantilla abarca todo el mes actual desde el día 1
-            $user->budgetPeriods()->create([
-                'budget_template_id' => $budget_template->id,
-                'start_date'         => $inicioMesActual,
-                'end_date'           => null, // Periodo abierto (Perpetual Budget)
-                'is_active'          => true,
-                'total_budgeted'     => $budget_template->total_estimated_amount ?? 0,
-            ]);
 
             return $this->sendSuccess('Presupuesto activado con éxito.');
         });
