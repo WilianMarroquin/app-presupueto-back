@@ -184,7 +184,11 @@ class Account extends Model
 
     public function getTextAttribute(): string
     {
-        return $this->name . ' (' . $this?->currency?->symbol . ')' . ' - ' . $this->description;
+        $symbol = $this->relationLoaded('currency') && $this->currency
+            ? $this->currency->symbol
+            : null;
+
+        return $symbol ? "{$this->name} ({$symbol})" : $this->name;
     }
 
     public function transactionsPending(): HasMany

@@ -96,7 +96,8 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     {
         $account->load([
             'transactionsPending.category',
-            'creditCardDetail'
+            'creditCardDetail',
+            'currency',
         ]);
 
         return $this->sendResponse($account->toArray(), 'Account recuperado con éxito.');

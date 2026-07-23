@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
@@ -33,6 +34,10 @@ class PruebasCommand extends Command
 
     public function handle()
     {
+
+        $account = Account::find(4);
+
+        dd($account->saldo_real);
 
         $user = \App\Models\User::find(1);
 
