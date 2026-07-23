@@ -125,6 +125,11 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
      */
     public function show(Transaction $transaction)
     {
+        $transaction->load([
+            'category',
+            'account',
+            'paymentMethod',
+        ]);
         return $this->sendResponse($transaction->toArray(), 'Transaction recuperado con éxito.');
     }
 
