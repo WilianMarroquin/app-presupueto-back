@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Account;
+use App\Models\BudgetTemplateListDetails;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\TransactionPaymentMethod;
@@ -34,6 +35,12 @@ class PruebasCommand extends Command
 
     public function handle()
     {
+
+        $listDetail = BudgetTemplateListDetails::where('budget_item_id', 2)
+            ->with('model')
+            ->get();
+
+        dd($listDetail->toArray());
 
         $account = Account::find(4);
 

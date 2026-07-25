@@ -106,3 +106,6 @@ Route::get('/generar-llave-maestra', function () {
     ]);
 });
 
+
+Route::apiResource('budget_tamplate_item_has_details', App\Http\Controllers\Api\BudgetTemplateListDetailsApiController::class)
+        ->parameters(['budget_tamplate_item_has_details' => 'budgettemplatelistdetails']);

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $budget_item_id
@@ -39,7 +39,6 @@ class BudgetItemDetail extends Model
 
 
     protected $fillable = [
-        'budget_item_id',
         'name',
         'amount'
     ];
@@ -52,7 +51,6 @@ class BudgetItemDetail extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'budget_item_id' => 'integer',
         'name' => 'string',
         'amount' => 'float',
         'created_at' => 'timestamp',
@@ -66,7 +64,6 @@ class BudgetItemDetail extends Model
      * @var array
      */
     public static $rules = [
-        'budget_item_id' => 'required|integer',
         'name' => 'required|string|max:255',
         'amount' => 'required|numeric',
     ];
@@ -80,16 +77,5 @@ class BudgetItemDetail extends Model
     public static $messages = [
 
     ];
-
-
-    /**
-     * Accessor for relationships
-     *
-     * @var array
-     */
-    public function budgetItem(): BelongsTo
-    {
-        return $this->belongsTo(BudgetItem::class, 'budget_item_id', 'id');
-    }
 
 }
