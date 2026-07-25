@@ -54,7 +54,8 @@ class BudgetItemApiController extends AppbaseController implements HasMiddleware
             ])
             ->allowedIncludes([
                 'template',
-                'category'
+                'category',
+                'fixedExpenses',
             ])
             ->defaultSort('-id')
             ->jsonPaginate();

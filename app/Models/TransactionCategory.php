@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -51,6 +51,8 @@ use Illuminate\Database\Query\Builder;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory excludeIds(string $ids)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory sinTransaccionesInternas()
+ * @property int|null $is_active
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TransactionCategory whereIsActive($value)
  * @mixin \Eloquent
  */
 class TransactionCategory extends Model

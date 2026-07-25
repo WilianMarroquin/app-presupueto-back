@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\BudgetItem;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Requests\Api\CreateBudgetItemDetailApiRequest;
@@ -61,13 +62,30 @@ class BudgetItemDetailApiController extends AppbaseController implements HasMidd
      * Store a newly created BudgetItemDetail in storage.
      * POST /budget_item_details
      */
-    public function store(CreateBudgetItemDetailApiRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        $input = $request->all();
+        $request->validate([
+            'budget_item_id'   => 'required|exists:budget_items,id',
+            'es_gasto_fijo'    => 'required|boolean',
 
-        $budget_item_details = BudgetItemDetail::create($input);
+            'fixed_expense_id' => 'required_if:es_gasto_fijo,1,true|nullable|exists:fixed_expenses,id',
 
-        return $this->sendResponse($budget_item_details->toArray(), 'BudgetItemDetail creado con éxito.');
+            'name'             => 'required_if:es_gasto_fijo,0,false|nullable|string|max:255',
+            'amount'           => 'required_if:es_gasto_fijo,0,false|nullable|numeric|min:0',
+        ]);
+
+        $budgetItem = BudgetItem::find($request->budget_item_id);
+
+        if($request->es_gasto_fijo){
+            $budgetItemDetail = $budgetItem->fixedExpenses()->sync($request->fixed_expense_id);
+        } else {
+            $budgetItemDetail = $budgetItem->details()->create([
+                'name' => $request->name,
+                'amount' => $request->amount,
+            ]);
+        }
+
+        return $this->sendResponse($budgetItemDetail, 'BudgetItemDetail creado con éxito.');
     }
 
     /**

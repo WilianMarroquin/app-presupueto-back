@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -56,6 +56,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int $is_transactional
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereIsTransactional($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUserId($value)
+ * @method static Builder<static>|Account onlyWithPermittedMovementId(int $movementId)
+ * @method static Builder<static>|Account withoutCreditCard()
  * @mixin \Eloquent
  */
 class Account extends Model

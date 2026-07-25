@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountType whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountType withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountType withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TransactionPaymentMethod> $movementMethods
+ * @property-read int|null $movement_methods_count
+ * @method static Builder<static>|AccountType withoutCreditCard()
  * @mixin \Eloquent
  */
 class AccountType extends Model

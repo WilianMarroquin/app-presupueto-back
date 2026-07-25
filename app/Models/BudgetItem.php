@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * 
@@ -33,6 +35,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\TransactionCategory $category
  * @property-read mixed $monto_total_details
  * @property-read \App\Models\BudgetTemplate $template
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BudgetItemDetail> $details
+ * @property-read int|null $details_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FixedExpense> $fixedExpenses
+ * @property-read int|null $fixed_expenses_count
  * @mixin \Eloquent
  */
 class BudgetItem extends Model
@@ -110,6 +116,20 @@ class BudgetItem extends Model
     {
         return $this->hasMany(BudgetItemDetail::class, 'budget_item_id', 'id')
             ->sum('amount');
+    }
+
+    public function fixedExpenses(): BelongsToMany
+    {
+        return $this->belongsToMany(FixedExpense::class,
+            'budget_tamplate_item_has_fixed_expense',
+            'budget_item_id',
+            'fixed_expense_id'
+        );
+    }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(BudgetItemDetail::class, 'budget_item_id', 'id');
     }
 
 }

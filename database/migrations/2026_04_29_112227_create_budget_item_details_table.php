@@ -10,11 +10,8 @@ return new class extends Migration
     {
         Schema::create('budget_item_details', function (Blueprint $create) {
             $create->id();
-            $create->foreignId('budget_item_id')->constrained()->onDelete('cascade');
-
             $create->string('name');
-            $create->decimal('amount', 12, 2);
-
+            $create->decimal('base_amount', 12, 2);
             $create->timestamps();
         });
     }

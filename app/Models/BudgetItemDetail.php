@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 
@@ -31,18 +32,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BudgetItemDetail extends Model
 {
 
-    
+
     use HasFactory;
 
     protected $table = 'budget_item_details';
 
 
-    protected $fillable =
-        [
-    'budget_item_id',
-    'name',
-    'amount'
-];
+    protected $fillable = [
+        'budget_item_id',
+        'name',
+        'amount'
+    ];
 
 
     /**
@@ -50,8 +50,7 @@ class BudgetItemDetail extends Model
      *
      * @var array
      */
-    protected $casts =
-        [
+    protected $casts = [
         'id' => 'integer',
         'budget_item_id' => 'integer',
         'name' => 'string',
@@ -61,18 +60,16 @@ class BudgetItemDetail extends Model
     ];
 
 
-
     /**
      * Validation rules
      *
      * @var array
      */
-    public static $rules =
-    [
-    'budget_item_id' => 'required|integer',
-    'name' => 'required|string|max:255',
-    'amount' => 'required|numeric',
-];
+    public static $rules = [
+        'budget_item_id' => 'required|integer',
+        'name' => 'required|string|max:255',
+        'amount' => 'required|numeric',
+    ];
 
 
     /**
@@ -80,7 +77,7 @@ class BudgetItemDetail extends Model
      *
      * @var array
      */
-    public static $messages =[
+    public static $messages = [
 
     ];
 
@@ -90,9 +87,9 @@ class BudgetItemDetail extends Model
      *
      * @var array
      */
-    public function budgetItem()
+    public function budgetItem(): BelongsTo
     {
-    return $this->belongsTo(BudgetItem::class,'budget_item_id','id');
+        return $this->belongsTo(BudgetItem::class, 'budget_item_id', 'id');
     }
 
 }
