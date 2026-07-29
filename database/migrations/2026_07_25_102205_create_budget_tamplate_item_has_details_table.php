@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('budget_tamplate_item_has_details', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('budget_item_id')->constrained('budget_items');
             $table->string('model_type', 255)->nullable();
             $table->integer('model_id')->nullable();

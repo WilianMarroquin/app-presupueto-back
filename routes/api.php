@@ -58,8 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('home/details/daily', [App\Http\Controllers\Api\HomeApiController::class, 'detailDaily']);
 
-    Route::apiResource('budget_item_details', App\Http\Controllers\Api\BudgetItemDetailApiController::class)
-        ->parameters(['budget_item_details' => 'budgetitemdetail']);
+//    Route::apiResource('budget_item_details', App\Http\Controllers\Api\BudgetItemDetailApiController::class)
+//        ->parameters(['budget_item_details' => 'budgetitemdetail']);
 
     Route::apiResource('budget_items', App\Http\Controllers\Api\BudgetItemApiController::class)
         ->parameters(['budget_items' => 'budgetitem']);
@@ -79,6 +79,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('fixed-expenses', App\Http\Controllers\Api\FixedExpenseApiController::class);
 
     Route::post('fixed-expenses/pay', [App\Http\Controllers\Api\FixedExpenseApiController::class, 'pay']);
+
+    Route::resource('budget-template-details', App\Http\Controllers\Api\BudgetTemplateListDetailsApiController::class);
 
 });
 
