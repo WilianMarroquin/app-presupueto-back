@@ -158,9 +158,16 @@ class BudgetTemplateListDetailsApiController extends AppbaseController implement
      * Remove the specified BudgetTemplateListDetails from storage.
      * DELETE /budget_tamplate_item_has_details/{id}
      */
-    public function destroy(BudgetTemplateListDetails $budgettemplatelistdetails): JsonResponse
+    public function destroy($id): JsonResponse
     {
-        $budgettemplatelistdetails->delete();
-        return $this->sendResponse(null, 'BudgetTemplateListDetails eliminado con éxito.');
+            $budgetTemplateListDetail = BudgetTemplateListDetails::findOrFail($id);
+
+            if ($budgetTemplateListDetail->model_type === BudgetItemDetail::class) {
+                $budgetTemplateListDetail->model()?->delete();
+            }
+
+            $budgetTemplateListDetail->delete();
+
+            return $this->sendResponse(null, 'BudgetTemplateListDetails eliminado con éxito.');
     }
 }
