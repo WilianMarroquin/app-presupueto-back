@@ -106,9 +106,52 @@ class BudgetTemplateListDetailsApiController extends AppbaseController implement
      */
     public function update(UpdateBudgetTemplateListDetailsApiRequest $request, $id): JsonResponse
     {
-        $budgettemplatelistdetails = BudgetTemplateListDetails::findOrFail($id);
-        $budgettemplatelistdetails->update($request->validated());
-        return $this->sendResponse($budgettemplatelistdetails, 'BudgetTemplateListDetails actualizado con éxito.');
+        $input = $request->all();
+
+            $detail = BudgetTemplateListDetails::findOrFail($id);
+
+            if ($input['es_gasto_fijo']) {
+                // Si el detalle anterior era un BudgetItemDetail personalizado, eliminamos ese registro hijo
+                if ($detail->model_type === BudgetItemDetail::class) {
+                    $detail->model()?->delete();
+                }
+
+                // Actualizamos el registro pivote apuntando al nuevo FixedExpense
+                $detail->update([
+                    'budget_item_id' => $input['budget_item_id'],
+                    'model_type' => FixedExpense::class,
+                    'model_id' => $input['fixed_expense_id'],
+                ]);
+            } else {
+                // Si ya era un BudgetItemDetail personalizado, actualizamos su nombre y monto
+                if ($detail->model_type === BudgetItemDetail::class && $detail->model) {
+                    $detail->model->update([
+                        'name' => $input['name'],
+                        'amount' => $input['amount'],
+                    ]);
+
+                    $detail->update([
+                        'budget_item_id' => $input['budget_item_id'],
+                    ]);
+                } else {
+                    // Si antes era un Gasto Fijo y ahora cambió a Normal, creamos un nuevo BudgetItemDetail
+                    $customDetail = BudgetItemDetail::create([
+                        'name' => $input['name'],
+                        'amount' => $input['amount'],
+                    ]);
+
+                    $detail->update([
+                        'budget_item_id' => $input['budget_item_id'],
+                        'model_type' => BudgetItemDetail::class,
+                        'model_id' => $customDetail->id,
+                    ]);
+                }
+            }
+
+            // Carga la relación 'model' para retornarla en la respuesta
+            $detail->load('model');
+
+            return $this->sendResponse($detail->toArray(), 'BudgetTemplateListDetails actualizado con éxito.');
     }
 
     /**
