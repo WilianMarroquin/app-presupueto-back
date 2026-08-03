@@ -16,7 +16,7 @@ provider:
     DB_CONNECTION: mysql
     DB_HOST: ${ssm:/app-budget/DB_HOST}
     DB_PORT: 4000
-    DB_DATABASE: ${ssm:/app-budget/DB_DATABASE}
+    DB_DATABASE: db_expense_control
     DB_USERNAME: ${ssm:/app-budget/DB_USERNAME}
     DB_PASSWORD: ${ssm:/app-budget/DB_PASSWORD}
 

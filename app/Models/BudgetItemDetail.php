@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $budget_item_id
  * @property string $name
- * @property float $amount
+ * @property float $base_amount
  * @property int|null $created_at
  * @property int|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BudgetItemDetail newModelQuery()
@@ -40,7 +40,7 @@ class BudgetItemDetail extends Model
 
     protected $fillable = [
         'name',
-        'amount'
+        'base_amount'
     ];
 
 
@@ -52,7 +52,7 @@ class BudgetItemDetail extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'amount' => 'float',
+        'base_amount' => 'float',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
     ];
@@ -65,7 +65,7 @@ class BudgetItemDetail extends Model
      */
     public static $rules = [
         'name' => 'required|string|max:255',
-        'amount' => 'required|numeric',
+        'base_amount' => 'required|numeric',
     ];
 
 

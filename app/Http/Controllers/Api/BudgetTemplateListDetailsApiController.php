@@ -78,7 +78,7 @@ class BudgetTemplateListDetailsApiController extends AppbaseController implement
         } else {
             $detail = BudgetItemDetail::create([
                 'name' => $input['name'],
-                'amount' => $input['amount'],
+                'base_amount' => $input['amount'],
             ]);
 
             $detail = BudgetTemplateListDetails::create([
@@ -127,7 +127,7 @@ class BudgetTemplateListDetailsApiController extends AppbaseController implement
                 if ($detail->model_type === BudgetItemDetail::class && $detail->model) {
                     $detail->model->update([
                         'name' => $input['name'],
-                        'amount' => $input['amount'],
+                        'base_amount' => $input['amount'],
                     ]);
 
                     $detail->update([
@@ -137,7 +137,7 @@ class BudgetTemplateListDetailsApiController extends AppbaseController implement
                     // Si antes era un Gasto Fijo y ahora cambió a Normal, creamos un nuevo BudgetItemDetail
                     $customDetail = BudgetItemDetail::create([
                         'name' => $input['name'],
-                        'amount' => $input['amount'],
+                        'base_amount' => $input['amount'],
                     ]);
 
                     $detail->update([
