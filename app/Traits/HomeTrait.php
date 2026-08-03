@@ -53,7 +53,7 @@ trait HomeTrait
             return 0.0;
         }
 
-        $categoriasFijas = [TransactionCategory::PAGOS_TC];
+        $categoriasFijas = [TransactionCategory::TRANSFERENCIAS];
 
         // OJO: Recuperé tu filtro de 'Expense' (Gastos Puros).
         // Si no lo pones, el sistema restará cosas que no debe de tu dinero de bolsillo.
@@ -124,7 +124,7 @@ trait HomeTrait
         // Esto no ejecuta la query todavía, solo prepara el "molde"
         $baseExpenseQuery = Transaction::whereHas('category', function ($q) {
             $q->where('type', 'expense')
-            ->where('id', '!=', TransactionCategory::PAGOS_TC);
+            ->where('id', '!=', TransactionCategory::TRANSFERENCIAS);
         });
 
         // 3. DATOS DE HOY (El Nuevo Requerimiento)

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -211,6 +211,11 @@ class Account extends Model
     public function scopeWithoutCreditCard(Builder $builder): Builder
     {
         return $builder->whereNot('type_id', AccountType::CREDIT_CARD);
+    }
+
+    public function scopeExcludedAccountId(Builder $builder, int $accountId): Builder
+    {
+        return $builder->whereNot('id', $accountId);
     }
 
 }

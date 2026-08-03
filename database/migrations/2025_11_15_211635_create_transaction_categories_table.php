@@ -18,8 +18,14 @@ return new class extends Migration
             $table->string('icon', 100)->nullable();
             $table->string('color', 100)->nullable();
             $table->boolean('is_active')->default(true);
+            $table->bigInteger('padre_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('padre_id')
+                ->references('id')
+                ->on('transaction_categories')
+                ->onDelete('cascade');
         });
     }
 

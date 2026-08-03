@@ -204,7 +204,7 @@ class CreditCardApiController extends AppbaseController implements HasMiddleware
                 'amount' => $request->amount,
                 'description' => 'Abono a TC: ' . $creditCard->name,
                 'payment_method_id' => TransactionPaymentMethod::TRANSFERENCIA,
-                'category_id' => TransactionCategory::PAGOS_TC,
+                'category_id' => TransactionCategory::TRANSFERENCIAS,
                 'is_settled' => true // El pago sale del banco liquidado
             ];
 

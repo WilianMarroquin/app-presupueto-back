@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('account_currencys', App\Http\Controllers\Api\AccountCurrencyApiController::class)
         ->parameters(['account_currencys' => 'accountcurrency']);
 
+    Route::post('accounts/transferir', [App\Http\Controllers\Api\AccountApiController::class, 'transferir']);
+
     Route::apiResource('accounts', App\Http\Controllers\Api\AccountApiController::class)
         ->parameters(['accounts' => 'account']);
 

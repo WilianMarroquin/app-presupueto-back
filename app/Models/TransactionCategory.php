@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -70,7 +70,7 @@ class TransactionCategory extends Model
     const INVERSIONES = 3;
     const OTROS_INGRESOS = 4;
 
-// --- GASTOS (Expense) ---
+    // --- GASTOS (Expense) ---
     const VIVIENDA = 5;
     const ALIMENTACION = 6;
     const TRANSPORTE = 7;
@@ -79,12 +79,18 @@ class TransactionCategory extends Model
     const COMPRAS = 10;
     const EDUCACION = 11;
     const GASTOS_FINANCIEROS = 12;
+    const TECNOLOGIA_Y_SUSCRIPCIONES = 13;
 
-    const PAGOS_TC = 13;
+    // --- TRANSFERENCIAS Y CONTENEDORES ---
+    const TRANSFERENCIAS = 14;
 
-    const TECNOLOGIA_Y_SUSCRIPCIONES = 14;
-    const AHORRO_Y_METAS = 15;
-    const OTROS_GASTOS = 16;
+    // --- HIJAS DE TRANSFERENCIAS / OTROS ---
+    const RETIRO_TRASPASO_SALIDA = 15;
+    const DEPOSITO_TRASPASO_ENTRADA = 16;
+    const PAGO_TARJETA_CREDITO = 17;
+    const ENVIO_TERCEROS = 18;
+    const RECEPCION_TERCEROS = 19;
+    const AHORRO_Y_METAS = 20;
 
 
     protected $fillable = [
@@ -93,8 +99,9 @@ class TransactionCategory extends Model
         'description',
         'icon',
         'color',
-        'parent_id',
+        'padre_id',
         'is_active',
+        'is_budgetable',
     ];
 
     const CATEGORY_TYPE_INCOME = 'Income';
@@ -115,6 +122,9 @@ class TransactionCategory extends Model
         'description' => 'string',
         'icon' => 'string',
         'color' => 'string',
+        'padre_id' => 'integer',
+        'is_active' => 'boolean',
+        'is_budgetable' => 'boolean',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -167,6 +177,6 @@ class TransactionCategory extends Model
 
     public function scopeSinTransaccionesInternas($query)
     {
-        return $query->where('id', '!=', self::PAGOS_TC);
+        return $query->where('id', '!=', self::TRANSFERENCIAS);
     }
 }
