@@ -141,14 +141,14 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
     {
         $request->validate([
             'category_id' => 'integer|exists:transaction_categories,id',
-            'comentario' => 'string|nullable',
+            'description' => 'string|nullable',
         ]);
 
         $transaction = Transaction::findOrFail($id);
 
         $transaction->update([
             'category_id' => $request->input('category_id', $transaction->category_id),
-            'description' => $request->input('comentario', $transaction->notes),
+            'description' => $request->input('description', $transaction->description),
         ]);
 
         return $this->sendResponse($transaction, 'Transaction actualizado con éxito.');
