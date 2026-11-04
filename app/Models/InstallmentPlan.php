@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -64,7 +64,8 @@ class InstallmentPlan extends Model
         'total_installments',
         'interest_rate',
         'start_date',
-        'status'
+        'status',
+        'account_id',
     ];
 
 
@@ -81,6 +82,7 @@ class InstallmentPlan extends Model
         'interest_rate' => 'float',
         'start_date' => 'date',
         'status' => 'string',
+        'account_id' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
@@ -97,6 +99,7 @@ class InstallmentPlan extends Model
         'total_amount' => 'required|numeric',
         'total_installments' => 'required|integer',
         'interest_rate' => 'required|numeric',
+        'account_id' => 'required|integer',
     ];
 
 

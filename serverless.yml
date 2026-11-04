@@ -38,13 +38,14 @@ plugins:
   - ./vendor/bref/bref
   - serverless-domain-manager
   - serverless-lift
+
 custom:
   customDomain:
     domainName: api.mrqn-labs.com
     basePath: ''
     stage: ${self:provider.stage}
     createRoute53Record: true
-    apiType: http                   # Esto indica API Gateway v2 (HTTP API)
+    apiType: http
     certificateName: mrqn-labs.com
     endpointType: regional
 
@@ -54,60 +55,27 @@ functions:
     description: 'Laravel API Budget'
     timeout: 28
     layers:
-      - ${bref:layer.php-82-fpm}
+      # Si prefieres ARN explícito directo: arn:aws:lambda:us-east-1:534081306603:layer:php-83-fpm:65
+      - ${bref:layer.php-83-fpm}
     events:
-      # CORREGIDO: Usamos httpApi para coincidir con apiType: http
       - httpApi: '*'
-      # Esta es la función que ejecuta comandos de artisan
+
   artisan:
     handler: artisan
     description: 'Ejecutor de comandos de consola Artisan'
     timeout: 120
     layers:
-      - ${bref:layer.php-82}
-#    console:
-#      handler: artisan
-#      layers:
-#        - ${bref:layer.php-82} # O la versión que uses
-#      events:
-#        - schedule:
-#            rate: rate(1 minute)
-#            input: '"schedule:run"'
-#  visacuotas-cron:
-#    handler: artisan
-#    description: 'Carga cuotas pendientes de visacuotas el día 1 del mes'
-#    timeout: 120 # Dale suficiente tiempo si procesa muchos registros
-#    layers:
-#      - ${bref:layer.php-82} # Importante: Usar php-82 (CLI), no fpm
-#    events:
-#      - schedule:
-#          rate: cron(0 6 1 * ? *)
-#          input: '"app:create-pending-quota-command"'
-
-#  visacuotas-cron:
-#    handler: artisan
-#    description: 'Carga cuotas pendientes de visacuotas (TEST: cada 2 minutos)'
-#    timeout: 120
-#    layers:
-#      - ${bref:layer.php-82}
-#    events:
-#      - schedule:
-#          # Se ejecutará cada 2 minutos
-#          rate: rate(2 minutes)
-#          # Recuerda poner el nombre real de tu comando aquí
-#          input: '"app:create-pending-quota-command"'
-#          enabled: false  # <--- AGREGA ESTA LÍNEA
+      # Si prefieres ARN explícito directo: arn:aws:lambda:us-east-1:534081306603:layer:php-83:65
+      - ${bref:layer.php-83}
 
 constructs:
-  # Aquí nace el Worker
   jobs:
     type: queue
     worker:
-      # Usa el handler oficial de Bref para Laravel
-      # ¡No necesitas crear un archivo worker.php manual!
       handler: Bref\LaravelBridge\Queue\QueueHandler
-      runtime: php-82
-      timeout: 60 # Dale 60s para que Gemini piense tranquilo
+      runtime: php-83
+      timeout: 60
+
 package:
   exclude:
     - node_modules/**

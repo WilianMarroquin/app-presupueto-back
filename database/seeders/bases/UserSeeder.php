@@ -10,6 +10,7 @@ class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * Para ejecutar este seeder: php artisan db:seed --class="Database\Seeders\bases\UserSeeder"
      */
     public function run(): void
     {
@@ -21,10 +22,10 @@ class UserSeeder extends Seeder
                 'segundo_nombre' => 'Alberto',
                 'primer_apellido' => 'Marroquin',
                 'segundo_apellido' => 'Morales',
-                'usuario' => 'wilian',
+                'usuario' => 'admin',
                 'estado_id' => UserEstado::ACTIVO,
-                'email' => 'admin@gmail.com',
-                'password' => bcrypt('WILIAN.123.gt'),
+                'email' => 'wilimarroquin61@gmail.com',
+                'password' => bcrypt('12354'),
             ]);
     }
 }

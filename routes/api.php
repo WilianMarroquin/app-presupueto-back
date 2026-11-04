@@ -84,6 +84,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('budget-template-details', App\Http\Controllers\Api\BudgetTemplateListDetailsApiController::class);
 
+    Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
+    Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
+
+//    Route::prefix('v1')->group(function () {
+//        Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
+//        Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
+//    });
+
 });
 
 Route::post('/voice-command', [\App\Http\Controllers\Api\VoiceCommandApiController::class, 'store']);
