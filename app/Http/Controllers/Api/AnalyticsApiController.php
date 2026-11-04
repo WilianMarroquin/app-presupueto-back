@@ -13,12 +13,19 @@ class AnalyticsApiController extends AppBaseController
     {
         $transactions = Transaction::query();
 
-        if ($request->filled('start_date')) {
-            $transactions->whereDate('transaction_date', '>=', $request->input('start_date'));
-        }
+        $currentPeriodStartDate = $request->input('start_date');
+        $currentPeriodEndDate = $request->input('end_date');
 
-        if ($request->filled('end_date')) {
-            $transactions->whereDate('transaction_date', '<=', $request->input('end_date'));
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $transactions->whereBetween('budget_date', [$currentPeriodStartDate, $currentPeriodEndDate]);
+        } else {
+            if ($request->filled('start_date')) {
+                $transactions->whereDate('budget_date', '>=', $currentPeriodStartDate);
+            }
+
+            if ($request->filled('end_date')) {
+                $transactions->whereDate('budget_date', '<=', $currentPeriodEndDate);
+            }
         }
 
         $data = $transactions->whereHas('category', function($query) {

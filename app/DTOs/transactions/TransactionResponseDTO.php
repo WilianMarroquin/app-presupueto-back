@@ -13,6 +13,7 @@ readonly class TransactionResponseDTO
         public float $amount,
         public string $description,
         public string $transactionDate,
+        public ?string $budgetDate,
         public bool $isSettled,
         public float $settledAmount,
     ) {}
@@ -29,6 +30,7 @@ readonly class TransactionResponseDTO
             amount: (float) $transaction->amount,
             description: $transaction->description,
             transactionDate: $transaction->transaction_date->toDateTimeString(),
+            budgetDate: $transaction->budget_date ? $transaction->budget_date->toDateString() : null,
             isSettled: (bool) $transaction->is_settled,
             settledAmount: (float) $transaction->settled_amount,
         );
@@ -46,6 +48,7 @@ readonly class TransactionResponseDTO
             'amount' => $this->amount,
             'description' => $this->description,
             'transaction_date' => $this->transactionDate,
+            'budget_date' => $this->budgetDate,
             'is_settled' => $this->isSettled,
             'settled_amount' => $this->settledAmount,
         ];

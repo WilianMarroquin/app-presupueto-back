@@ -18,6 +18,10 @@ return new class extends Migration
             $table->float('amount', 15);
             $table->text('description')->nullable();
             $table->date('transaction_date');
+            $table->date('budget_date')
+                ->nullable()
+                ->index('transactions_budget_date_idx')
+                ->comment('Fecha contable/presupuestaria en la que impacta el gasto');
             $table->boolean('is_settled')->default(false);
             $table->decimal('settled_amount', 12, 2)->default(0);
             $table->unsignedBigInteger('payment_method_id')->index('fk_transactions_transaction_payment_methods1_idx');

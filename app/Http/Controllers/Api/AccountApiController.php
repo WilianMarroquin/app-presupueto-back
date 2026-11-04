@@ -102,7 +102,6 @@ class AccountApiController extends AppbaseController implements HasMiddleware
     public function show(Account $account)
     {
         $account->load([
-            'transactionsPending.category',
             'creditCardDetail',
             'currency',
         ]);

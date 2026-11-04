@@ -59,6 +59,8 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 AllowedFilter::custom('date_range', new \App\Filters\Transactions\TransactionDateRangeFilter()),
                 AllowedFilter::custom('category_id', new \App\Filters\Transactions\TransactionCategoryFilter()),
                 AllowedFilter::scope('soloEstasCategoriasIds','soloEstasCategoriasIds'),
+                AllowedFilter::scope('soloPendientes', 'soloPendientes'),
+                AllowedFilter::scope('SoloPresupuestadasEnPeriodoActivo', 'SoloPresupuestadasEnPeriodoActivo'),
             ])
             ->allowedSorts([
                 'id',
@@ -99,7 +101,8 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 'amount' => $input['amount'],
                 'description' => $input['description'],
                 'payment_method_id' => $input['payment_method_id'],
-                'category_id' => $input['category_id'],
+                'category_id' => $input['category_id'] ?? null,
+                'budget_date' => $input['budget_date'] ?? null,
             ];
             $dpo = TransactionDTO::fromArray($datos);
 
@@ -142,6 +145,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
         $request->validate([
             'category_id' => 'integer|exists:transaction_categories,id',
             'description' => 'string|nullable',
+            'budget_date' => 'nullable|date',
         ]);
 
         $transaction = Transaction::findOrFail($id);
@@ -149,6 +153,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
         $transaction->update([
             'category_id' => $request->input('category_id', $transaction->category_id),
             'description' => $request->input('description', $transaction->description),
+            'budget_date' => $request->has('budget_date') ? $request->input('budget_date') : $transaction->budget_date,
         ]);
 
         return $this->sendResponse($transaction, 'Transaction actualizado con éxito.');

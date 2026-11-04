@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $category_id
@@ -70,6 +70,7 @@ class Transaction extends Model
         'amount',
         'description',
         'transaction_date',
+        'budget_date',
         'payment_method_id',
         'is_settled',
         'settled_amount',
@@ -88,13 +89,13 @@ class Transaction extends Model
         'amount' => 'float',
         'description' => 'string',
         'transaction_date' => 'date',
+        'budget_date' => 'date',
         'payment_method_id' => 'integer',
         'is_settled' => 'boolean',
         'settled_amount' => 'float',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
-
 
     /**
      * Validation rules
@@ -107,6 +108,7 @@ class Transaction extends Model
         'description'       => 'required_without:category_id|nullable|string',
         'category_id'       => 'required_without:description|nullable|integer',
         'payment_method_id' => 'required|integer',
+        'budget_date'       => 'nullable|date',
         'settled_amount'    => 'nullable|numeric',
     ];
 
@@ -146,4 +148,29 @@ class Transaction extends Model
         return $builder->whereIn('category_id', $categoriesIds);
     }
 
+    /**
+     * Scope que filtra solo las transacciones pendientes (is_settled != 1).
+     */
+    public function scopeSoloPendientes(Builder $builder): Builder
+    {
+        return $builder->where('is_settled', 0);
+    }
+
+    /**
+     * Scope que filtra las transacciones que corresponden al período contable activo según su budget_date.
+     */
+    public function scopeSoloPresupuestadasEnPeriodoActivo(Builder $builder): Builder
+    {
+        $activePeriod = BudgetPeriod::OnlyCurrentAccountingPeriod()
+            ->first();
+
+        if (!$activePeriod) {
+            return $builder;
+        }
+
+        return $builder->whereBetween('budget_date', [
+            $activePeriod->start_date,
+            $activePeriod->end_date ?? $activePeriod->start_date->endOfMonth(),
+        ]);
+    }
 }

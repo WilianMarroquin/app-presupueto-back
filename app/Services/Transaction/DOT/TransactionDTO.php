@@ -9,6 +9,7 @@ readonly class TransactionDTO {
         public ?string $description = null,
         public int $payment_method_id,
         public ?int $category_id = null,
+        public ?string $budget_date = null,
     ) {}
 
     public static function fromArray(array $data): self {
@@ -18,6 +19,7 @@ readonly class TransactionDTO {
             description: $data['description'] ?? null,
             payment_method_id: $data['payment_method_id'],
             category_id: $data['category_id'] ?? null,
+            budget_date: $data['budget_date'] ?? null,
         );
     }
     public function toArray(): array {
@@ -27,6 +29,7 @@ readonly class TransactionDTO {
             'description' => $this->description,
             'payment_method_id' => $this->payment_method_id,
             'category_id' => $this->category_id,
+            'budget_date' => $this->budget_date,
         ];
     }
 }

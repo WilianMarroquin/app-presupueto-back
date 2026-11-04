@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessVoiceTransactionJob;
+use App\Models\BudgetPeriod;
 use App\Services\Transaction\CreateTransactionService;
 use App\Services\Transaction\DOT\TransactionDTO;
 use App\Traits\HomeTrait;
@@ -31,6 +32,13 @@ class PruebaCommand2 extends Command
      */
     public function handle()
     {
+
+        $periodoActivo = BudgetPeriod::onlyCurrentAccountingPeriod()->first();
+
+        $transacciones = \App\Models\Transaction::whereBetween('budget_date', [$periodoActivo->start_date, $periodoActivo->end_date])
+            ->get();
+
+        dd($transacciones->count());
 //        $datos = [
 //            'category_id' => 1,
 //            'account_id' => 1,

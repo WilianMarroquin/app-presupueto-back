@@ -27,8 +27,10 @@ class CreateTransactionService
             DB::beginTransaction();
 
             $account = Account::findOrFail($data->account_id);
+            $transactionDate = now();
             $payload = $data->toArray();
-            $payload['transaction_date'] = now();
+            $payload['transaction_date'] = $transactionDate;
+            $payload['budget_date'] = !empty($data->budget_date) ? $data->budget_date : $transactionDate;
             $payload['category_id'] = $category->id;
 
             if ($account->nature === 'asset') {
