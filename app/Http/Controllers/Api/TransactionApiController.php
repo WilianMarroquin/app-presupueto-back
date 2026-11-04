@@ -60,7 +60,7 @@ class TransactionApiController extends AppbaseController implements HasMiddlewar
                 AllowedFilter::custom('category_id', new \App\Filters\Transactions\TransactionCategoryFilter()),
                 AllowedFilter::scope('soloEstasCategoriasIds','soloEstasCategoriasIds'),
                 AllowedFilter::scope('soloPendientes', 'soloPendientes'),
-                AllowedFilter::scope('SoloPresupuestadasEnPeriodoActivo', 'SoloPresupuestadasEnPeriodoActivo'),
+                AllowedFilter::scope('soloPresupuestadasEnPeriodoActivo', 'SoloPresupuestadasEnPeriodoActivo'),
             ])
             ->allowedSorts([
                 'id',
