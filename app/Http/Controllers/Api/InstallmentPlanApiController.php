@@ -63,7 +63,9 @@ class InstallmentPlanApiController extends AppbaseController implements HasMiddl
                 'status'
             ])
             ->allowedIncludes([
-                'paymentsMade'
+                'paymentsMade',
+                'payments',
+                'creditCard',
             ])
             ->defaultSort('-id') // Ordenar por defecto por fecha descendente
             ->Paginate(request('page.size') ?? 10);
