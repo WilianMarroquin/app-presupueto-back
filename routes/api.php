@@ -90,8 +90,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
     Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
 
+    Route::post('assistant/chat', [App\Http\Controllers\Api\AssistantController::class, 'chat']);
+
     Route::prefix('v1')->group(function () {
         Route::get('home/overview', [App\Http\Controllers\Api\HomeApiController::class, 'overview']);
+        Route::post('assistant/chat', [App\Http\Controllers\Api\AssistantController::class, 'chat']);
         Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
         Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
     });
