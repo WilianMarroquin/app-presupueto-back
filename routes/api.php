@@ -75,6 +75,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('budget_templates', App\Http\Controllers\Api\BudgetTemplateApiController::class)
         ->parameters(['budget_templates' => 'budgettemplate']);
 
+    Route::get('budget_periods/summary/global', [App\Http\Controllers\Api\BudgetPeriodApiController::class, 'globalSummary']);
+
     Route::apiResource('budget_periods', App\Http\Controllers\Api\BudgetPeriodApiController::class)
         ->parameters(['budget_periods' => 'budgetperiod']);
 
