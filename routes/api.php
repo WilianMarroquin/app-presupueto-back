@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('credit/card/payment', [App\Http\Controllers\Api\CreditCardApiController::class, 'payment']);
 
     Route::get('home/details/daily', [App\Http\Controllers\Api\HomeApiController::class, 'detailDaily']);
+    Route::get('home/overview', [App\Http\Controllers\Api\HomeApiController::class, 'overview']);
 
 //    Route::apiResource('budget_item_details', App\Http\Controllers\Api\BudgetItemDetailApiController::class)
 //        ->parameters(['budget_item_details' => 'budgetitemdetail']);
@@ -89,10 +90,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
     Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
 
-//    Route::prefix('v1')->group(function () {
-//        Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
-//        Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
-//    });
+    Route::prefix('v1')->group(function () {
+        Route::get('home/overview', [App\Http\Controllers\Api\HomeApiController::class, 'overview']);
+        Route::post('quick-actions/{id}/execute', [App\Http\Controllers\Api\QuickActionApiController::class, 'execute']);
+        Route::apiResource('quick-actions', App\Http\Controllers\Api\QuickActionApiController::class);
+    });
 
 });
 
